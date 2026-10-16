@@ -48,6 +48,16 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/#collaborations" className="hover:text-[#d8392f] transition-colors">
+                  Official Collaborations
+                </Link>
+              </li>
+              <li>
+                <Link href="/#sponsorship" className="hover:text-[#d8392f] transition-colors text-amber-300">
+                  Sponsorship Packages (₹30L)
+                </Link>
+              </li>
+              <li>
                 <Link href="/#teams" className="hover:text-[#d8392f] transition-colors">
                   24 River Teams
                 </Link>
@@ -88,7 +98,13 @@ export default function Footer() {
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-[#d8392f] shrink-0" />
                 <a href="tel:+919056333759" className="hover:text-[#d8392f] transition-colors font-bold text-white">
-                  +91 90563 33759 (Official Helpline)
+                  +91 90563 33759 (Helpline)
+                </a>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <Phone className="w-4 h-4 text-amber-400 shrink-0" />
+                <a href="tel:+919041540053" className="hover:text-amber-400 transition-colors font-bold text-white">
+                  +91 90415 40053 (Vishal)
                 </a>
               </li>
               <li className="flex items-center gap-2.5">

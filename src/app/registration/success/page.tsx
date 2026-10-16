@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useEffect, useState, Suspense } from 'react';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { CheckCircle2, Trophy, ArrowRight, Download, Users, Phone, Calendar, ShieldCheck, Home } from 'lucide-react';
 import Link from 'next/link';
+import { teamLogos } from '@/data/teamsData';
 
 interface RegistrationData {
   txnid: string;
@@ -96,9 +98,22 @@ function SuccessContent() {
               </div>
               {data && (
                 <>
-                  <div>
-                    <span className="text-xs text-slate-500 font-bold uppercase block">Team Name</span>
-                    <span className="font-black text-[#0b162c] text-lg uppercase italic">{data.team_name}</span>
+                  <div className="flex items-center gap-3">
+                    {teamLogos[data.team_name?.toLowerCase().replace(/\s+/g, '-')] && (
+                      <div className="w-12 h-12 bg-white rounded-xl p-1 shrink-0 flex items-center justify-center border border-slate-200 shadow-sm">
+                        <Image
+                          src={teamLogos[data.team_name.toLowerCase().replace(/\s+/g, '-')]}
+                          alt={data.team_name}
+                          width={44}
+                          height={44}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <span className="text-xs text-slate-500 font-bold uppercase block">Team Name</span>
+                      <span className="font-black text-[#0b162c] text-lg uppercase italic">{data.team_name}</span>
+                    </div>
                   </div>
                   <div>
                     <span className="text-xs text-slate-500 font-bold uppercase block">Division & Captain</span>
@@ -144,7 +159,7 @@ function SuccessContent() {
             </div>
             <p>1. Custom jerseys will be distributed during the pre-tournament captains meeting.</p>
             <p>2. Report strictly <strong className="font-bold">60 minutes prior</strong> to your scheduled match at Sector 16 Cricket Stadium, Chandigarh.</p>
-            <p>3. For any queries or adjustments, contact our Official Helpline <strong className="font-bold">+91 90563 33759</strong> or email <strong className="font-bold">helposcricketcup@gmail.com</strong>.</p>
+            <p>3. For any queries or adjustments, contact our Official Helpline <strong className="font-bold">+91 90563 33759</strong> / Vishal <strong className="font-bold">+91 90415 40053</strong> or email <strong className="font-bold">helposcricketcup@gmail.com</strong>.</p>
           </div>
 
           {/* Action Buttons */}

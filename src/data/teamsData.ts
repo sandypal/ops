@@ -22,6 +22,13 @@ export interface TeamDetail {
   accentBorder: string;
   badgeColor: string;
   squad: SquadPlayer[];
+  logo?: string;
+  cardBgFrom?: string;
+  cardBgTo?: string;
+  glowColor?: string;
+  accentColor?: string;
+  cardStyle?: string;
+  logoPlate?: string;
 }
 
 export const createSquadSlots = (): SquadPlayer[] => [
@@ -498,5 +505,254 @@ export const teamsData: Record<string, TeamDetail> = {
     squad: createSquadSlots()
   }
 };
+
+// Official Team Logos (16 Boys in /public + 8 Girls in /public/womens)
+export const teamLogos: Record<string, string> = {
+  // Boys Division (16 Teams)
+  "sindhu-spartans": "/sindhuspartans.png",
+  "satluj-soorme": "/satlujSoorme.png",
+  "beas-blasters": "/beasblasters.png",
+  "brahmaputra-bulls": "/brahmputrabulls.png",
+  "mahanadi-masters": "/mahanadimasters.png",
+  "ravi-rangers": "/ravirangers.png",
+  "chenab-challengers": "/chenabchallengers.png",
+  "jhelum-jaguars": "/jhelumjaguars.png",
+  "yamuna-yodhas": "/yamunayodhas.png",
+  "kaveri-warriors": "/kaveriWarriors.png",
+  "ghaggar-champions": "/ghaggarchampions.png",
+  "ganga-giants": "/gangagiants.png",
+  "narmada-titans": "/narmadatitans.png",
+  "tapti-tigers": "/tapatitigers.png",
+  "godavari-knights": "/godawariknights.png",
+  "krishna-kings": "/krishnakings.png",
+
+  // Girls Division (8 Teams in /womens/)
+  "sindhu-sherniyan": "/womens/sindhusherniyan.png",
+  "saraswati-strikers": "/womens/saraswatistrikers.png",
+  "satluj-sena": "/womens/satlujsena.png",
+  "yamuna-panthers": "/womens/yamunapanthers.png",
+  "sabarmati-sunrisers": "/womens/sabarmatisunrisers.png",
+  "kaveri-queens": "/womens/kaveriqueens.png",
+  "ravi-royals": "/womens/raviroyals.png",
+  "ganga-glory": "/womens/gangaglory.png",
+};
+
+// Official Card Theme Palettes for all 24 Teams
+export interface TeamThemeColors {
+  cardBgFrom: string;
+  cardBgTo: string;
+  glowColor: string;
+  accentColor: string;
+  logoPlate?: string;
+  cardStyle: string;
+}
+
+export const teamThemes: Record<string, TeamThemeColors> = {
+  "sindhu-spartans": {
+    "cardBgFrom": "#0b162c",
+    "cardBgTo": "#152a4e",
+    "glowColor": "#2563eb",
+    "accentColor": "#f59e0b",
+    "logoPlate": "",
+    "cardStyle": "Deep Indus royal blue gradient with golden amber glow"
+  },
+  "satluj-soorme": {
+    "cardBgFrom": "#2a0a12",
+    "cardBgTo": "#4a0f1e",
+    "glowColor": "#d4a017",
+    "accentColor": "#fbbf24",
+    "logoPlate": "",
+    "cardStyle": "Deep maroon wine gradient with imperial gold glow"
+  },
+  "beas-blasters": {
+    "cardBgFrom": "#1c1917",
+    "cardBgTo": "#3a2414",
+    "glowColor": "#f97316",
+    "accentColor": "#fbbf24",
+    "logoPlate": "",
+    "cardStyle": "Charcoal black to burnt amber gradient with molten orange glow"
+  },
+  "brahmaputra-bulls": {
+    "cardBgFrom": "#2a0508",
+    "cardBgTo": "#4d0b12",
+    "glowColor": "#dc2626",
+    "accentColor": "#fbbf24",
+    "logoPlate": "",
+    "cardStyle": "Dark obsidian to deep crimson gradient with blood-red glow"
+  },
+  "mahanadi-masters": {
+    "cardBgFrom": "#1a0b2e",
+    "cardBgTo": "#2e1457",
+    "glowColor": "#a78bfa",
+    "accentColor": "#fbbf24",
+    "logoPlate": "#f5f3ff",
+    "cardStyle": "Royal purple gradient with a soft lavender-white logo plate and gold accents"
+  },
+  "ravi-rangers": {
+    "cardBgFrom": "#0a1f14",
+    "cardBgTo": "#123a24",
+    "glowColor": "#22c55e",
+    "accentColor": "#facc15",
+    "logoPlate": "",
+    "cardStyle": "Forest green gradient with emerald glow and yellow accents"
+  },
+  "chenab-challengers": {
+    "cardBgFrom": "#07182e",
+    "cardBgTo": "#0e3358",
+    "glowColor": "#38bdf8",
+    "accentColor": "#7dd3fc",
+    "logoPlate": "#f0f9ff",
+    "cardStyle": "Deep navy to glacial blue gradient with an ice-white logo plate"
+  },
+  "jhelum-jaguars": {
+    "cardBgFrom": "#06140f",
+    "cardBgTo": "#0d2e22",
+    "glowColor": "#10b981",
+    "accentColor": "#fbbf24",
+    "logoPlate": "#f8fafc",
+    "cardStyle": "Dark jungle emerald gradient with a white logo plate so black outlines show"
+  },
+  "yamuna-yodhas": {
+    "cardBgFrom": "#0a1440",
+    "cardBgTo": "#14246b",
+    "glowColor": "#3b82f6",
+    "accentColor": "#ef4444",
+    "logoPlate": "",
+    "cardStyle": "Deep indigo-blue gradient with electric blue glow and red accents"
+  },
+  "kaveri-warriors": {
+    "cardBgFrom": "#2b0a0f",
+    "cardBgTo": "#4a1018",
+    "glowColor": "#dc2626",
+    "accentColor": "#fbbf24",
+    "logoPlate": "",
+    "cardStyle": "Crimson war-red gradient with ember glow and gold accents"
+  },
+  "ghaggar-champions": {
+    "cardBgFrom": "#0a1530",
+    "cardBgTo": "#12285a",
+    "glowColor": "#f97316",
+    "accentColor": "#fb923c",
+    "logoPlate": "#fff7ed",
+    "cardStyle": "Midnight blue gradient with orange glow and a warm-white logo plate"
+  },
+  "ganga-giants": {
+    "cardBgFrom": "#0b1633",
+    "cardBgTo": "#172a5c",
+    "glowColor": "#f59e0b",
+    "accentColor": "#ff9933",
+    "logoPlate": "#f8fafc",
+    "cardStyle": "Deep navy gradient with saffron glow and a white logo plate"
+  },
+  "narmada-titans": {
+    "cardBgFrom": "#12161c",
+    "cardBgTo": "#262e3a",
+    "glowColor": "#ef4444",
+    "accentColor": "#f87171",
+    "logoPlate": "",
+    "cardStyle": "Dark steel-slate gradient with fierce red glow"
+  },
+  "tapti-tigers": {
+    "cardBgFrom": "#1a0f05",
+    "cardBgTo": "#3a1d08",
+    "glowColor": "#f97316",
+    "accentColor": "#fb923c",
+    "logoPlate": "#f8fafc",
+    "cardStyle": "Dark jungle brown gradient with tiger-orange glow and a white logo plate"
+  },
+  "godavari-knights": {
+    "cardBgFrom": "#0a1740",
+    "cardBgTo": "#172d6e",
+    "glowColor": "#60a5fa",
+    "accentColor": "#cbd5e1",
+    "logoPlate": "#f1f5f9",
+    "cardStyle": "Royal blue gradient with silver accents and a pale silver logo plate"
+  },
+  "krishna-kings": {
+    "cardBgFrom": "#021c26",
+    "cardBgTo": "#064456",
+    "glowColor": "#06b6d4",
+    "accentColor": "#fbbf24",
+    "logoPlate": "",
+    "cardStyle": "Deep peacock teal gradient with cyan glow and gold accents"
+  },
+  "sindhu-sherniyan": {
+    "cardBgFrom": "#042326",
+    "cardBgTo": "#0a4147",
+    "glowColor": "#14b8a6",
+    "accentColor": "#fbbf24",
+    "logoPlate": "#f0fdfa",
+    "cardStyle": "Deep teal gradient with golden accents and a mint-white logo plate"
+  },
+  "saraswati-strikers": {
+    "cardBgFrom": "#14123a",
+    "cardBgTo": "#26227a",
+    "glowColor": "#818cf8",
+    "accentColor": "#facc15",
+    "logoPlate": "#eef2ff",
+    "cardStyle": "Deep indigo gradient with yellow accents and a pale lavender logo plate"
+  },
+  "satluj-sena": {
+    "cardBgFrom": "#1f0709",
+    "cardBgTo": "#420d12",
+    "glowColor": "#ef4444",
+    "accentColor": "#e5e7eb",
+    "logoPlate": "",
+    "cardStyle": "Dark battle-red gradient with crimson glow and silver accents"
+  },
+  "yamuna-panthers": {
+    "cardBgFrom": "#150a24",
+    "cardBgTo": "#2c1250",
+    "glowColor": "#a855f7",
+    "accentColor": "#e9d5ff",
+    "logoPlate": "#faf5ff",
+    "cardStyle": "Midnight purple gradient with violet glow and a soft white-lilac logo plate"
+  },
+  "sabarmati-sunrisers": {
+    "cardBgFrom": "#0b1a3a",
+    "cardBgTo": "#152c5e",
+    "glowColor": "#fb923c",
+    "accentColor": "#fde047",
+    "logoPlate": "",
+    "cardStyle": "Pre-dawn navy gradient with sunrise orange glow and golden yellow accents"
+  },
+  "kaveri-queens": {
+    "cardBgFrom": "#2a0620",
+    "cardBgTo": "#520d3f",
+    "glowColor": "#ec4899",
+    "accentColor": "#fbbf24",
+    "logoPlate": "",
+    "cardStyle": "Deep magenta-plum gradient with pink glow and royal gold accents"
+  },
+  "ravi-royals": {
+    "cardBgFrom": "#0c1a3d",
+    "cardBgTo": "#1e3a8a",
+    "glowColor": "#3b82f6",
+    "accentColor": "#e2e8f0",
+    "logoPlate": "#eff6ff",
+    "cardStyle": "Royal blue gradient with silver accents and an ice-white logo plate"
+  },
+  "ganga-glory": {
+    "cardBgFrom": "#062033",
+    "cardBgTo": "#0c3a5c",
+    "glowColor": "#38bdf8",
+    "accentColor": "#fb923c",
+    "logoPlate": "#f0f9ff",
+    "cardStyle": "Sacred river blue gradient with orange accents and a pale sky logo plate"
+  }
+};
+
+// Populate logo and theme properties onto every team object
+Object.keys(teamsData).forEach((slug) => {
+  teamsData[slug].logo = teamLogos[slug] || "/logo.png";
+  if (teamThemes[slug]) {
+    teamsData[slug].cardBgFrom = teamThemes[slug].cardBgFrom;
+    teamsData[slug].cardBgTo = teamThemes[slug].cardBgTo;
+    teamsData[slug].glowColor = teamThemes[slug].glowColor;
+    teamsData[slug].accentColor = teamThemes[slug].accentColor;
+    teamsData[slug].logoPlate = teamThemes[slug].logoPlate;
+    teamsData[slug].cardStyle = teamThemes[slug].cardStyle;
+  }
+});
 
 export const allTeamSlugs = Object.keys(teamsData);

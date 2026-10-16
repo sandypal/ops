@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { teamLogos } from '@/data/teamsData';
 import { 
   Upload, 
   Users, 
@@ -265,12 +267,12 @@ export default function RegistrationPage() {
   const isSelectedGirls = dbGirlsTeams.some(t => t.name === selectedTeam) || defaultGirlsTeams.includes(selectedTeam);
 
   return (
-    <div className="min-h-screen bg-[#f3f5f8] text-slate-900 selection:bg-[#d8392f] selection:text-white pb-20">
+    <div className="min-h-screen bg-[#f3f5f8] text-slate-900 selection:bg-[#d8392f] selection:text-white flex flex-col justify-between">
       {/* Shared Header */}
       <Header />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 pt-8 md:pt-10 max-w-7xl">
+      <main className="container mx-auto px-4 pt-8 md:pt-10 pb-20 md:pb-28 max-w-7xl flex-1">
         
         {/* Page Heading */}
         <div className="mb-8">
@@ -449,20 +451,47 @@ export default function RegistrationPage() {
               </div>
             </div>
 
-            {/* Official Helpline Card */}
-            <div className="bg-[#112240] text-white p-5 rounded-2xl border border-white/10 flex items-center justify-between">
-              <div>
-                <span className="text-[11px] uppercase font-black text-[#d8392f] block tracking-wider">Official Helpline</span>
-                <a href="tel:+919056333759" className="font-black text-base text-white block hover:text-[#d8392f] transition-colors">+91 90563 33759</a>
-                <a href="mailto:helposcricketcup@gmail.com" className="text-[11px] text-slate-300 block mt-0.5 hover:underline">helposcricketcup@gmail.com</a>
+            {/* Official Helpline & Coordinator Contact Card */}
+            <div className="bg-[#112240] text-white p-5 rounded-2xl border border-white/10 space-y-3.5 shadow-xl">
+              <span className="text-[11px] uppercase font-black text-[#d8392f] block tracking-wider">
+                Official Helpline
+              </span>
+
+              {/* Main Helpline */}
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Tournament Helpline</span>
+                  <a href="tel:+919056333759" className="font-black text-base text-white block hover:text-[#d8392f] transition-colors">+91 90563 33759</a>
+                </div>
+                <a 
+                  href="tel:+919056333759" 
+                  className="w-10 h-10 rounded-full bg-[#d8392f] hover:bg-[#b91c1c] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-105 shrink-0"
+                  title="Call Official Helpline"
+                >
+                  <Phone className="w-4 h-4" />
+                </a>
               </div>
-              <a 
-                href="tel:+919056333759" 
-                className="w-11 h-11 rounded-full bg-[#d8392f] hover:bg-[#b91c1c] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-105 shrink-0"
-                title="Call Official Helpline"
-              >
-                <Phone className="w-5 h-5" />
-              </a>
+
+              {/* Coordinator Vishal */}
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <div>
+                  <span className="text-[10px] uppercase font-black text-amber-400 block tracking-wider">Coordinator (Vishal)</span>
+                  <a href="tel:+919041540053" className="font-black text-base text-white block hover:text-amber-300 transition-colors">+91 90415 40053</a>
+                </div>
+                <a 
+                  href="tel:+919041540053" 
+                  className="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center shadow-lg transition-transform hover:scale-105 shrink-0"
+                  title="Call Vishal (Coordinator)"
+                >
+                  <Phone className="w-4 h-4" />
+                </a>
+              </div>
+
+              <div>
+                <a href="mailto:helposcricketcup@gmail.com" className="text-xs text-slate-300 block hover:underline hover:text-white transition-colors">
+                  helposcricketcup@gmail.com
+                </a>
+              </div>
             </div>
 
           </div>
@@ -538,15 +567,28 @@ export default function RegistrationPage() {
                   </div>
 
                   {selectedTeam ? (
-                    <div className="bg-[#0b162c] text-white p-4 rounded-xl flex items-center justify-between border-l-4 border-[#d8392f]">
-                      <div>
-                        <span className="text-[10px] uppercase font-bold text-slate-400 block">Selected Team</span>
-                        <span className="text-base font-black italic uppercase text-white">{selectedTeam}</span>
-                        <span className="text-xs text-slate-300 block font-medium">
-                          {isSelectedGirls ? "Girls Division" : "Boys Division"}
-                        </span>
+                    <div className="bg-[#0b162c] text-white p-4 rounded-xl flex items-center justify-between border-l-4 border-[#d8392f] gap-4">
+                      <div className="flex items-center gap-3.5">
+                        {teamLogos[selectedTeam.toLowerCase().replace(/\s+/g, '-')] && (
+                          <div className="w-12 h-12 bg-white rounded-xl p-1 shrink-0 flex items-center justify-center shadow-md">
+                            <Image
+                              src={teamLogos[selectedTeam.toLowerCase().replace(/\s+/g, '-')]}
+                              alt={selectedTeam}
+                              width={44}
+                              height={44}
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                        )}
+                        <div>
+                          <span className="text-[10px] uppercase font-bold text-slate-400 block">Selected Team</span>
+                          <span className="text-base font-black italic uppercase text-white">{selectedTeam}</span>
+                          <span className="text-xs text-slate-300 block font-medium">
+                            {isSelectedGirls ? "Girls Division" : "Boys Division"}
+                          </span>
+                        </div>
                       </div>
-                      <Shield className="w-7 h-7 text-[#d8392f]" />
+                      <Shield className="w-6 h-6 text-[#d8392f] shrink-0" />
                     </div>
                   ) : (
                     <div className="border border-dashed border-slate-300 rounded-xl p-4 flex items-center justify-center text-xs text-slate-400 font-medium">
@@ -1013,6 +1055,20 @@ export default function RegistrationPage() {
                       </>
                     )}
                   </button>
+                </div>
+
+                {/* Direct Registration Support Helpline */}
+                <div className="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-bold text-white uppercase text-[10px] tracking-wider">Official Helpline:</span>
+                    <a href="tel:+919056333759" className="text-[#d8392f] hover:underline font-bold">+91 90563 33759</a>
+                    <span className="text-white/20 hidden sm:inline">|</span>
+                    <span className="font-bold text-amber-400 uppercase text-[10px] tracking-wider">Vishal:</span>
+                    <a href="tel:+919041540053" className="text-amber-400 hover:underline font-bold">+91 90415 40053</a>
+                  </div>
+                  <a href="mailto:helposcricketcup@gmail.com" className="text-slate-400 hover:text-white transition-colors text-[11px]">
+                    helposcricketcup@gmail.com
+                  </a>
                 </div>
               </div>
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
@@ -81,33 +82,49 @@ export default async function TeamDetailPage({ params }: Props) {
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               
-              <div className="max-w-3xl">
-                {/* Division & River Badges */}
-                <div className="flex flex-wrap items-center gap-2.5 mb-3">
-                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-                    team.division === 'boys' 
-                      ? 'bg-blue-50 text-blue-700 border border-blue-200' 
-                      : 'bg-rose-50 text-rose-700 border border-rose-200'
-                  }`}>
-                    <Shield className="w-3.5 h-3.5" />
-                    {team.division === 'boys' ? 'Boys Division (16 Teams)' : 'Girls Division (8 Teams)'}
-                  </span>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-6 max-w-3xl">
+                {/* Official Team Logo */}
+                {team.logo && (
+                  <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-3xl bg-slate-50 border-2 border-slate-200 p-2.5 shadow-md flex items-center justify-center shrink-0">
+                    <Image
+                      src={team.logo}
+                      alt={`${team.name} Logo`}
+                      width={140}
+                      height={140}
+                      priority
+                      className="w-full h-full object-contain drop-shadow"
+                    />
+                  </div>
+                )}
 
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
-                    <Droplets className="w-3.5 h-3.5 text-blue-600" />
-                    {team.river}
-                  </span>
+                <div>
+                  {/* Division & River Badges */}
+                  <div className="flex flex-wrap items-center gap-2.5 mb-3">
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                      team.division === 'boys' 
+                        ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                        : 'bg-rose-50 text-rose-700 border border-rose-200'
+                    }`}>
+                      <Shield className="w-3.5 h-3.5" />
+                      {team.division === 'boys' ? 'Boys Division (16 Teams)' : 'Girls Division (8 Teams)'}
+                    </span>
+
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                      <Droplets className="w-3.5 h-3.5 text-blue-600" />
+                      {team.river}
+                    </span>
+                  </div>
+
+                  {/* Team Heading */}
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl font-black italic tracking-tight text-[#0b162c] uppercase leading-none mb-3">
+                    {team.name}
+                  </h1>
+
+                  {/* Tagline */}
+                  <p className="text-base sm:text-lg md:text-xl font-medium text-slate-600 italic">
+                    &ldquo;{team.tagline}&rdquo;
+                  </p>
                 </div>
-
-                {/* Team Heading */}
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-black italic tracking-tight text-[#0b162c] uppercase leading-none mb-3">
-                  {team.name}
-                </h1>
-
-                {/* Tagline */}
-                <p className="text-base sm:text-lg md:text-xl font-medium text-slate-600 italic">
-                  &ldquo;{team.tagline}&rdquo;
-                </p>
               </div>
 
               {/* Quick Hero CTA */}
@@ -263,23 +280,30 @@ export default async function TeamDetailPage({ params }: Props) {
                 <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                   
                   {/* Sidebar Header */}
-                  <div className="bg-[#0b162c] text-white p-5 border-b-2 border-[#d8392f]">
-                    <div className="flex items-center justify-between gap-2 mb-1">
-                      <span className="text-[10px] font-black tracking-widest uppercase text-slate-400 flex items-center gap-1.5">
-                        <Shirt className="w-3.5 h-3.5 text-[#d8392f]" />
-                        Official Squad
-                      </span>
-                      <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                        <Clock className="w-3 h-3" />
-                        Coming Soon
-                      </span>
+                  <div className="bg-[#0b162c] text-white p-5 border-b-2 border-[#d8392f] flex items-center gap-3.5">
+                    {team.logo && (
+                      <div className="w-13 h-13 bg-white/95 rounded-2xl p-1.5 shadow-md flex items-center justify-center shrink-0 border border-white/40">
+                        <Image src={team.logo} alt="" width={52} height={52} className="w-full h-full object-contain" />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <span className="text-[10px] font-black tracking-widest uppercase text-slate-400 flex items-center gap-1.5">
+                          <Shirt className="w-3.5 h-3.5 text-[#d8392f]" />
+                          Official Squad
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                          <Clock className="w-3 h-3" />
+                          Coming Soon
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-black uppercase tracking-tight text-white truncate">
+                        {team.name} Roster
+                      </h3>
+                      <p className="text-xs text-slate-300 mt-0.5">
+                        12 certified slots allocated.
+                      </p>
                     </div>
-                    <h3 className="text-lg font-black uppercase tracking-tight text-white">
-                      {team.name} Roster
-                    </h3>
-                    <p className="text-xs text-slate-300 mt-1">
-                      12 certified slots allocated for this river team.
-                    </p>
                   </div>
 
                   {/* Announcement Banner inside Sidebar */}

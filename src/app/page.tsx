@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { teamLogos, teamsData } from '@/data/teamsData';
 import {
   Calendar,
   MapPin,
@@ -20,18 +21,22 @@ import {
   Phone,
   Check,
   Leaf,
-  Mail
+  Mail,
+  Handshake,
+  ExternalLink,
+  Sparkles,
+  Briefcase,
+  Building,
+  CheckCircle2,
+  X,
+  MessageCircle,
+  ArrowRight
 } from 'lucide-react';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'boys' | 'girls'>('boys');
-
-  const teamColors = [
-    "from-blue-600 to-blue-900", "from-green-500 to-green-800", "from-[#d8392f] to-red-900", "from-yellow-500 to-yellow-700",
-    "from-purple-500 to-purple-800", "from-cyan-500 to-cyan-800", "from-pink-500 to-pink-800", "from-orange-500 to-orange-800",
-    "from-indigo-600 to-indigo-900", "from-teal-500 to-teal-800", "from-rose-500 to-rose-800", "from-fuchsia-500 to-fuchsia-800",
-    "from-amber-500 to-amber-700", "from-lime-500 to-lime-700", "from-emerald-500 to-emerald-800", "from-sky-500 to-sky-800"
-  ];
+  const [isSponsorModalOpen, setIsSponsorModalOpen] = useState(false);
+  const [selectedSponsorTier, setSelectedSponsorTier] = useState<string>('Title Sponsor');
 
   const boysTeams = [
     "Sindhu Spartans", "Satluj Soorme", "Beas Blasters", "Brahmaputra Bulls",
@@ -45,7 +50,209 @@ export default function Home() {
     "Sabarmati Sunrisers", "Kaveri Queens", "Ravi Royals", "Ganga Glory"
   ];
 
-  // Organizing Committee Members (Add new members here)
+  // Official Collaborations - In exact order matching official banner
+  const collaborators = [
+    {
+      name: "Sarv Seva Sashaktikaran Sanstha",
+      subtitle: "सर्व सेवा सशक्तिकरण संस्था (Regd. NGO)",
+      role: "Organizing Foundation",
+      tagline: "Seva Samarpan & Youth Empowerment",
+      description: "Leading grassroots social transformation and empowering youth across India through sports, de-addiction campaigns, and civic service.",
+      logos: [
+        {
+          src: "/collaborators/sarv-seva-sashaktikaran.png",
+          alt: "Sarv Seva Sashaktikaran Sanstha Logo",
+          width: 140,
+          height: 140,
+          className: "max-h-20 w-auto object-contain"
+        }
+      ],
+      link: "",
+      badgeColor: "bg-emerald-50 text-emerald-800 border-emerald-200"
+    },
+    {
+      name: "Panjab University",
+      subtitle: "PU Chandigarh • Estd. 1882",
+      role: "University Partner",
+      tagline: "Collegiate & Academic Outreach",
+      description: "Collaborating with one of India's oldest and most prestigious universities to mobilize talented collegiate cricket squads across the region.",
+      logos: [
+        {
+          src: "/collaborators/panjab-university.png",
+          alt: "Panjab University Logo",
+          width: 120,
+          height: 120,
+          className: "max-h-20 w-auto object-contain"
+        }
+      ],
+      link: "https://puchd.ac.in/",
+      badgeColor: "bg-purple-50 text-purple-700 border-purple-200"
+    },
+    {
+      name: "UT Sports Chandigarh",
+      subtitle: "Sports Department, Chandigarh Administration",
+      role: "Venue & Sports Authority",
+      tagline: "Infrastructure & Host Partner",
+      description: "Supporting grassroots athletics and tournament hosting at the prestigious Sector 16 Cricket Stadium, Chandigarh.",
+      logos: [
+        {
+          src: "/collaborators/ut-sports-chandigarh.png",
+          alt: "Sports Department Chandigarh Administration",
+          width: 140,
+          height: 120,
+          className: "max-h-20 w-auto object-contain"
+        }
+      ],
+      link: "https://sportsdeptt.chd.gov.in/",
+      badgeColor: "bg-blue-50 text-blue-800 border-blue-200"
+    },
+    {
+      name: "Indian Army",
+      subtitle: "Ministry of Defence • Govt. of India",
+      role: "Armed Forces Partner",
+      tagline: "Service Before Self (Seva Paramo Dharma)",
+      description: "Standing in eternal tribute to our valiant soldiers, inspiring the tournament with unmatched courage, discipline, and dedication to the nation.",
+      logos: [
+        {
+          src: "/collaborators/indian-army.png",
+          alt: "Indian Army Official Emblem",
+          width: 140,
+          height: 140,
+          className: "max-h-20 w-auto object-contain"
+        }
+      ],
+      link: "https://indianarmy.nic.in/",
+      badgeColor: "bg-red-50 text-red-700 border-red-200"
+    },
+    {
+      name: "Indian Air Force",
+      subtitle: "Ministry of Defence • Govt. of India",
+      role: "Armed Forces Partner (Air)",
+      tagline: "Touch the Sky with Glory (Nabhaḥ Sparśaṁ Dīptam)",
+      description: "Saluting the valiant guardians of our airspace whose valor, precision, and technological prowess protect our skies with supreme dedication.",
+      logos: [
+        {
+          src: "/collaborators/indian-air-force.png",
+          alt: "Indian Air Force Official Crest",
+          width: 140,
+          height: 140,
+          className: "max-h-20 w-auto object-contain"
+        }
+      ],
+      link: "https://indianairforce.nic.in/",
+      badgeColor: "bg-sky-50 text-sky-800 border-sky-200"
+    },
+    {
+      name: "Indian Navy",
+      subtitle: "Ministry of Defence • Govt. of India",
+      role: "Armed Forces Partner (Maritime)",
+      tagline: "Shaṁ No Varuṇaḥ (May the Ocean Lord be Auspicious)",
+      description: "Honoring our maritime guardians protecting the sovereign waters of Bharat with supreme vigilance, integrity, and valor.",
+      logos: [
+        {
+          src: "/collaborators/indian-navy.png",
+          alt: "Indian Navy Official Crest",
+          width: 140,
+          height: 140,
+          className: "max-h-20 w-auto object-contain"
+        }
+      ],
+      link: "https://indiannavy.nic.in/",
+      badgeColor: "bg-blue-50 text-blue-900 border-blue-200"
+    },
+    {
+      name: "Ministry of Youth Affairs & Sports",
+      subtitle: "Government of India • भारत सरकार",
+      role: "Union Ministry",
+      tagline: "Empowering Indian Youth & Sports",
+      description: "Fostering national athletic excellence, developing world-class sports ecosystems, and mobilizing youth energy for India's sporting future.",
+      logos: [
+        {
+          src: "/collaborators/ministry-of-youth-affairs.svg",
+          alt: "Ministry of Youth Affairs and Sports Logo",
+          width: 150,
+          height: 90,
+          className: "max-h-16 w-auto object-contain"
+        }
+      ],
+      link: "https://yas.nic.in/",
+      badgeColor: "bg-amber-50 text-amber-800 border-amber-200"
+    },
+    {
+      name: "MY Bharat",
+      subtitle: "Mera Yuva Bharat • Ministry of Youth Affairs & Sports",
+      role: "National Youth Network",
+      tagline: "Yuva Shakti for Viksit Bharat",
+      description: "An autonomous body under the Ministry of Youth Affairs empowering millions of youth through sports leadership, volunteerism, and active athletic engagement.",
+      logos: [
+        {
+          src: "/collaborators/my-bharat.png",
+          alt: "MY Bharat Official Logo",
+          width: 160,
+          height: 80,
+          className: "max-h-16 w-auto object-contain"
+        }
+      ],
+      link: "https://mybharat.gov.in/",
+      badgeColor: "bg-orange-50 text-orange-700 border-orange-200"
+    },
+    {
+      name: "NSS (National Service Scheme)",
+      subtitle: "Ministry of Youth Affairs & Sports • Govt. of India",
+      role: "National Youth Service Wing",
+      tagline: "Not Me, But You",
+      description: "Mobilizing youth energy into community leadership, social welfare, civic responsibility, and active nation-building.",
+      logos: [
+        {
+          src: "/collaborators/nss.png",
+          alt: "National Service Scheme (NSS) Emblem",
+          width: 130,
+          height: 130,
+          className: "max-h-20 w-auto object-contain"
+        }
+      ],
+      link: "https://nss.gov.in/",
+      badgeColor: "bg-indigo-50 text-indigo-700 border-indigo-200"
+    },
+    {
+      name: "NCC (National Cadet Corps)",
+      subtitle: "Youth Wing of Armed Forces • Ministry of Defence",
+      role: "Cadet & Youth Wing",
+      tagline: "Unity & Discipline (Ekta aur Anushasan)",
+      description: "Developing character, comradeship, ideals of selfless service, and patriotic leadership among young student cadets nationwide.",
+      logos: [
+        {
+          src: "/collaborators/ncc.png",
+          alt: "National Cadet Corps (NCC) Crest",
+          width: 110,
+          height: 140,
+          className: "max-h-20 w-auto object-contain"
+        }
+      ],
+      link: "https://indiancc.nic.in/",
+      badgeColor: "bg-sky-50 text-sky-800 border-sky-200"
+    },
+    {
+      name: "Viksit Bharat Abhiyan",
+      subtitle: "Government of India Initiative • 1947 to 2047",
+      role: "National Vision Partner",
+      tagline: "Transforming India into a Developed Nation",
+      description: "Uniting youth spirit, national pride, and athletic dedication to advance the grand vision of a developed, prosperous, and self-reliant India by 2047.",
+      logos: [
+        {
+          src: "/collaborators/viksit-bharat.png",
+          alt: "Viksit Bharat Abhiyan Logo",
+          width: 140,
+          height: 80,
+          className: "max-h-16 w-auto object-contain"
+        }
+      ],
+      link: "https://www.india.gov.in/",
+      badgeColor: "bg-teal-50 text-teal-800 border-teal-200"
+    }
+  ];
+
+  // Organizing Committee Members
   const organizers = [
     {
       name: "Vishal Kamboj",
@@ -53,9 +260,213 @@ export default function Home() {
       designation: "Coordinator, Operation Sindoor Cricket Cup 2.0",
       image: "/vishal-kamboj.jpg",
       organization: "Sarv Sewa Sashktikaran Sangthan",
-      phone: "+91 84374 09211"
+      phone: "+91 90415 40053"
+    },
+    {
+      name: "Gurwinder Singh",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Gurwinder-singh.jpeg",
+      organization: "Sarv Sewa Sashktikaran Sangthan",
+      phone: ""
+    },
+    {
+      name: "Ram Chander Singh",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Ramchandersingh.jpeg",
+      organization: "Sarv Sewa Sashktikaran Sangthan",
+      phone: ""
+    },
+    {
+      name: "Kohinoor",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Kohinoor.jpeg",
+      organization: "Sarv Sewa Sashktikaran Sangthan",
+      phone: ""
+    },
+    {
+      name: "Gourav Choudhary",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Gouravchoudhary.jpeg",
+      organization: "Sarv Sewa Sashktikaran Sangthan",
+      phone: ""
+    },
+    {
+      name: "Jujhar Singh",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Jujharsingh.jpeg",
+      organization: "Sarv Sewa Sashktikaran Sangthan",
+      phone: ""
+    },
+    {
+      name: "Jarman Brar",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Jarmanbrar.jpeg",
+      organization: "Sarv Sewa Sashktikaran Sangthan",
+      phone: ""
+    },
+    {
+      name: "Rohit",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/rohit.jpeg",
+      organization: "Sarv Sewa Sashktikaran Sangthan",
+      phone: ""
+    },
+    {
+      name: "Ranjit Singh",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Ranjitsingh.jpeg",
+      organization: "Sarv Sewa Sashktikaran Sangthan",
+      phone: ""
+    },
+    {
+      name: "Gursimrat Singh",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Gursimrat-Singh.jpeg",
+      organization: "Sarv Sewa Sashktikaran Sangthan",
+      phone: ""
+    },
+    {
+      name: "Rajbir Singh",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Rajbirsingh.jpeg",
+      organization: "Sarv Sewa Sashktikaran Sangthan",
+      phone: ""
     }
   ];
+
+  // Active / Confirmed Sponsors (Add sponsors here to show their logos on the website)
+  const activeSponsors: {
+    category: string;
+    brandName: string;
+    logo?: string;
+    website?: string;
+    tagline?: string;
+  }[] = [
+    // Confirmed sponsors will automatically display their logo here.
+    // Example:
+    // {
+    //   category: "Title Sponsor",
+    //   brandName: "Brand Name",
+    //   logo: "/sponsors/brand.png",
+    //   website: "https://brand.com",
+    //   tagline: "Official Title Sponsor"
+    // }
+  ];
+
+  // Sponsorship Categories Matrix (12 Partners — ₹30,00,000)
+  const sponsorshipTiers = [
+    {
+      id: "title-sponsor",
+      category: "Title Sponsor",
+      hindiCategory: "टाइटल स्पॉन्सर",
+      partners: 1,
+      partnerLabel: "1 Slot (Exclusive)",
+      perPartner: "₹10,00,000",
+      totalAmount: "₹10,00,000",
+      featured: true,
+      badge: "Exclusive Naming Rights",
+      badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
+      accentBorder: "border-amber-400 shadow-amber-500/10",
+      perks: [
+        "Exclusive Tournament Naming Rights: '[Your Brand] Operation Sindoor Cricket Cup 2.0'",
+        "Primary Front Jersey Center Chest Logo across all 24 team kits (288+ players)",
+        "Dominant Pitch Mat, Sight-screen, Main Presentation Backdrop & Stadium Entrance Gate branding",
+        "VIP Trophy Handover Ceremony & Chief Guest honor at the Grand Finale",
+        "Full digital live-stream score bug & lower-third broadcast branding"
+      ]
+    },
+    {
+      id: "co-powered-by",
+      category: "Co-Powered By",
+      hindiCategory: "सह-संचालक पार्टनर",
+      partners: 2,
+      partnerLabel: "2 Partners",
+      perPartner: "₹5,00,000",
+      totalAmount: "₹10,00,000",
+      featured: false,
+      badge: "Co-Presenting Brand",
+      badgeColor: "bg-blue-100 text-blue-900 border-blue-300",
+      accentBorder: "border-blue-300 shadow-blue-500/10",
+      perks: [
+        "'Co-Powered By [Your Brand]' branding on all official print, digital & stadium media",
+        "Upper Back of Jersey logo on all match day player uniforms",
+        "Ground perimeter boards & Team Dugout backdrop branding",
+        "Digital live-stream graphic sponsor bugs & press release attribution"
+      ]
+    },
+    {
+      id: "associate-sponsor",
+      category: "Associate Sponsor",
+      hindiCategory: "एसोसिएट स्पॉन्सर",
+      partners: 3,
+      partnerLabel: "3 Partners",
+      perPartner: "₹2,00,000",
+      totalAmount: "₹6,00,000",
+      featured: false,
+      badge: "High-Visibility Partner",
+      badgeColor: "bg-purple-100 text-purple-900 border-purple-300",
+      accentBorder: "border-purple-200",
+      perks: [
+        "Right/Left Jersey Sleeve prominent logo placement on official jerseys",
+        "2x Ground Perimeter A-frame boards at Sector 16 Stadium",
+        "Official Award naming partner (e.g. Man of the Match / Best Bowler)",
+        "Dedicated social media sponsor spotlight & digital shoutouts"
+      ]
+    },
+    {
+      id: "team-jersey-sponsor",
+      category: "Team/Jersey Sponsor",
+      hindiCategory: "टीम / जर्सी स्पॉन्सर",
+      partners: 2,
+      partnerLabel: "2 Partners",
+      perPartner: "₹1,00,000",
+      totalAmount: "₹2,00,000",
+      featured: false,
+      badge: "Team Kit Partner",
+      badgeColor: "bg-emerald-100 text-emerald-900 border-emerald-300",
+      accentBorder: "border-emerald-200",
+      perks: [
+        "Direct Player Jersey branding worn across 24 collegiate cricket squads",
+        "Team dugout banner presence & official kit unveiling coverage",
+        "Photo-ops with team captains and player squads",
+        "Digital social media roster branding tags and match updates"
+      ]
+    },
+    {
+      id: "special-category-partner",
+      category: "Special Category Partner",
+      hindiCategory: "स्पेशल कैटेगरी पार्टनर",
+      partners: 4,
+      partnerLabel: "4 Partners",
+      perPartner: "₹50,000",
+      totalAmount: "₹2,00,000",
+      featured: false,
+      badge: "Category Exclusive",
+      badgeColor: "bg-slate-100 text-slate-800 border-slate-300",
+      accentBorder: "border-slate-200",
+      perks: [
+        "Exclusive Domain Partnership (Beverage, Refreshment, Digital, Medical)",
+        "On-ground kiosk / stall and product sampling booth rights at stadium",
+        "Official Special Partner logo on event posters & social media banners",
+        "Live PA ground announcement acknowledgement during matches"
+      ]
+    }
+  ];
+
+  const openSponsorModal = (category: string = 'Title Sponsor') => {
+    setSelectedSponsorTier(category);
+    setIsSponsorModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-[#f3f5f8] text-slate-900 font-sans selection:bg-[#d8392f] selection:text-white">
@@ -120,7 +531,7 @@ export default function Home() {
             </h2>
 
             <p className="text-lg md:text-xl text-slate-300 max-w-2xl mb-8 font-medium">
-              Open to <strong className="text-white">college &amp; university students</strong> across Punjab &amp; Chandigarh. Join the battle at Sector 16 Stadium Chandigarh. 24 Teams. 5 Days. Ultimate T10 knockouts. Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-white font-bold hover:text-[#d8392f] underline underline-offset-2 transition-colors">Sarv Sewa Sashktikaran Sangthan</a>.
+              Open to <strong className="text-white">college &amp; university students</strong> across all States &amp; UTs. Join the battle at Sector 16 Stadium Chandigarh. 24 Teams. 5 Days. Ultimate T10 knockouts. Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-white font-bold hover:text-[#d8392f] underline underline-offset-2 transition-colors">Sarv Sewa Sashktikaran Sangthan</a>.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 mb-5">
@@ -176,10 +587,12 @@ export default function Home() {
         </div>
       </section>
 
+
+
       {/* About Section */}
       <section id="about" className="py-20 bg-gradient-to-b from-white via-slate-50 to-[#f3f5f8] border-b border-slate-200 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex items-center justify-between gap-6 mb-12">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-12">
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-red-100/80 text-[#d8392f] text-xs font-black uppercase tracking-widest mb-3 border border-red-200">
                 <Shield className="w-3.5 h-3.5" />
@@ -193,15 +606,58 @@ export default function Home() {
                 Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer"><strong className="text-slate-900 font-bold hover:text-[#d8392f] transition-colors">Sarv Sewa Sashktikaran Sangthan</strong></a>, the Operation Sindoor Cricket Cup is a premier state-level cricket tournament held in salute to the brave men and women of the Indian Armed Forces.
               </p>
             </div>
-            <div className="shrink-0">
-              <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden shadow-xl border-4 border-white ring-2 ring-slate-200">
-                <Image
-                  src="/sarvsewa-logo.png"
-                  alt="Sarv Sewa Sashaktikaran Sangathan Logo"
-                  width={160}
-                  height={160}
-                  className="object-cover w-full h-full"
-                />
+            {/* Organizing Body & Institutional Collaborators Cluster */}
+            <div className="shrink-0 bg-white/90 backdrop-blur-xs p-3.5 sm:p-4 rounded-3xl border border-slate-200/90 shadow-md max-w-full lg:max-w-md">
+              <div className="flex items-center justify-between gap-2 mb-2.5 pb-2 border-b border-slate-100">
+                <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#d8392f]"></span>
+                  Organization & Official Collaborators
+                </span>
+                <a href="#collaborations" className="text-[10px] font-bold text-[#d8392f] hover:underline uppercase tracking-wider">
+                  View All (11)
+                </a>
+              </div>
+              <div className="flex items-center gap-3">
+                {/* 1. Sarv Sewa (Organizing Body) */}
+                <a
+                  href="https://sarvsewabharat.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden shadow-md border-2 border-emerald-500 ring-2 ring-emerald-100 bg-white p-0.5 hover:scale-105 transition-transform shrink-0"
+                  title="Sarv Sewa Sashaktikaran Sangathan (Organizing Body)"
+                >
+                  <Image
+                    src="/sarvsewa-logo.png"
+                    alt="Sarv Sewa Sashaktikaran Sangathan Logo"
+                    width={80}
+                    height={80}
+                    className="object-cover w-full h-full rounded-full"
+                  />
+                </a>
+
+                <div className="h-10 w-px bg-slate-200 hidden sm:block shrink-0"></div>
+
+                {/* Collaboration Logos next to Sarv Sewa in exact order */}
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  {collaborators.slice(1).map((collab, idx) => (
+                    <a
+                      key={idx}
+                      href={collab.link || "#collaborations"}
+                      target={collab.link ? "_blank" : undefined}
+                      rel={collab.link ? "noopener noreferrer" : undefined}
+                      className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-slate-50 hover:bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-[#d8392f] hover:scale-110 transition-all p-1 flex items-center justify-center shrink-0"
+                      title={`${collab.name} — ${collab.role}`}
+                    >
+                      <Image
+                        src={collab.logos[0].src}
+                        alt={collab.logos[0].alt}
+                        width={32}
+                        height={32}
+                        className="max-h-full max-w-full object-contain"
+                      />
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -314,60 +770,514 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Schedule / Match Center */}
-      <section id="schedule" className="py-16 bg-[#0b162c] text-white">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-end mb-10 border-b-2 border-[#112240] pb-4">
+      {/* Collaborations Section */}
+      <section id="collaborations" className="py-20 bg-gradient-to-b from-white via-slate-50/70 to-white border-b border-slate-200 relative overflow-hidden">
+        {/* Subtle background glow */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-red-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b-2 border-slate-100 pb-6 gap-4">
             <div>
-              <h2 className="text-3xl md:text-5xl font-black uppercase italic text-white tracking-tighter">
-                TOURNAMENT <span className="text-[#d8392f]">SCHEDULE</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-red-100/80 text-[#d8392f] text-xs font-black uppercase tracking-widest mb-3 border border-red-200">
+                <Handshake className="w-3.5 h-3.5" />
+                Official Association
+              </div>
+              <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-[#0b162c]">
+                OFFICIAL <span className="text-[#d8392f]">COLLABORATIONS</span>
               </h2>
+              <p className="text-slate-600 text-sm md:text-base mt-2 font-medium max-w-2xl">
+                Operation Sindoor Cricket Cup 2.0 stands in proud tribute to the Armed Forces, uniting Sarv Seva Sashaktikaran Sanstha, Panjab University, UT Sports, Indian Army, Indian Air Force, Indian Navy, Ministry of Youth Affairs & Sports, MY Bharat, NSS, NCC, and Viksit Bharat in an inspiring national sporting mission.
+              </p>
+            </div>
+            <div className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider bg-white px-4 py-2.5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+              11 Official Partners
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {collaborators.map((collab, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-2xl border border-slate-200 hover:border-[#d8392f] hover:shadow-xl transition-all duration-300 p-6 flex flex-col justify-between group relative overflow-hidden"
+              >
+                {/* Top subtle accent line */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#d8392f] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                <div>
+                  {/* Logo Container */}
+                  <div className="h-28 rounded-xl bg-slate-50/80 border border-slate-100 flex items-center justify-center p-3 mb-5 group-hover:bg-slate-50 transition-colors">
+                    {collab.logos.length === 1 ? (
+                      <Image
+                        src={collab.logos[0].src}
+                        alt={collab.logos[0].alt}
+                        width={collab.logos[0].width}
+                        height={collab.logos[0].height}
+                        className={`${collab.logos[0].className} group-hover:scale-105 transition-transform duration-300 drop-shadow-sm`}
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center gap-3">
+                        {collab.logos.map((logo, lIdx) => (
+                          <div key={lIdx} className="bg-white rounded-xl p-2 shadow-sm border border-slate-200/70 flex items-center justify-center">
+                            <Image
+                              src={logo.src}
+                              alt={logo.alt}
+                              width={logo.width}
+                              height={logo.height}
+                              className={`${logo.className} group-hover:scale-105 transition-transform duration-300`}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Badge */}
+                  <div className="mb-3">
+                    <span className={`inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${collab.badgeColor}`}>
+                      {collab.role}
+                    </span>
+                  </div>
+
+                  {/* Title & Subtitle */}
+                  <h3 className="font-black text-xl text-[#0b162c] uppercase italic tracking-tight group-hover:text-[#d8392f] transition-colors leading-tight mb-1">
+                    {collab.name}
+                  </h3>
+                  <p className="text-xs font-bold text-slate-500 mb-3 leading-snug">
+                    {collab.subtitle}
+                  </p>
+
+                  {/* Description */}
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                    {collab.description}
+                  </p>
+                </div>
+
+                {/* Footer with Tagline and Link */}
+                <div className="pt-5 mt-5 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                    {collab.tagline}
+                  </span>
+                  {collab.link && (
+                    <a
+                      href={collab.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-bold text-[#d8392f] hover:text-[#b91c1c] transition-colors"
+                      title={`Visit ${collab.name}`}
+                    >
+                      <span>Explore</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Sponsorship Section - Executive VIP Dark Onyx & Amber Prestige */}
+      <section id="sponsorship" className="py-24 bg-gradient-to-b from-[#060b17] via-[#0c1426] to-[#050914] text-white relative overflow-hidden border-b-2 border-amber-500/20">
+        {/* Luxury Gold & Crimson atmospheric glows */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[450px] h-[450px] bg-[#d8392f]/10 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[40%] h-full bg-gradient-to-l from-amber-500/5 to-transparent transform skew-x-[-18deg] translate-x-24 pointer-events-none" />
+
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Header */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-14 border-b border-white/10 pb-8 gap-6">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-amber-400/10 text-amber-400 text-xs font-black uppercase tracking-widest mb-3 border border-amber-400/20 backdrop-blur-sm">
+                <Sparkles className="w-3.5 h-3.5" />
+                Brand Association & Growth
+              </div>
+              <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-white">
+                TOURNAMENT <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#d8392f] to-[#fb923c]">SPONSORSHIP</span>
+              </h2>
+              <p className="text-slate-300 text-sm md:text-base mt-2 font-medium max-w-2xl leading-relaxed">
+                Position your brand at the center of North India’s premier collegiate cricket championship. Extensive stadium hoardings, live-stream broadcast exposure, and direct engagement with youth across all States &amp; UTs.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={() => openSponsorModal('Title Sponsor')}
+                className="px-6 py-3.5 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white font-black italic text-sm uppercase tracking-wider rounded-xl hover:shadow-[0_0_25px_rgba(239,68,68,0.6)] hover:-translate-y-0.5 transition-all flex items-center gap-2 shadow-lg cursor-pointer"
+              >
+                <Briefcase className="w-4 h-4" />
+                <span>Apply for Sponsorship</span>
+              </button>
+              <a
+                href="tel:+919056333759"
+                className="px-5 py-3.5 bg-white/10 hover:bg-white/15 text-white font-bold text-sm rounded-xl border border-white/20 transition-all flex items-center gap-2"
+              >
+                <Phone className="w-4 h-4 text-[#d8392f]" />
+                <span>+91 90563 33759</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Active / Confirmed Sponsors Showcase */}
+          <div className="mb-16">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <h3 className="text-xs font-black uppercase tracking-widest text-slate-300">
+                  Official Tournament Sponsors &amp; Brand Partners
+                </h3>
+              </div>
+              <span className="text-xs font-semibold text-slate-400">
+                12 Partner Slots Available
+              </span>
+            </div>
+
+            {activeSponsors.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                {activeSponsors.map((sponsor, idx) => (
+                  <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center text-center hover:border-white/30 transition-all">
+                    {sponsor.logo ? (
+                      <Image src={sponsor.logo} alt={sponsor.brandName} width={120} height={60} className="max-h-12 w-auto object-contain mb-2" />
+                    ) : (
+                      <Building className="w-8 h-8 text-amber-400 mb-2" />
+                    )}
+                    <span className="text-xs font-bold text-white uppercase">{sponsor.brandName}</span>
+                    <span className="text-[10px] text-amber-400 font-semibold">{sponsor.category}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                {sponsorshipTiers.map((tier) => (
+                  <div
+                    key={tier.id}
+                    className="bg-white/5 border border-white/10 hover:border-amber-400/50 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 group hover:bg-white/[0.08]"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-3">
+                        <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded border ${tier.badgeColor}`}>
+                          {tier.partners} {tier.partners === 1 ? 'Slot' : 'Slots'}
+                        </span>
+                        <span className="text-[11px] font-bold text-amber-400">
+                          {tier.perPartner}
+                        </span>
+                      </div>
+                      <h4 className="font-black text-sm uppercase italic text-white tracking-wide group-hover:text-amber-300 transition-colors">
+                        {tier.category}
+                      </h4>
+                      <p className="text-[11px] text-slate-400 mt-0.5 font-medium">
+                        {tier.hindiCategory}
+                      </p>
+                      
+                      {/* Logo Placeholder Box */}
+                      <div className="my-3.5 h-16 rounded-xl border border-dashed border-white/20 bg-white/[0.02] flex flex-col items-center justify-center text-center group-hover:border-amber-400/40 transition-colors">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider group-hover:text-slate-200">
+                          Your Logo Here
+                        </span>
+                        <span className="text-[9px] text-emerald-400 font-semibold mt-0.5">
+                          Slot Open
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => openSponsorModal(tier.category)}
+                      className="w-full mt-2 py-2 px-3 bg-white/10 hover:bg-[#d8392f] text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <span>Claim This Slot</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Detailed Tier Cards */}
+          <div className="mb-14">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h3 className="text-2xl md:text-3xl font-black uppercase italic tracking-tight text-white">
+                  SPONSORSHIP <span className="text-[#d8392f]">PACKAGES &amp; DELIVERABLES</span>
+                </h3>
+                <p className="text-slate-400 text-xs md:text-sm mt-1">
+                  Comprehensive 360° branding rights across ground hoardings, team jersey kits, and digital live-streams.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {sponsorshipTiers.map((tier) => (
+                <div
+                  key={tier.id}
+                  className={`rounded-2xl border p-6 flex flex-col justify-between transition-all duration-300 relative ${
+                    tier.featured
+                      ? 'bg-gradient-to-b from-amber-500/10 via-[#112240] to-[#0b162c] border-amber-400/60 shadow-[0_0_30px_rgba(245,158,11,0.15)] lg:scale-[1.02]'
+                      : 'bg-[#112240] border-white/10 hover:border-white/25 hover:shadow-xl'
+                  }`}
+                >
+                  {tier.featured && (
+                    <div className="absolute -top-3 right-6 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">
+                      ★ Prime Exclusive
+                    </div>
+                  )}
+
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded border ${tier.badgeColor}`}>
+                        {tier.badge}
+                      </span>
+                      <span className="text-xs font-bold text-slate-400">
+                        {tier.partnerLabel}
+                      </span>
+                    </div>
+
+                    <h4 className="text-2xl font-black uppercase italic tracking-tight text-white mb-1">
+                      {tier.category}
+                    </h4>
+                    <p className="text-xs text-slate-400 font-semibold mb-4">
+                      {tier.hindiCategory}
+                    </p>
+
+                    {/* Pricing Highlight Strip */}
+                    <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 mb-5 flex items-baseline justify-between">
+                      <div>
+                        <div className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">
+                          Per Partner (प्रति पार्टनर)
+                        </div>
+                        <div className="text-2xl font-black italic text-amber-400">
+                          {tier.perPartner}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">
+                          Category Total (कुल)
+                        </div>
+                        <div className="text-sm font-black text-slate-200">
+                          {tier.totalAmount}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Deliverables List */}
+                    <div className="space-y-2.5 mb-6">
+                      <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-2">
+                        Included Deliverables:
+                      </div>
+                      {tier.perks.map((perk, pIdx) => (
+                        <div key={pIdx} className="flex items-start gap-2 text-xs text-slate-300 leading-snug">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                          <span>{perk}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => openSponsorModal(tier.category)}
+                    className={`w-full py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                      tier.featured
+                        ? 'bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 shadow-lg shadow-amber-500/20'
+                        : 'bg-white/10 hover:bg-[#d8392f] text-white'
+                    }`}
+                  >
+                    <span>Apply for {tier.category}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Official Sponsorship Matrix Table - Commented out for now */}
+          {false && (
+            <div className="bg-[#112240] rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
+              <div className="p-5 md:p-6 bg-gradient-to-r from-white/5 to-transparent border-b border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div>
+                  <h4 className="text-lg font-black uppercase italic tracking-tight text-white flex items-center gap-2">
+                    <span>Official Sponsorship Matrix</span>
+                    <span className="text-xs font-bold text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">
+                      कुल बजट: ₹30,00,000
+                    </span>
+                  </h4>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Full category allocation across all 12 partner slots for Operation Sindoor Cricket Cup 2.0.
+                  </p>
+                </div>
+                <button
+                  onClick={() => openSponsorModal('Title Sponsor')}
+                  className="px-4 py-2 bg-[#d8392f] hover:bg-[#b91c1c] text-white font-black text-xs uppercase tracking-wider rounded-lg transition-colors cursor-pointer shrink-0"
+                >
+                  Inquire All Categories
+                </button>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm text-slate-300">
+                  <thead className="bg-white/5 text-[11px] font-black uppercase tracking-wider text-slate-400 border-b border-white/10">
+                    <tr>
+                      <th className="py-3.5 px-6">Sponsorship Category (श्रेणी)</th>
+                      <th className="py-3.5 px-6 text-center">Partners (पार्टनर्स)</th>
+                      <th className="py-3.5 px-6 text-right">प्रति पार्टनर (Per Partner)</th>
+                      <th className="py-3.5 px-6 text-right">कुल (Total Amount)</th>
+                      <th className="py-3.5 px-6 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5 font-medium">
+                    {sponsorshipTiers.map((tier) => (
+                      <tr key={tier.id} className="hover:bg-white/[0.03] transition-colors group">
+                        <td className="py-4 px-6">
+                          <div className="font-bold text-white group-hover:text-amber-300 transition-colors">
+                            {tier.category}
+                          </div>
+                          <div className="text-xs text-slate-400 font-normal">
+                            {tier.hindiCategory} • {tier.badge}
+                          </div>
+                        </td>
+                        <td className="py-4 px-6 text-center">
+                          <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/10 font-bold text-white text-xs">
+                            {tier.partners}
+                          </span>
+                        </td>
+                        <td className="py-4 px-6 text-right font-black italic text-amber-400 text-base">
+                          {tier.perPartner}
+                        </td>
+                        <td className="py-4 px-6 text-right font-black italic text-white text-base">
+                          {tier.totalAmount}
+                        </td>
+                        <td className="py-4 px-6 text-center">
+                          <button
+                            onClick={() => openSponsorModal(tier.category)}
+                            className="px-3.5 py-1.5 bg-white/10 hover:bg-[#d8392f] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                          >
+                            Apply Now
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot className="bg-white/10 border-t-2 border-white/20 font-black text-white">
+                    <tr>
+                      <td className="py-4 px-6 uppercase tracking-wider text-sm">
+                        Total Allocation (कुल योग)
+                      </td>
+                      <td className="py-4 px-6 text-center text-base text-amber-400">
+                        12 Partners
+                      </td>
+                      <td className="py-4 px-6 text-right text-xs text-slate-400 uppercase tracking-wider font-bold">
+                        —
+                      </td>
+                      <td className="py-4 px-6 text-right text-xl italic text-amber-400">
+                        ₹30,00,000
+                      </td>
+                      <td className="py-4 px-6 text-center">
+                        <span className="text-xs text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
+                          12 Slots Open
+                        </span>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Tournament Transition Ribbon between Sponsorship & Schedule */}
+      <div className="h-2 w-full bg-gradient-to-r from-amber-400 via-[#d8392f] to-blue-500 shadow-md relative z-20" />
+
+      {/* Schedule / Match Center - Athletic Floodlit Stadium Arena */}
+      <section id="schedule" className="py-24 bg-gradient-to-b from-[#0e172a] via-[#142343] to-[#0a101f] text-white relative overflow-hidden border-b-2 border-slate-700/80">
+        {/* Stadium Floodlight Accents & Mesh Grid */}
+        <div className="absolute -top-32 left-1/4 w-[500px] h-[350px] bg-blue-500/15 rounded-full blur-[110px] pointer-events-none" />
+        <div className="absolute -top-32 right-1/4 w-[500px] h-[350px] bg-sky-400/10 rounded-full blur-[110px] pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#d8392f]/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.035] pointer-events-none" />
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-blue-500/20 pb-6 gap-4">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/15 text-blue-300 text-xs font-black uppercase tracking-widest mb-3 border border-blue-400/30 backdrop-blur-sm">
+                <Calendar className="w-3.5 h-3.5 text-blue-400" />
+                Tournament Match Center &amp; Brackets
+              </div>
+              <h2 className="text-3xl md:text-5xl font-black uppercase italic text-white tracking-tighter">
+                TOURNAMENT <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-300 to-white">SCHEDULE</span>
+              </h2>
+              <p className="text-slate-300 text-sm md:text-base mt-2 font-medium max-w-2xl">
+                Official 5-day T10 knockout roadmaps hosted under floodlights at Sector 16 Stadium, Chandigarh.
+              </p>
+            </div>
+            <div className="inline-flex items-center gap-2 text-xs font-bold text-sky-300 uppercase tracking-wider bg-blue-950/60 px-4 py-2 rounded-xl border border-blue-400/30">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              22 Knockout Matches • 5 Days
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Boys Roadmap */}
-            <div className="bg-[#112240] rounded-2xl p-6 border-t-4 border-blue-500 shadow-xl">
-              <h3 className="font-black text-2xl uppercase italic tracking-wider mb-6">Boys Division</h3>
-              <div className="space-y-4">
+            {/* Boys Roadmap - Deep Royal Cobalt */}
+            <div className="bg-gradient-to-b from-[#16274a] to-[#0d182e] rounded-3xl p-6 sm:p-8 border-2 border-blue-400/40 shadow-2xl relative overflow-hidden">
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-blue-500/20">
+                <div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-0.5">Men&apos;s Championship</div>
+                  <h3 className="font-black text-2xl uppercase italic tracking-wider text-white">Boys Division</h3>
+                </div>
+                <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30">
+                  16 Teams • 15 Matches
+                </span>
+              </div>
+              <div className="space-y-3.5">
                 {[
                   { phase: "Round of 16", matches: "8 Matches", teams: "16 Teams" },
                   { phase: "Quarter-Finals", matches: "4 Matches", teams: "8 Teams" },
                   { phase: "Semi-Finals", matches: "2 Matches", teams: "4 Teams" },
                   { phase: "Grand Final", matches: "1 Match", teams: "2 Teams" }
                 ].map((step, i) => (
-                  <div key={i} className="bg-[#0b162c] p-4 rounded-xl border border-white/10 flex justify-between items-center group hover:border-blue-500 transition-colors">
+                  <div key={i} className="bg-[#091122]/90 p-4 rounded-xl border border-blue-500/20 flex justify-between items-center group hover:border-blue-400 hover:bg-[#0f1b34] transition-all hover:translate-x-1">
                     <div className="flex items-center gap-4">
-                      <div className="w-8 h-8 rounded-full bg-blue-600 font-bold flex items-center justify-center shrink-0">{i + 1}</div>
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 font-black text-white flex items-center justify-center shrink-0 shadow-md">{i + 1}</div>
                       <div>
-                        <h4 className="font-bold uppercase tracking-wider">{step.phase}</h4>
-                        <p className="text-sm text-slate-400">{step.teams}</p>
+                        <h4 className="font-bold uppercase tracking-wider text-white group-hover:text-blue-300 transition-colors">{step.phase}</h4>
+                        <p className="text-xs text-slate-400">{step.teams}</p>
                       </div>
                     </div>
-                    <div className="font-black text-blue-500 italic">{step.matches}</div>
+                    <div className="font-black text-sky-400 italic text-base">{step.matches}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Girls Roadmap */}
-            <div className="bg-[#112240] rounded-2xl p-6 border-t-4 border-[#d8392f] shadow-xl">
-              <h3 className="font-black text-2xl uppercase italic tracking-wider mb-6">Girls Division</h3>
-              <div className="space-y-4">
+            {/* Girls Roadmap - Rich Ruby Crimson */}
+            <div className="bg-gradient-to-b from-[#351523] to-[#1c0c14] rounded-3xl p-6 sm:p-8 border-2 border-[#d8392f]/40 shadow-2xl relative overflow-hidden">
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#d8392f]/20">
+                <div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-rose-400 mb-0.5">Women&apos;s Championship</div>
+                  <h3 className="font-black text-2xl uppercase italic tracking-wider text-white">Girls Division</h3>
+                </div>
+                <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#d8392f]/20 text-rose-300 border border-[#d8392f]/30">
+                  8 Teams • 7 Matches
+                </span>
+              </div>
+              <div className="space-y-3.5">
                 {[
                   { phase: "Quarter-Finals", matches: "4 Matches", teams: "8 Teams" },
                   { phase: "Semi-Finals", matches: "2 Matches", teams: "4 Teams" },
                   { phase: "Grand Final", matches: "1 Match", teams: "2 Teams" }
                 ].map((step, i) => (
-                  <div key={i} className="bg-[#0b162c] p-4 rounded-xl border border-white/10 flex justify-between items-center group hover:border-[#d8392f] transition-colors">
+                  <div key={i} className="bg-[#180811]/90 p-4 rounded-xl border border-[#d8392f]/20 flex justify-between items-center group hover:border-[#d8392f] hover:bg-[#250d1a] transition-all hover:translate-x-1">
                     <div className="flex items-center gap-4">
-                      <div className="w-8 h-8 rounded-full bg-[#d8392f] font-bold flex items-center justify-center shrink-0">{i + 1}</div>
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#d8392f] to-[#b91c1c] font-black text-white flex items-center justify-center shrink-0 shadow-md">{i + 1}</div>
                       <div>
-                        <h4 className="font-bold uppercase tracking-wider">{step.phase}</h4>
-                        <p className="text-sm text-slate-400">{step.teams}</p>
+                        <h4 className="font-bold uppercase tracking-wider text-white group-hover:text-rose-300 transition-colors">{step.phase}</h4>
+                        <p className="text-xs text-slate-400">{step.teams}</p>
                       </div>
                     </div>
-                    <div className="font-black text-[#d8392f] italic">{step.matches}</div>
+                    <div className="font-black text-rose-400 italic text-base">{step.matches}</div>
                   </div>
                 ))}
               </div>
@@ -375,7 +1285,7 @@ export default function Home() {
           </div>
 
           {/* Registration Price & Kit Inclusions Callout Card */}
-          <div className="mt-8 bg-gradient-to-br from-[#0b162c] via-[#112240] to-[#0b162c] text-white rounded-3xl p-6 md:p-8 flex flex-col lg:flex-row items-center gap-6 justify-between shadow-2xl border-2 border-[#d8392f] relative overflow-hidden">
+          <div className="mt-10 bg-gradient-to-r from-[#0b162c] via-[#152342] to-[#0b162c] text-white rounded-3xl p-6 md:p-8 flex flex-col lg:flex-row items-center gap-6 justify-between shadow-2xl border-2 border-amber-400/80 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#d8392f]/20 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="relative z-10 text-left">
@@ -405,7 +1315,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Match Refreshments & BCCI Grade Umpires</span>
+                  <span>Match Refreshments &amp; BCCI Grade Umpires</span>
                 </div>
               </div>
             </div>
@@ -455,34 +1365,109 @@ export default function Home() {
             </button>
           </div>
 
+          {/* Tournament Teams Grid - IPL Centered Crest Style */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 animate-fade-in" key={activeTab}>
-            {(activeTab === 'boys' ? boysTeams : girlsTeams).map((team, i) => {
+            {(activeTab === 'boys' ? boysTeams : girlsTeams).map((team) => {
               const slug = team.toLowerCase().replace(/\s+/g, '-');
+              const logo = teamLogos[slug];
+              const detail = teamsData[slug];
+              const cardBgFrom = detail?.cardBgFrom || '#0b162c';
+              const cardBgTo = detail?.cardBgTo || '#152a4e';
+              const glowColor = detail?.glowColor || '#2563eb';
+              const accentColor = detail?.accentColor || '#f59e0b';
+              const logoPlate = detail?.logoPlate || '';
+              const riverText = detail?.river?.replace(/^River\s+/, '') || 'Vedic Division';
+
               return (
                 <Link
                   key={team}
                   href={`/teams/${slug}`}
-                  className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-2xl transition-all aspect-[4/3] block"
+                  className="group relative rounded-2xl border p-4 md:p-6 flex flex-col justify-between overflow-hidden shadow-lg hover:-translate-y-2 transition-all duration-500 ease-out min-h-[290px] md:min-h-[340px]"
+                  style={{
+                    background: `linear-gradient(145deg, ${cardBgFrom} 0%, ${cardBgTo} 100%)`,
+                    borderColor: `${accentColor}33`,
+                    boxShadow: `0 10px 25px -5px ${cardBgFrom}cc, 0 8px 10px -6px ${cardBgFrom}aa`
+                  }}
                 >
-                  {/* Team Background */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${teamColors[i % teamColors.length]} opacity-90 group-hover:opacity-100 transition-opacity`}></div>
+                  {/* Subtle Dark Vignette Overlay for uniform text legibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
 
-                  {/* Slanted accent */}
-                  <div className="absolute top-0 right-0 w-[150%] h-[150%] bg-white/10 transform -skew-x-[25deg] translate-x-1/2 group-hover:translate-x-[40%] transition-transform duration-500"></div>
+                  {/* Diagonal Shimmer Sheen Flare on Hover */}
+                  <div className="absolute inset-0 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none -skew-x-12 z-20" />
 
-                  <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-between z-10">
-                    <div className="flex items-center justify-between">
-                      <div className="w-10 h-10 md:w-14 md:h-14 bg-white/20 backdrop-blur-md rounded-full border border-white/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Shield className="w-5 h-5 md:w-7 md:h-7 text-white" />
+                  {/* Dynamic Pulsing Ambient Glow */}
+                  <div
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 md:w-52 md:h-52 rounded-full blur-3xl opacity-35 group-hover:opacity-80 group-hover:scale-135 transition-all duration-700 ease-out pointer-events-none"
+                    style={{ backgroundColor: glowColor }}
+                  />
+
+                  {/* Top Row: River Lineage + Interactive Squad Button */}
+                  <div className="relative z-10 flex items-center justify-between w-full">
+                    <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-slate-200 group-hover:text-white bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 transition-colors truncate max-w-[65%]">
+                      {riverText}
+                    </span>
+                    <span
+                      className="text-[10px] md:text-xs font-bold text-slate-200 group-hover:text-white px-2.5 py-1 rounded-full border transition-all duration-300 flex items-center gap-0.5"
+                      style={{
+                        backgroundColor: `${accentColor}25`,
+                        borderColor: `${accentColor}55`,
+                      }}
+                    >
+                      Squad <ChevronRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
+
+                  {/* Center Hero Logo with Fully Enclosed High-Contrast Emblem Stage */}
+                  <div className="relative z-10 my-auto py-2 flex items-center justify-center w-full">
+                    {/* Outer Ambient Glow Aura */}
+                    <div
+                      className="absolute w-36 h-36 md:w-48 md:h-48 rounded-full blur-xl pointer-events-none group-hover:scale-120 transition-transform duration-500"
+                      style={{
+                        background: `radial-gradient(circle, ${glowColor}60 0%, transparent 70%)`
+                      }}
+                    />
+
+                    {/* Dedicated High-Contrast Emblem Card (Encloses 100% of the logo & embedded text) */}
+                    <div
+                      className="w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-2xl bg-white shadow-xl p-2.5 flex items-center justify-center transition-all duration-500 group-hover:scale-105 group-hover:shadow-2xl"
+                      style={{
+                        border: `2px solid ${accentColor}60`,
+                        boxShadow: `0 12px 28px -5px rgba(0,0,0,0.5), 0 0 20px ${glowColor}40`
+                      }}
+                    >
+                      <div className="w-full h-full relative flex items-center justify-center">
+                        {logo ? (
+                          <Image
+                            src={logo}
+                            alt={`${team} Logo`}
+                            width={160}
+                            height={160}
+                            className="w-full h-full object-contain"
+                          />
+                        ) : (
+                          <Shield className="w-16 h-16 text-slate-400" />
+                        )}
                       </div>
-                      <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-white/70 bg-black/30 backdrop-blur-sm px-2 py-1 rounded-md border border-white/10 group-hover:text-white group-hover:border-white/30 transition-all">
-                        View Heritage & Squad →
-                      </span>
                     </div>
-                    <div>
-                      <h3 className="font-black text-white text-lg md:text-2xl leading-none italic uppercase drop-shadow-md">{team.split(' ')[0]}</h3>
-                      <h3 className="font-black text-white/80 text-xl md:text-3xl leading-none italic uppercase drop-shadow-md">{team.split(' ')[1]}</h3>
-                    </div>
+                  </div>
+
+                  {/* Bottom Info: Team Name with Linear Gradient & Tagline */}
+                  <div className="relative z-10 text-center w-full pt-3 border-t border-white/10 group-hover:border-white/20 transition-colors">
+                    <h3
+                      className="font-black text-base md:text-xl uppercase italic tracking-wide transition-all duration-300 leading-tight truncate"
+                      style={{
+                        background: `linear-gradient(90deg, #ffffff 20%, ${accentColor} 100%)`,
+                        WebkitBackgroundClip: 'text',
+                        backgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        color: 'transparent'
+                      }}
+                    >
+                      {team}
+                    </h3>
+                    <p className="text-[11px] md:text-xs text-slate-400 group-hover:text-slate-300 transition-colors font-medium truncate mt-0.5">
+                      {detail?.tagline || 'Official T10 Franchise'}
+                    </p>
                   </div>
                 </Link>
               );
@@ -643,14 +1628,25 @@ export default function Home() {
                 className="bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-[#d8392f] hover:shadow-md transition-all duration-300 group"
               >
                 <div className="relative aspect-square overflow-hidden bg-slate-100">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 16vw"
-                    className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  {member.image ? (
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 16vw"
+                      className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-100 via-slate-50 to-red-50/40 text-[#0b162c] p-3 text-center">
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#d8392f] to-[#b91c1c] text-white flex items-center justify-center font-black text-lg mb-1 shadow-md">
+                        {member.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()}
+                      </div>
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                        Committee
+                      </span>
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                   <div className="absolute bottom-2 left-2 right-2">
                     <span className="bg-[#d8392f] text-white text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow-md line-clamp-1">
                       {member.role}
@@ -667,9 +1663,16 @@ export default function Home() {
                   <p className="text-slate-400 text-[10px] font-medium mt-0.5 leading-tight">
                     {member.organization}
                   </p>
-                  <a href={`tel:${member.phone.replace(/\s+/g, '')}`} className="inline-flex items-center gap-1 text-[10px] text-slate-600 hover:text-[#d8392f] transition-colors mt-1.5 font-bold">
-                    <Phone className="w-3 h-3 text-[#d8392f]" /> {member.phone}
-                  </a>
+                  {member.phone ? (
+                    <a href={`tel:${member.phone.replace(/\s+/g, '')}`} className="inline-flex items-center gap-1 text-[10px] text-slate-600 hover:text-[#d8392f] transition-colors mt-1.5 font-bold">
+                      <Phone className="w-3 h-3 text-[#d8392f]" /> {member.phone}
+                    </a>
+                  ) : (
+                    <div className="text-[10px] text-slate-400 font-medium mt-1.5 flex items-center gap-1">
+                      <Shield className="w-3 h-3 text-slate-400" />
+                      <span>Executive Council</span>
+                    </div>
+                  )}
                   <div className="border-t border-slate-100 mt-2 pt-2 space-y-1">
                     <a href="tel:+919056333759" className="flex items-center gap-1 text-[10px] text-slate-500 hover:text-[#d8392f] transition-colors font-semibold">
                       <Phone className="w-2.5 h-2.5 text-[#d8392f] shrink-0" />
@@ -696,6 +1699,150 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Sponsorship Contact & Number Dialog */}
+      {isSponsorModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-[#0b162c] text-white rounded-3xl border-2 border-[#d8392f]/70 max-w-lg w-full p-6 md:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            {/* Close Button */}
+            <button
+              onClick={() => setIsSponsorModalOpen(false)}
+              className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Header */}
+            <div className="mb-6">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 text-amber-400 text-xs font-black uppercase tracking-wider mb-2 border border-amber-400/20">
+                <Sparkles className="w-3.5 h-3.5" />
+                Direct Sponsorship Desk
+              </div>
+              <h3 className="text-2xl md:text-3xl font-black uppercase italic tracking-tight text-white leading-tight">
+                APPLY FOR <span className="text-[#d8392f]">SPONSORSHIP</span>
+              </h3>
+              <p className="text-xs text-slate-300 mt-1">
+                Call or WhatsApp our organizing committee directly to discuss and lock your brand sponsorship slot.
+              </p>
+            </div>
+
+            {/* Selected Package Highlight */}
+            <div className="bg-gradient-to-r from-white/10 to-white/5 border border-white/15 rounded-2xl p-4 mb-6">
+              <div className="flex items-center justify-between text-xs text-slate-300 mb-1">
+                <span className="font-bold uppercase tracking-wider text-amber-400">Selected Category</span>
+                <span className="text-[11px] text-slate-400">Sector 16 Stadium, Chandigarh</span>
+              </div>
+              <div className="text-xl font-black uppercase italic text-white">
+                {selectedSponsorTier}
+              </div>
+              <p className="text-xs text-slate-300 mt-1">
+                Slots are allotted on a first-confirmed basis for Operation Sindoor Cricket Cup 2.0.
+              </p>
+            </div>
+
+            {/* Direct Phone Numbers & Quick Actions */}
+            <div className="space-y-3 mb-6">
+              {/* Helpline Number */}
+              <div className="bg-[#112240] rounded-2xl p-4 border border-white/10 hover:border-[#d8392f] transition-all">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-black uppercase tracking-wider text-slate-400">
+                    Official Tournament Helpline
+                  </span>
+                  <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                    Active 24/7
+                  </span>
+                </div>
+                <a
+                  href="tel:+919056333759"
+                  className="text-2xl font-black text-white hover:text-[#d8392f] transition-colors tracking-tight flex items-center gap-2"
+                >
+                  <Phone className="w-5 h-5 text-[#d8392f]" />
+                  <span>+91 90563 33759</span>
+                </a>
+                <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-white/10">
+                  <a
+                    href="tel:+919056333759"
+                    className="py-2.5 px-3 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Call Helpline</span>
+                  </a>
+                  <a
+                    href={`https://wa.me/919056333759?text=${encodeURIComponent(`Hello, we want to sponsor Operation Sindoor Cricket Cup 2.0 under the "${selectedSponsorTier}" category. Please share the details.`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Coordinator Number */}
+              <div className="bg-[#112240] rounded-2xl p-4 border border-white/10 hover:border-[#d8392f] transition-all">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-black uppercase tracking-wider text-slate-400">
+                    Vishal Kamboj (Coordinator)
+                  </span>
+                  <span className="text-[10px] font-semibold text-slate-400">
+                    Sarv Sewa Sashktikaran Sangthan
+                  </span>
+                </div>
+                <a
+                  href="tel:+918437409211"
+                  className="text-2xl font-black text-white hover:text-[#d8392f] transition-colors tracking-tight flex items-center gap-2"
+                >
+                  <Phone className="w-5 h-5 text-[#d8392f]" />
+                  <span>+91 84374 09211</span>
+                </a>
+                <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-white/10">
+                  <a
+                    href="tel:+918437409211"
+                    className="py-2.5 px-3 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Call Vishal Ji</span>
+                  </a>
+                  <a
+                    href={`https://wa.me/918437409211?text=${encodeURIComponent(`Hello Vishal ji, we are interested in sponsoring Operation Sindoor Cricket Cup 2.0 under the "${selectedSponsorTier}" category. Please share details.`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Email & Venue Info */}
+            <div className="bg-white/5 rounded-2xl p-4 border border-white/10 text-xs text-slate-300 space-y-2 mb-6">
+              <div className="flex items-center justify-between">
+                <span className="text-slate-400">Official Email:</span>
+                <a href="mailto:helposcricketcup@gmail.com" className="font-bold text-amber-400 hover:underline">
+                  helposcricketcup@gmail.com
+                </a>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-400">Match Venue:</span>
+                <span className="font-bold text-white">Sector 16 Cricket Stadium, Chandigarh</span>
+              </div>
+            </div>
+
+            {/* 1-click WhatsApp CTA */}
+            <a
+              href={`https://wa.me/919056333759?text=${encodeURIComponent(`Hello, we want to sponsor Operation Sindoor Cricket Cup 2.0 under the "${selectedSponsorTier}" category. Please share the official sponsorship proposal.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-black italic text-sm uppercase tracking-wider rounded-2xl shadow-lg hover:shadow-emerald-500/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <MessageCircle className="w-5 h-5" />
+              <span>Connect on WhatsApp for {selectedSponsorTier}</span>
+            </a>
+          </div>
+        </div>
+      )}
 
       {/* Shared Footer */}
       <Footer />

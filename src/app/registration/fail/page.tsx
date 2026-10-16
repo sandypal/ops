@@ -47,6 +47,9 @@ function FailContent() {
                 <Phone className="w-4 h-4 text-[#d8392f]" />
                 <span>Helpline: </span>
                 <a href="tel:+919056333759" className="text-[#d8392f] hover:underline">+91 90563 33759</a>
+                <span className="text-slate-300">|</span>
+                <span className="text-xs text-slate-500 font-bold">Vishal:</span>
+                <a href="tel:+919041540053" className="text-[#d8392f] hover:underline">+91 90415 40053</a>
               </div>
               <div className="text-xs text-slate-600 pl-6">
                 <span>Email: </span>

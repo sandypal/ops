@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     siteName: "Operation Sindoor Cricket Cup 2.0",
     title: "Operation Sindoor Cricket Cup 2.0 | Chandigarh Cricket Tournament 2026",
     description:
-      "Punjab & Chandigarh's biggest cricket tournament 2026. T10 format, 24 teams, ₹2 Lac prize pool at Sector 16 Stadium. Boys & Girls divisions. Register now!",
+      "India's premier nationwide collegiate cricket tournament 2026 across all States & UTs. T10 format, 24 teams, ₹2 Lac prize pool at Sector 16 Stadium Chandigarh. Register now!",
     images: [
       {
         url: "/logo.png",
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Operation Sindoor Cricket Cup 2.0 | Chandigarh Cricket Tournament 2026",
     description:
-      "Punjab & Chandigarh's biggest cricket tournament 2026. T10 format, 24 teams, ₹2 Lac prize pool. Register now!",
+      "India's premier nationwide collegiate cricket tournament 2026 across all States & UTs. T10 format, 24 teams, ₹2 Lac prize pool. Register now!",
     images: ["/logo.png"],
   },
 };
