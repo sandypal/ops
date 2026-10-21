@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
@@ -30,13 +30,37 @@ import {
   CheckCircle2,
   X,
   MessageCircle,
-  ArrowRight
+  ArrowRight,
+  Lock
 } from 'lucide-react';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'boys' | 'girls'>('boys');
   const [isSponsorModalOpen, setIsSponsorModalOpen] = useState(false);
   const [selectedSponsorTier, setSelectedSponsorTier] = useState<string>('Title Sponsor');
+
+  // Confirmed teams from API with default fallback
+  const [registeredTeamsList, setRegisteredTeamsList] = useState<Array<{ name: string; slug: string; division: string }>>([
+    { name: "Kaveri Queens", slug: "kaveri-queens", division: "girls" }
+  ]);
+
+  useEffect(() => {
+    const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://sarvsewabharat.org/api/api/';
+    const baseApiUrl = rawApiUrl.replace(/\/+$/, '');
+    fetch(`${baseApiUrl}/tournament/teams`)
+      .then(res => res.json())
+      .then(res => {
+        if (res.status === 'success' && res.data && res.data.all) {
+          const registered = res.data.all.filter((t: any) => t.status === 'registered' || t.is_registered);
+          if (registered.length > 0) {
+            setRegisteredTeamsList(registered);
+          }
+        }
+      })
+      .catch(err => {
+        console.warn('Could not fetch teams from API:', err);
+      });
+  }, []);
 
   const boysTeams = [
     "Sindhu Spartans", "Satluj Soorme", "Beas Blasters", "Brahmaputra Bulls",
@@ -50,24 +74,94 @@ export default function Home() {
     "Sabarmati Sunrisers", "Kaveri Queens", "Ravi Royals", "Ganga Glory"
   ];
 
-  // Official Collaborations - In exact order matching official banner
-  const collaborators = [
+  // 1. Sacred Armed Forces Tributes (Army, Air Force, Navy)
+  const armedForcesTributes = [
     {
-      name: "Sarv Seva Sashaktikaran Sanstha",
-      subtitle: "सर्व सेवा सशक्तिकरण संस्था (Regd. NGO)",
+      name: "Indian Army",
+      hindiName: "भारतीय थल सेना",
+      subtitle: "Solemn Tribute to Our Brave Soldiers",
+      branch: "Frontier Guardians & Land Defence",
+      tagline: "Service Before Self (Seva Paramo Dharma)",
+      mottoHindi: "सेवा अस्माकं धर्मः",
+      description: "Dedicated in deepest reverence and sporting tribute to the valiant soldiers of the Indian Army. Honoring their supreme sacrifices, unmatched courage, and steadfast vigilance protecting the land borders of Bharat.",
+      logos: [
+        {
+          src: "/collaborators/indian-army.png",
+          alt: "Indian Army Official Emblem",
+          width: 150,
+          height: 150,
+          className: "max-h-24 w-auto object-contain"
+        }
+      ],
+      link: "https://indianarmy.nic.in/",
+      themeGradient: "from-red-950/60 via-[#131b2e] to-[#0b162c]",
+      badgeColor: "bg-red-500/20 text-red-300 border-red-500/30",
+      accentBorder: "border-red-500/30 hover:border-red-500"
+    },
+    {
+      name: "Indian Air Force",
+      hindiName: "भारतीय वायु सेना",
+      subtitle: "Solemn Tribute to Our Sky Guardians",
+      branch: "Air Dominance & Aerospace Guardians",
+      tagline: "Touch the Sky with Glory (Nabhaḥ Sparśaṁ Dīptam)",
+      mottoHindi: "नभः स्पृशं दीप्तम्",
+      description: "Saluting the fearless air warriors and guardians of Indian skies. Operation Sindoor Cricket Cup celebrates their technological precision, speed, and supreme dedication in defending our airspace.",
+      logos: [
+        {
+          src: "/collaborators/indian-air-force.png",
+          alt: "Indian Air Force Official Crest",
+          width: 150,
+          height: 150,
+          className: "max-h-24 w-auto object-contain"
+        }
+      ],
+      link: "https://indianairforce.nic.in/",
+      themeGradient: "from-sky-950/60 via-[#131b2e] to-[#0b162c]",
+      badgeColor: "bg-sky-500/20 text-sky-300 border-sky-500/30",
+      accentBorder: "border-sky-500/30 hover:border-sky-400"
+    },
+    {
+      name: "Indian Navy",
+      hindiName: "भारतीय नौसेना",
+      subtitle: "Solemn Tribute to Our Ocean Sentinels",
+      branch: "Maritime Sovereignty & Ocean Defence",
+      tagline: "Shaṁ No Varuṇaḥ (May the Ocean Lord be Auspicious)",
+      mottoHindi: "शं नो वरुणः",
+      description: "Dedicated in solemn tribute to the courageous sailors and maritime commanders protecting the sovereign oceans and vast coastline of Bharat with unyielding vigilance, integrity, and valor.",
+      logos: [
+        {
+          src: "/collaborators/indian-navy.png",
+          alt: "Indian Navy Official Crest",
+          width: 150,
+          height: 150,
+          className: "max-h-24 w-auto object-contain"
+        }
+      ],
+      link: "https://indiannavy.nic.in/",
+      themeGradient: "from-blue-950/60 via-[#131b2e] to-[#0b162c]",
+      badgeColor: "bg-blue-500/20 text-blue-300 border-blue-500/30",
+      accentBorder: "border-blue-500/30 hover:border-blue-400"
+    }
+  ];
+
+  // 2. Official Institutional Collaborations & Supporters (8 Partners)
+  const institutionalCollaborators = [
+    {
+      name: "Sarv Sewa Sashktikarn Sangthan (Regd)",
+      subtitle: "सर्व सेवा सशक्तिकरण संगठन (Regd. NGO)",
       role: "Organizing Foundation",
       tagline: "Seva Samarpan & Youth Empowerment",
       description: "Leading grassroots social transformation and empowering youth across India through sports, de-addiction campaigns, and civic service.",
       logos: [
         {
           src: "/collaborators/sarv-seva-sashaktikaran.png",
-          alt: "Sarv Seva Sashaktikaran Sanstha Logo",
+          alt: "Sarv Sewa Sashktikarn Sangthan (Regd) Logo",
           width: 140,
           height: 140,
           className: "max-h-20 w-auto object-contain"
         }
       ],
-      link: "",
+      link: "https://sarvsewabharat.org/",
       badgeColor: "bg-emerald-50 text-emerald-800 border-emerald-200"
     },
     {
@@ -105,60 +199,6 @@ export default function Home() {
       ],
       link: "https://sportsdeptt.chd.gov.in/",
       badgeColor: "bg-blue-50 text-blue-800 border-blue-200"
-    },
-    {
-      name: "Indian Army",
-      subtitle: "Ministry of Defence • Govt. of India",
-      role: "Armed Forces Partner",
-      tagline: "Service Before Self (Seva Paramo Dharma)",
-      description: "Standing in eternal tribute to our valiant soldiers, inspiring the tournament with unmatched courage, discipline, and dedication to the nation.",
-      logos: [
-        {
-          src: "/collaborators/indian-army.png",
-          alt: "Indian Army Official Emblem",
-          width: 140,
-          height: 140,
-          className: "max-h-20 w-auto object-contain"
-        }
-      ],
-      link: "https://indianarmy.nic.in/",
-      badgeColor: "bg-red-50 text-red-700 border-red-200"
-    },
-    {
-      name: "Indian Air Force",
-      subtitle: "Ministry of Defence • Govt. of India",
-      role: "Armed Forces Partner (Air)",
-      tagline: "Touch the Sky with Glory (Nabhaḥ Sparśaṁ Dīptam)",
-      description: "Saluting the valiant guardians of our airspace whose valor, precision, and technological prowess protect our skies with supreme dedication.",
-      logos: [
-        {
-          src: "/collaborators/indian-air-force.png",
-          alt: "Indian Air Force Official Crest",
-          width: 140,
-          height: 140,
-          className: "max-h-20 w-auto object-contain"
-        }
-      ],
-      link: "https://indianairforce.nic.in/",
-      badgeColor: "bg-sky-50 text-sky-800 border-sky-200"
-    },
-    {
-      name: "Indian Navy",
-      subtitle: "Ministry of Defence • Govt. of India",
-      role: "Armed Forces Partner (Maritime)",
-      tagline: "Shaṁ No Varuṇaḥ (May the Ocean Lord be Auspicious)",
-      description: "Honoring our maritime guardians protecting the sovereign waters of Bharat with supreme vigilance, integrity, and valor.",
-      logos: [
-        {
-          src: "/collaborators/indian-navy.png",
-          alt: "Indian Navy Official Crest",
-          width: 140,
-          height: 140,
-          className: "max-h-20 w-auto object-contain"
-        }
-      ],
-      link: "https://indiannavy.nic.in/",
-      badgeColor: "bg-blue-50 text-blue-900 border-blue-200"
     },
     {
       name: "Ministry of Youth Affairs & Sports",
@@ -252,6 +292,9 @@ export default function Home() {
     }
   ];
 
+  // Alias for backward compatibility
+  const collaborators = institutionalCollaborators;
+
   // Organizing Committee Members
   const organizers = [
     {
@@ -259,31 +302,39 @@ export default function Home() {
       role: "Coordinator",
       designation: "Coordinator, Operation Sindoor Cricket Cup 2.0",
       image: "/vishal-kamboj.jpg",
-      organization: "Sarv Sewa Sashktikaran Sangthan",
-      phone: "+91 90415 40053"
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
+      phone: "+91 84374 09211"
     },
     {
-      name: "Gurwinder Singh",
+      name: "Karan Sama",
+      role: "Coordinator",
+      designation: "Coordinator, Operation Sindoor Cricket Cup 2.0",
+      image: "/karan-sama.jpg",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
+      phone: "+91 98551 09159"
+    },
+    {
+      name: "Karan Batti",
       role: "Organizing Committee",
       designation: "Organizing Committee Member",
-      image: "/Gurwinder-singh.jpeg",
-      organization: "Sarv Sewa Sashktikaran Sangthan",
+      image: "/karan-batti.jpg",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
+      phone: "+91 95927 43434"
+    },
+    {
+      name: "Rajbir Singh",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Rajbirsingh.jpeg",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
       phone: ""
     },
     {
-      name: "Ram Chander Singh",
+      name: "Jagchannan Singh",
       role: "Organizing Committee",
       designation: "Organizing Committee Member",
-      image: "/Ramchandersingh.jpeg",
-      organization: "Sarv Sewa Sashktikaran Sangthan",
-      phone: ""
-    },
-    {
-      name: "Kohinoor",
-      role: "Organizing Committee",
-      designation: "Organizing Committee Member",
-      image: "/Kohinoor.jpeg",
-      organization: "Sarv Sewa Sashktikaran Sangthan",
+      image: "/JAGCHANANSINGH.jpeg",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
       phone: ""
     },
     {
@@ -291,7 +342,31 @@ export default function Home() {
       role: "Organizing Committee",
       designation: "Organizing Committee Member",
       image: "/Gouravchoudhary.jpeg",
-      organization: "Sarv Sewa Sashktikaran Sangthan",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
+      phone: "+91 90415 40053"
+    },
+    {
+      name: "Ram Chander Singh",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Ramchandersingh.jpeg",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
+      phone: ""
+    },
+    {
+      name: "Gurwinder Singh",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Gurwinder-singh.jpeg",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
+      phone: ""
+    },
+    {
+      name: "Kohinoor",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Kohinoor.jpeg",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
       phone: ""
     },
     {
@@ -299,7 +374,7 @@ export default function Home() {
       role: "Organizing Committee",
       designation: "Organizing Committee Member",
       image: "/Jujharsingh.jpeg",
-      organization: "Sarv Sewa Sashktikaran Sangthan",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
       phone: ""
     },
     {
@@ -307,7 +382,7 @@ export default function Home() {
       role: "Organizing Committee",
       designation: "Organizing Committee Member",
       image: "/Jarmanbrar.jpeg",
-      organization: "Sarv Sewa Sashktikaran Sangthan",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
       phone: ""
     },
     {
@@ -315,7 +390,7 @@ export default function Home() {
       role: "Organizing Committee",
       designation: "Organizing Committee Member",
       image: "/rohit.jpeg",
-      organization: "Sarv Sewa Sashktikaran Sangthan",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
       phone: ""
     },
     {
@@ -323,7 +398,7 @@ export default function Home() {
       role: "Organizing Committee",
       designation: "Organizing Committee Member",
       image: "/Ranjitsingh.jpeg",
-      organization: "Sarv Sewa Sashktikaran Sangthan",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
       phone: ""
     },
     {
@@ -331,15 +406,7 @@ export default function Home() {
       role: "Organizing Committee",
       designation: "Organizing Committee Member",
       image: "/Gursimrat-Singh.jpeg",
-      organization: "Sarv Sewa Sashktikaran Sangthan",
-      phone: ""
-    },
-    {
-      name: "Rajbir Singh",
-      role: "Organizing Committee",
-      designation: "Organizing Committee Member",
-      image: "/Rajbirsingh.jpeg",
-      organization: "Sarv Sewa Sashktikaran Sangthan",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
       phone: ""
     }
   ];
@@ -352,18 +419,18 @@ export default function Home() {
     website?: string;
     tagline?: string;
   }[] = [
-    // Confirmed sponsors will automatically display their logo here.
-    // Example:
-    // {
-    //   category: "Title Sponsor",
-    //   brandName: "Brand Name",
-    //   logo: "/sponsors/brand.png",
-    //   website: "https://brand.com",
-    //   tagline: "Official Title Sponsor"
-    // }
-  ];
+      // Confirmed sponsors will automatically display their logo here.
+      // Example:
+      // {
+      //   category: "Title Sponsor",
+      //   brandName: "Brand Name",
+      //   logo: "/sponsors/brand.png",
+      //   website: "https://brand.com",
+      //   tagline: "Official Title Sponsor"
+      // }
+    ];
 
-  // Sponsorship Categories Matrix (12 Partners — ₹30,00,000)
+  // Sponsorship Categories Matrix (12 Partner Slots)
   const sponsorshipTiers = [
     {
       id: "title-sponsor",
@@ -371,8 +438,6 @@ export default function Home() {
       hindiCategory: "टाइटल स्पॉन्सर",
       partners: 1,
       partnerLabel: "1 Slot (Exclusive)",
-      perPartner: "₹10,00,000",
-      totalAmount: "₹10,00,000",
       featured: true,
       badge: "Exclusive Naming Rights",
       badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
@@ -391,8 +456,6 @@ export default function Home() {
       hindiCategory: "सह-संचालक पार्टनर",
       partners: 2,
       partnerLabel: "2 Partners",
-      perPartner: "₹5,00,000",
-      totalAmount: "₹10,00,000",
       featured: false,
       badge: "Co-Presenting Brand",
       badgeColor: "bg-blue-100 text-blue-900 border-blue-300",
@@ -410,8 +473,6 @@ export default function Home() {
       hindiCategory: "एसोसिएट स्पॉन्सर",
       partners: 3,
       partnerLabel: "3 Partners",
-      perPartner: "₹2,00,000",
-      totalAmount: "₹6,00,000",
       featured: false,
       badge: "High-Visibility Partner",
       badgeColor: "bg-purple-100 text-purple-900 border-purple-300",
@@ -429,8 +490,6 @@ export default function Home() {
       hindiCategory: "टीम / जर्सी स्पॉन्सर",
       partners: 2,
       partnerLabel: "2 Partners",
-      perPartner: "₹1,00,000",
-      totalAmount: "₹2,00,000",
       featured: false,
       badge: "Team Kit Partner",
       badgeColor: "bg-emerald-100 text-emerald-900 border-emerald-300",
@@ -448,8 +507,6 @@ export default function Home() {
       hindiCategory: "स्पेशल कैटेगरी पार्टनर",
       partners: 4,
       partnerLabel: "4 Partners",
-      perPartner: "₹50,000",
-      totalAmount: "₹2,00,000",
       featured: false,
       badge: "Category Exclusive",
       badgeColor: "bg-slate-100 text-slate-800 border-slate-300",
@@ -531,7 +588,7 @@ export default function Home() {
             </h2>
 
             <p className="text-lg md:text-xl text-slate-300 max-w-2xl mb-8 font-medium">
-              Open to <strong className="text-white">college &amp; university students</strong> across all States &amp; UTs. Join the battle at Sector 16 Stadium Chandigarh. 24 Teams. 5 Days. Ultimate T10 knockouts. Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-white font-bold hover:text-[#d8392f] underline underline-offset-2 transition-colors">Sarv Sewa Sashktikaran Sangthan</a>.
+              Open to <strong className="text-white">college &amp; university students</strong> across all States &amp; UTs. Join the battle at Sector 16 Stadium Chandigarh. 24 Teams. 5 Days. Ultimate T10 knockouts. Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-white font-bold hover:text-[#d8392f] underline underline-offset-2 transition-colors">Sarv Sewa Sashktikarn Sangthan (Regd)</a>.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 mb-5">
@@ -569,6 +626,54 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ═══════════════════════════════════════════════════════════════════════
+          OPTION 3A: LIVE CONFIRMED SQUADS TRUST RIBBON (Direct Logos)
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <div className="bg-[#070e1c] text-white border-y border-amber-500/20 py-2.5 relative z-20 shadow-md">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2.5 shrink-0">
+            <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 px-3 py-1 rounded-full font-black uppercase tracking-wider text-[11px]">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span>Live Confirmed Teams</span>
+            </span>
+            <span className="text-slate-400 font-semibold hidden lg:inline">
+              Verified Squads for Sector 16 Stadium:
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3 overflow-x-auto max-w-full py-1 custom-scrollbar">
+            {registeredTeamsList.map((team, idx) => {
+              const slug = team.slug || team.name.toLowerCase().replace(/\s+/g, '-');
+              const logo = teamLogos[slug];
+              return (
+                <div key={idx} className="flex items-center gap-2 bg-white/10 hover:bg-white/15 px-3 py-1 rounded-xl border border-white/15 shrink-0 transition-colors">
+                  {logo && (
+                    <div className="w-6 h-6 rounded-md bg-white p-0.5 flex items-center justify-center shrink-0 shadow-2xs">
+                      <Image src={logo} alt={team.name} width={20} height={20} className="max-h-full max-w-full object-contain" />
+                    </div>
+                  )}
+                  <span className="font-black text-white text-xs uppercase italic">{team.name}</span>
+                  <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-1.5 py-0.5 rounded border border-emerald-500/30 flex items-center gap-1">
+                    <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
+                    Confirmed Entry
+                  </span>
+                </div>
+              );
+            })}
+            <a 
+              href="/registration" 
+              className="text-xs font-black text-amber-400 hover:text-amber-300 hover:underline uppercase tracking-wider shrink-0 flex items-center gap-1 ml-2"
+            >
+              <span>+ Register Your Team (₹4,999)</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* Quick Stats (Like IPL stats bar) */}
       <section className="bg-white border-y border-slate-200 shadow-sm relative z-20 -mt-6 mx-4 md:mx-auto md:w-11/12 rounded-xl mb-16 overflow-hidden">
         <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-slate-100">
@@ -603,60 +708,101 @@ export default function Home() {
                 <span className="text-[#d8392f]">CRICKET CUP 2.0</span>
               </h2>
               <p className="text-slate-600 text-base md:text-lg mt-4 font-medium leading-relaxed">
-                Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer"><strong className="text-slate-900 font-bold hover:text-[#d8392f] transition-colors">Sarv Sewa Sashktikaran Sangthan</strong></a>, the Operation Sindoor Cricket Cup is a premier state-level cricket tournament held in salute to the brave men and women of the Indian Armed Forces.
+                Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer"><strong className="text-slate-900 font-bold hover:text-[#d8392f] transition-colors">Sarv Sewa Sashktikarn Sangthan (Regd)</strong></a>, the Operation Sindoor Cricket Cup is a premier state-level cricket tournament held in salute to the brave men and women of the Indian Armed Forces.
               </p>
             </div>
-            {/* Organizing Body & Institutional Collaborators Cluster */}
-            <div className="shrink-0 bg-white/90 backdrop-blur-xs p-3.5 sm:p-4 rounded-3xl border border-slate-200/90 shadow-md max-w-full lg:max-w-md">
+            {/* Organizing Body, Armed Forces Tribute & Collaborators Widget */}
+            <div className="shrink-0 bg-white/95 backdrop-blur-xs p-3.5 sm:p-4 rounded-3xl border border-slate-200/90 shadow-md max-w-full lg:max-w-md w-full">
               <div className="flex items-center justify-between gap-2 mb-2.5 pb-2 border-b border-slate-100">
-                <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-[#d8392f]"></span>
-                  Organization & Official Collaborators
+                  Organization, Tributes &amp; Collabs
                 </span>
-                <a href="#collaborations" className="text-[10px] font-bold text-[#d8392f] hover:underline uppercase tracking-wider">
-                  View All (11)
-                </a>
+                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-[#d8392f]">
+                  <a href="#tribute" className="hover:underline">Tribute</a>
+                  <span className="text-slate-300">•</span>
+                  <a href="#collaborations" className="hover:underline">Collabs</a>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
-                {/* 1. Sarv Sewa (Organizing Body) */}
-                <a
-                  href="https://sarvsewabharat.org/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden shadow-md border-2 border-emerald-500 ring-2 ring-emerald-100 bg-white p-0.5 hover:scale-105 transition-transform shrink-0"
-                  title="Sarv Sewa Sashaktikaran Sangathan (Organizing Body)"
-                >
-                  <Image
-                    src="/sarvsewa-logo.png"
-                    alt="Sarv Sewa Sashaktikaran Sangathan Logo"
-                    width={80}
-                    height={80}
-                    className="object-cover w-full h-full rounded-full"
-                  />
-                </a>
 
-                <div className="h-10 w-px bg-slate-200 hidden sm:block shrink-0"></div>
+              <div className="space-y-2.5">
+                {/* 1. Organizing Foundation */}
+                <div className="flex items-center gap-2.5">
+                  <a
+                    href="https://sarvsewabharat.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-11 h-11 sm:w-12 sm:h-12 rounded-full overflow-hidden shadow-xs border-2 border-emerald-500 ring-2 ring-emerald-100 bg-white p-0.5 hover:scale-105 transition-transform shrink-0"
+                    title="Sarv Sewa Sashktikarn Sangthan (Regd) — Organizing Foundation"
+                  >
+                    <Image
+                      src="/sarvsewa-logo.png"
+                      alt="Sarv Sewa Sashktikarn Sangthan (Regd) Logo"
+                      width={48}
+                      height={48}
+                      className="object-cover w-full h-full rounded-full"
+                    />
+                  </a>
+                  <div>
+                    <span className="text-[9px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 block w-fit mb-0.5">
+                      Organizing Foundation
+                    </span>
+                    <span className="text-xs font-bold text-slate-800 block line-clamp-1">
+                      Sarv Sewa Sashktikarn Sangthan (Regd)
+                    </span>
+                  </div>
+                </div>
 
-                {/* Collaboration Logos next to Sarv Sewa in exact order */}
-                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                  {collaborators.slice(1).map((collab, idx) => (
-                    <a
-                      key={idx}
-                      href={collab.link || "#collaborations"}
-                      target={collab.link ? "_blank" : undefined}
-                      rel={collab.link ? "noopener noreferrer" : undefined}
-                      className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-slate-50 hover:bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-[#d8392f] hover:scale-110 transition-all p-1 flex items-center justify-center shrink-0"
-                      title={`${collab.name} — ${collab.role}`}
-                    >
-                      <Image
-                        src={collab.logos[0].src}
-                        alt={collab.logos[0].alt}
-                        width={32}
-                        height={32}
-                        className="max-h-full max-w-full object-contain"
-                      />
-                    </a>
-                  ))}
+                {/* 2. In Sacred Tribute to Armed Forces */}
+                <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1 text-[10px] font-bold text-slate-600 uppercase tracking-wider shrink-0">
+                    <Shield className="w-3 h-3 text-[#d8392f]" />
+                    <span>In Tribute To:</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    {armedForcesTributes.map((tribute, idx) => (
+                      <a
+                        key={idx}
+                        href="#tribute"
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-50 hover:bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-[#d8392f] hover:scale-110 transition-all p-1 flex items-center justify-center shrink-0"
+                        title={`${tribute.name} (${tribute.subtitle})`}
+                      >
+                        <Image
+                          src={tribute.logos[0].src}
+                          alt={tribute.logos[0].alt}
+                          width={28}
+                          height={28}
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 3. Official Collaborations */}
+                <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1 text-[10px] font-bold text-slate-600 uppercase tracking-wider shrink-0">
+                    <Handshake className="w-3 h-3 text-blue-600" />
+                    <span>Collaborators:</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                    {institutionalCollaborators.slice(1).map((collab, idx) => (
+                      <a
+                        key={idx}
+                        href="#collaborations"
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-50 hover:bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-[#d8392f] hover:scale-110 transition-all p-1 flex items-center justify-center shrink-0"
+                        title={`${collab.name} — ${collab.role}`}
+                      >
+                        <Image
+                          src={collab.logos[0].src}
+                          alt={collab.logos[0].alt}
+                          width={28}
+                          height={28}
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -680,7 +826,7 @@ export default function Home() {
               </p>
 
               <p className="text-slate-300 leading-relaxed text-sm md:text-base mb-6 font-normal">
-                Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer"><strong className="text-white hover:text-[#d8392f] transition-colors">Sarv Sewa Sashktikaran Sangthan</strong></a>, this event stands as a beacon of unity — bringing together young athletes, families, and communities to celebrate the values of discipline, teamwork, and national pride.
+                Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer"><strong className="text-white hover:text-[#d8392f] transition-colors">Sarv Sewa Sashktikarn Sangthan (Regd)</strong></a>, this event stands as a beacon of unity — bringing together young athletes, families, and communities to celebrate the values of discipline, teamwork, and national pride.
               </p>
 
               <ul className="space-y-2 mb-6">
@@ -770,8 +916,131 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Collaborations Section */}
-      <section id="collaborations" className="py-20 bg-gradient-to-b from-white via-slate-50/70 to-white border-b border-slate-200 relative overflow-hidden">
+      {/* ═══════════════════════════════════════════════════════════════════════
+          ARMED FORCES TRIBUTE SECTION (Sacred Salute - Separate from Collaborators)
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <section id="tribute" className="py-24 bg-gradient-to-b from-[#060b17] via-[#0b162c] to-[#08111f] text-white relative overflow-hidden border-b-2 border-amber-500/20">
+        {/* Subtle Patriotic Ambient Glows: Saffron on top-left, Navy in center, Emerald on bottom-right */}
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Subtle Tiranga top border ribbon */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff9933] via-white to-[#138808]" />
+
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 border-b border-white/10 pb-6 gap-6">
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/15 text-amber-400 text-xs font-black uppercase tracking-widest mb-3 border border-amber-500/30">
+                <Shield className="w-3.5 h-3.5 text-amber-400" />
+                <span>Salute to the Guardians of Bharat</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase italic tracking-tighter text-white">
+                IN SOLEMN TRIBUTE TO THE <br className="hidden sm:inline" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-300 to-amber-200">
+                  INDIAN ARMED FORCES
+                </span>
+              </h2>
+              <p className="text-slate-300 text-sm md:text-base mt-3 font-medium leading-relaxed">
+                Operation Sindoor Cricket Cup 2.0 is organized in profound reverence and heartfelt tribute to the brave soldiers, air warriors, and naval sailors of Bharat. We bow in utmost gratitude to their indomitable courage, round-the-clock vigilance, and supreme sacrifice defending our motherland.
+              </p>
+            </div>
+          </div>
+
+          {/* 3 Large Tribute Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {armedForcesTributes.map((force, index) => (
+              <div
+                key={index}
+                className="group relative rounded-3xl bg-gradient-to-b from-white/[0.07] to-white/[0.02] border border-white/10 hover:border-amber-400/50 hover:shadow-[0_20px_50px_rgba(245,158,11,0.15)] transition-all duration-500 p-7 flex flex-col justify-between overflow-hidden"
+              >
+                {/* Top Glowing Trim */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                <div>
+                  {/* Branch Pill & Hindi Name */}
+                  <div className="flex items-center justify-between gap-2 mb-5">
+                    <span className="text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-white/10 text-amber-300 border border-white/15">
+                      {force.branch}
+                    </span>
+                    <span className="text-xs font-bold text-slate-400">
+                      {force.hindiName}
+                    </span>
+                  </div>
+
+                  {/* Insignia / Crest Showcase */}
+                  <div className="h-36 rounded-2xl bg-[#070e1c]/80 border border-white/10 flex items-center justify-center p-4 mb-6 group-hover:scale-[1.02] group-hover:bg-[#070e1c] group-hover:border-amber-400/30 transition-all duration-300 shadow-inner">
+                    <Image
+                      src={force.logos[0].src}
+                      alt={force.logos[0].alt}
+                      width={force.logos[0].width}
+                      height={force.logos[0].height}
+                      className="max-h-28 w-auto object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+
+                  {/* Force Name */}
+                  <h3 className="text-2xl font-black uppercase italic tracking-tight text-white group-hover:text-amber-300 transition-colors mb-1">
+                    {force.name}
+                  </h3>
+
+                  {/* Subtitle */}
+                  <p className="text-xs font-bold text-amber-400/90 uppercase tracking-wider mb-3">
+                    {force.subtitle}
+                  </p>
+
+                  {/* Motto Box */}
+                  <div className="bg-white/5 border border-white/10 rounded-xl p-3 mb-4">
+                    <div className="text-xs font-bold text-amber-300 italic mb-0.5">
+                      &quot;{force.mottoHindi}&quot;
+                    </div>
+                    <div className="text-[11px] text-slate-400 font-medium">
+                      {force.tagline}
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                    {force.description}
+                  </p>
+                </div>
+
+                {/* Footer Link */}
+                <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between">
+                  <span className="text-[11px] font-semibold text-slate-400">
+                    Official Armed Force
+                  </span>
+                  <a
+                    href={force.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-black text-amber-400 hover:text-amber-300 transition-colors uppercase tracking-wider group-hover:translate-x-0.5"
+                  >
+                    <span>Visit Portal</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Solemn Quote / Soldier Banner */}
+          <div className="mt-12 bg-gradient-to-r from-amber-500/10 via-red-500/10 to-amber-500/10 rounded-2xl border border-amber-500/25 p-5 sm:p-6 text-center">
+            <p className="text-sm sm:text-base font-bold text-amber-200 tracking-wide">
+              &quot;Our flag does not fly because the wind moves it; it flies with the last breath of each soldier who died protecting it.&quot;
+            </p>
+            <span className="text-xs text-slate-400 uppercase tracking-widest mt-1 block font-medium">
+              Operation Sindoor Cricket Cup 2.0 • Dedicated in Eternal Gratitude to the Armed Forces of India
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+          OFFICIAL INSTITUTIONAL COLLABORATIONS SECTION (Partners & Associations)
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <section id="collaborations" className="py-20 bg-gradient-to-b from-white via-slate-50/80 to-white border-b border-slate-200 relative overflow-hidden">
         {/* Subtle background glow */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-red-500/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -779,15 +1048,15 @@ export default function Home() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b-2 border-slate-100 pb-6 gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-red-100/80 text-[#d8392f] text-xs font-black uppercase tracking-widest mb-3 border border-red-200">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-blue-100/80 text-blue-700 text-xs font-black uppercase tracking-widest mb-3 border border-blue-200">
                 <Handshake className="w-3.5 h-3.5" />
-                Official Association
+                Institutional Network
               </div>
               <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-[#0b162c]">
                 OFFICIAL <span className="text-[#d8392f]">COLLABORATIONS</span>
               </h2>
               <p className="text-slate-600 text-sm md:text-base mt-2 font-medium max-w-2xl">
-                Operation Sindoor Cricket Cup 2.0 stands in proud tribute to the Armed Forces, uniting Sarv Seva Sashaktikaran Sanstha, Panjab University, UT Sports, Indian Army, Indian Air Force, Indian Navy, Ministry of Youth Affairs & Sports, MY Bharat, NSS, NCC, and Viksit Bharat in an inspiring national sporting mission.
+                Organized by Sarv Sewa Sashktikarn Sangthan (Regd) in proud institutional collaboration with Panjab University, UT Sports Chandigarh, Ministry of Youth Affairs &amp; Sports, MY Bharat, NSS, NCC, and Viksit Bharat Abhiyan.
               </p>
             </div>
             <div className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider bg-white px-4 py-2.5 rounded-xl border border-slate-200 shadow-sm">
@@ -795,12 +1064,12 @@ export default function Home() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
               </span>
-              11 Official Partners
+              8 Official Institutional Collaborations
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {collaborators.map((collab, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {institutionalCollaborators.map((collab, index) => (
               <div
                 key={index}
                 className="bg-white rounded-2xl border border-slate-200 hover:border-[#d8392f] hover:shadow-xl transition-all duration-300 p-6 flex flex-col justify-between group relative overflow-hidden"
@@ -960,10 +1229,11 @@ export default function Home() {
                     <div>
                       <div className="flex items-center justify-between mb-3">
                         <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded border ${tier.badgeColor}`}>
-                          {tier.partners} {tier.partners === 1 ? 'Slot' : 'Slots'}
+                          {tier.partners} {tier.partners === 1 ? 'Slot Available' : 'Slots Available'}
                         </span>
-                        <span className="text-[11px] font-bold text-amber-400">
-                          {tier.perPartner}
+                        <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                          Open
                         </span>
                       </div>
                       <h4 className="font-black text-sm uppercase italic text-white tracking-wide group-hover:text-amber-300 transition-colors">
@@ -972,7 +1242,7 @@ export default function Home() {
                       <p className="text-[11px] text-slate-400 mt-0.5 font-medium">
                         {tier.hindiCategory}
                       </p>
-                      
+
                       {/* Logo Placeholder Box */}
                       <div className="my-3.5 h-16 rounded-xl border border-dashed border-white/20 bg-white/[0.02] flex flex-col items-center justify-center text-center group-hover:border-amber-400/40 transition-colors">
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider group-hover:text-slate-200">
@@ -1014,11 +1284,10 @@ export default function Home() {
               {sponsorshipTiers.map((tier) => (
                 <div
                   key={tier.id}
-                  className={`rounded-2xl border p-6 flex flex-col justify-between transition-all duration-300 relative ${
-                    tier.featured
-                      ? 'bg-gradient-to-b from-amber-500/10 via-[#112240] to-[#0b162c] border-amber-400/60 shadow-[0_0_30px_rgba(245,158,11,0.15)] lg:scale-[1.02]'
-                      : 'bg-[#112240] border-white/10 hover:border-white/25 hover:shadow-xl'
-                  }`}
+                  className={`rounded-2xl border p-6 flex flex-col justify-between transition-all duration-300 relative ${tier.featured
+                    ? 'bg-gradient-to-b from-amber-500/10 via-[#112240] to-[#0b162c] border-amber-400/60 shadow-[0_0_30px_rgba(245,158,11,0.15)] lg:scale-[1.02]'
+                    : 'bg-[#112240] border-white/10 hover:border-white/25 hover:shadow-xl'
+                    }`}
                 >
                   {tier.featured && (
                     <div className="absolute -top-3 right-6 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">
@@ -1039,29 +1308,9 @@ export default function Home() {
                     <h4 className="text-2xl font-black uppercase italic tracking-tight text-white mb-1">
                       {tier.category}
                     </h4>
-                    <p className="text-xs text-slate-400 font-semibold mb-4">
+                    <p className="text-xs text-slate-400 font-semibold mb-5 pb-4 border-b border-white/10">
                       {tier.hindiCategory}
                     </p>
-
-                    {/* Pricing Highlight Strip */}
-                    <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 mb-5 flex items-baseline justify-between">
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">
-                          Per Partner (प्रति पार्टनर)
-                        </div>
-                        <div className="text-2xl font-black italic text-amber-400">
-                          {tier.perPartner}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">
-                          Category Total (कुल)
-                        </div>
-                        <div className="text-sm font-black text-slate-200">
-                          {tier.totalAmount}
-                        </div>
-                      </div>
-                    </div>
 
                     {/* Deliverables List */}
                     <div className="space-y-2.5 mb-6">
@@ -1079,11 +1328,10 @@ export default function Home() {
 
                   <button
                     onClick={() => openSponsorModal(tier.category)}
-                    className={`w-full py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                      tier.featured
-                        ? 'bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 shadow-lg shadow-amber-500/20'
-                        : 'bg-white/10 hover:bg-[#d8392f] text-white'
-                    }`}
+                    className={`w-full py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${tier.featured
+                      ? 'bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 shadow-lg shadow-amber-500/20'
+                      : 'bg-white/10 hover:bg-[#d8392f] text-white'
+                      }`}
                   >
                     <span>Apply for {tier.category}</span>
                     <ArrowRight className="w-4 h-4" />
@@ -1100,8 +1348,8 @@ export default function Home() {
                 <div>
                   <h4 className="text-lg font-black uppercase italic tracking-tight text-white flex items-center gap-2">
                     <span>Official Sponsorship Matrix</span>
-                    <span className="text-xs font-bold text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">
-                      कुल बजट: ₹30,00,000
+                    <span className="text-xs font-bold text-emerald-400 bg-emerald-400/10 px-2.5 py-0.5 rounded-full border border-emerald-400/20">
+                      12 Partner Slots Available
                     </span>
                   </h4>
                   <p className="text-xs text-slate-400 mt-0.5">
@@ -1122,8 +1370,7 @@ export default function Home() {
                     <tr>
                       <th className="py-3.5 px-6">Sponsorship Category (श्रेणी)</th>
                       <th className="py-3.5 px-6 text-center">Partners (पार्टनर्स)</th>
-                      <th className="py-3.5 px-6 text-right">प्रति पार्टनर (Per Partner)</th>
-                      <th className="py-3.5 px-6 text-right">कुल (Total Amount)</th>
+                      <th className="py-3.5 px-6">Badge / Benefit</th>
                       <th className="py-3.5 px-6 text-center">Action</th>
                     </tr>
                   </thead>
@@ -1135,7 +1382,7 @@ export default function Home() {
                             {tier.category}
                           </div>
                           <div className="text-xs text-slate-400 font-normal">
-                            {tier.hindiCategory} • {tier.badge}
+                            {tier.hindiCategory}
                           </div>
                         </td>
                         <td className="py-4 px-6 text-center">
@@ -1143,11 +1390,8 @@ export default function Home() {
                             {tier.partners}
                           </span>
                         </td>
-                        <td className="py-4 px-6 text-right font-black italic text-amber-400 text-base">
-                          {tier.perPartner}
-                        </td>
-                        <td className="py-4 px-6 text-right font-black italic text-white text-base">
-                          {tier.totalAmount}
+                        <td className="py-4 px-6 text-sm text-amber-300 font-semibold">
+                          {tier.badge}
                         </td>
                         <td className="py-4 px-6 text-center">
                           <button
@@ -1160,27 +1404,6 @@ export default function Home() {
                       </tr>
                     ))}
                   </tbody>
-                  <tfoot className="bg-white/10 border-t-2 border-white/20 font-black text-white">
-                    <tr>
-                      <td className="py-4 px-6 uppercase tracking-wider text-sm">
-                        Total Allocation (कुल योग)
-                      </td>
-                      <td className="py-4 px-6 text-center text-base text-amber-400">
-                        12 Partners
-                      </td>
-                      <td className="py-4 px-6 text-right text-xs text-slate-400 uppercase tracking-wider font-bold">
-                        —
-                      </td>
-                      <td className="py-4 px-6 text-right text-xl italic text-amber-400">
-                        ₹30,00,000
-                      </td>
-                      <td className="py-4 px-6 text-center">
-                        <span className="text-xs text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
-                          12 Slots Open
-                        </span>
-                      </td>
-                    </tr>
-                  </tfoot>
                 </table>
               </div>
             </div>
@@ -1377,6 +1600,7 @@ export default function Home() {
               const accentColor = detail?.accentColor || '#f59e0b';
               const logoPlate = detail?.logoPlate || '';
               const riverText = detail?.river?.replace(/^River\s+/, '') || 'Vedic Division';
+              const isTeamRegistered = registeredTeamsList.some(r => r.name.toLowerCase() === team.toLowerCase());
 
               return (
                 <Link
@@ -1401,20 +1625,27 @@ export default function Home() {
                     style={{ backgroundColor: glowColor }}
                   />
 
-                  {/* Top Row: River Lineage + Interactive Squad Button */}
+                  {/* Top Row: River Lineage + Status Badge / Interactive Squad Button */}
                   <div className="relative z-10 flex items-center justify-between w-full">
-                    <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-slate-200 group-hover:text-white bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 transition-colors truncate max-w-[65%]">
+                    <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-slate-200 group-hover:text-white bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 transition-colors truncate max-w-[55%]">
                       {riverText}
                     </span>
-                    <span
-                      className="text-[10px] md:text-xs font-bold text-slate-200 group-hover:text-white px-2.5 py-1 rounded-full border transition-all duration-300 flex items-center gap-0.5"
-                      style={{
-                        backgroundColor: `${accentColor}25`,
-                        borderColor: `${accentColor}55`,
-                      }}
-                    >
-                      Squad <ChevronRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
-                    </span>
+                    {isTeamRegistered ? (
+                      <span className="text-[9px] md:text-[10px] font-black uppercase tracking-wider text-emerald-300 bg-emerald-950/90 border border-emerald-400/60 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-[0_0_12px_rgba(16,185,129,0.4)]">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                        Confirmed
+                      </span>
+                    ) : (
+                      <span
+                        className="text-[10px] md:text-xs font-bold text-slate-200 group-hover:text-white px-2.5 py-1 rounded-full border transition-all duration-300 flex items-center gap-0.5"
+                        style={{
+                          backgroundColor: `${accentColor}25`,
+                          borderColor: `${accentColor}55`,
+                        }}
+                      >
+                        Squad <ChevronRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
+                      </span>
+                    )}
                   </div>
 
                   {/* Center Hero Logo with Fully Enclosed High-Contrast Emblem Stage */}
@@ -1451,7 +1682,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Bottom Info: Team Name with Linear Gradient & Tagline */}
+                  {/* Bottom Info: Team Name with Linear Gradient & Tagline / Status Lock */}
                   <div className="relative z-10 text-center w-full pt-3 border-t border-white/10 group-hover:border-white/20 transition-colors">
                     <h3
                       className="font-black text-base md:text-xl uppercase italic tracking-wide transition-all duration-300 leading-tight truncate"
@@ -1465,9 +1696,16 @@ export default function Home() {
                     >
                       {team}
                     </h3>
-                    <p className="text-[11px] md:text-xs text-slate-400 group-hover:text-slate-300 transition-colors font-medium truncate mt-0.5">
-                      {detail?.tagline || 'Official T10 Franchise'}
-                    </p>
+                    {isTeamRegistered ? (
+                      <p className="text-[10px] md:text-[11px] text-emerald-300 font-bold flex items-center justify-center gap-1 mt-0.5">
+                        <Lock className="w-2.5 h-2.5" />
+                        <span>Official Entry Confirmed (Paid)</span>
+                      </p>
+                    ) : (
+                      <p className="text-[11px] md:text-xs text-slate-400 group-hover:text-slate-300 transition-colors font-medium truncate mt-0.5">
+                        {detail?.tagline || 'Official T10 Franchise'}
+                      </p>
+                    )}
                   </div>
                 </Link>
               );
@@ -1614,7 +1852,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-end mb-10 border-b-2 border-slate-100 pb-4">
             <div>
-              <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-[#d8392f] font-black uppercase text-xs tracking-widest block mb-1 hover:underline">Sarv Sewa Sashktikaran Sangthan</a>
+              <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-[#d8392f] font-black uppercase text-xs tracking-widest block mb-1 hover:underline">Sarv Sewa Sashktikarn Sangthan (Regd)</a>
               <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-[#0b162c]">
                 ORGANIZING <span className="text-[#d8392f]">COMMITTEE</span>
               </h2>
@@ -1778,14 +2016,14 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Coordinator Number */}
+              {/* Coordinator Vishal */}
               <div className="bg-[#112240] rounded-2xl p-4 border border-white/10 hover:border-[#d8392f] transition-all">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-black uppercase tracking-wider text-slate-400">
                     Vishal Kamboj (Coordinator)
                   </span>
                   <span className="text-[10px] font-semibold text-slate-400">
-                    Sarv Sewa Sashktikaran Sangthan
+                    Sarv Sewa Sashktikarn Sangthan (Regd)
                   </span>
                 </div>
                 <a
@@ -1805,6 +2043,43 @@ export default function Home() {
                   </a>
                   <a
                     href={`https://wa.me/918437409211?text=${encodeURIComponent(`Hello Vishal ji, we are interested in sponsoring Operation Sindoor Cricket Cup 2.0 under the "${selectedSponsorTier}" category. Please share details.`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Coordinator Karan Sama */}
+              <div className="bg-[#112240] rounded-2xl p-4 border border-white/10 hover:border-[#d8392f] transition-all">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-black uppercase tracking-wider text-slate-400">
+                    Karan Sama (Coordinator)
+                  </span>
+                  <span className="text-[10px] font-semibold text-slate-400">
+                    Sarv Sewa Sashktikarn Sangthan (Regd)
+                  </span>
+                </div>
+                <a
+                  href="tel:+919855109159"
+                  className="text-2xl font-black text-white hover:text-[#d8392f] transition-colors tracking-tight flex items-center gap-2"
+                >
+                  <Phone className="w-5 h-5 text-[#d8392f]" />
+                  <span>+91 98551 09159</span>
+                </a>
+                <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-white/10">
+                  <a
+                    href="tel:+919855109159"
+                    className="py-2.5 px-3 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Call Karan Ji</span>
+                  </a>
+                  <a
+                    href={`https://wa.me/919855109159?text=${encodeURIComponent(`Hello Karan ji, we are interested in sponsoring Operation Sindoor Cricket Cup 2.0 under the "${selectedSponsorTier}" category. Please share details.`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"

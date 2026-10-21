@@ -27,7 +27,7 @@ export default function Footer() {
             </Link>
             
             <p className="text-slate-400 font-medium max-w-md text-sm leading-relaxed mb-4">
-              Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer"><strong className="text-white hover:text-[#d8392f] transition-colors">Sarv Sewa Sashktikaran Sangthan</strong></a>. A heartfelt sporting tribute to the courageous soldiers, airmen, and sailors of the Indian Army, Indian Air Force, and Indian Navy.
+              Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer"><strong className="text-white hover:text-[#d8392f] transition-colors">Sarv Sewa Sashktikarn Sangthan (Regd)</strong></a>. A heartfelt sporting tribute to the courageous soldiers, airmen, and sailors of the Indian Army, Indian Air Force, and Indian Navy.
             </p>
 
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-slate-300 font-semibold">
@@ -48,13 +48,18 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/#tribute" className="text-amber-300 hover:text-amber-200 transition-colors font-semibold">
+                  Armed Forces Tribute
+                </Link>
+              </li>
+              <li>
                 <Link href="/#collaborations" className="hover:text-[#d8392f] transition-colors">
                   Official Collaborations
                 </Link>
               </li>
               <li>
                 <Link href="/#sponsorship" className="hover:text-[#d8392f] transition-colors text-amber-300">
-                  Sponsorship Packages (₹30L)
+                  Sponsorship Packages
                 </Link>
               </li>
               <li>
@@ -103,8 +108,14 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-amber-400 shrink-0" />
-                <a href="tel:+919041540053" className="hover:text-amber-400 transition-colors font-bold text-white">
-                  +91 90415 40053 (Vishal)
+                <a href="tel:+918437409211" className="hover:text-amber-400 transition-colors font-bold text-white">
+                  +91 84374 09211 (Vishal)
+                </a>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <Phone className="w-4 h-4 text-amber-400 shrink-0" />
+                <a href="tel:+919855109159" className="hover:text-amber-400 transition-colors font-bold text-white">
+                  +91 98551 09159 (Karan Sama)
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
@@ -120,7 +131,7 @@ export default function Footer() {
         
         {/* Bottom Copyright Strip */}
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-xs font-medium">
-          <p>© 2026 <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Sarv Sewa Sashktikaran Sangthan</a>. All Rights Reserved.</p>
+          <p>© 2026 <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Sarv Sewa Sashktikarn Sangthan (Regd)</a>. All Rights Reserved.</p>
           <div className="flex items-center gap-4 text-slate-400">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <span>•</span>

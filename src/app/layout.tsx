@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s | Operation Sindoor Cricket Cup 2.0",
   },
   description:
-    "Operation Sindoor Cricket Cup 2.0 — A premier T10 leather ball cricket tournament in Chandigarh. 24 teams (Boys & Girls), Sector 16 Stadium, ₹2 Lac prize pool. Punjab's biggest cricket league 2026, organized by Sarv Sewa Sashktikaran Sangthan.",
+    "Operation Sindoor Cricket Cup 2.0 — A premier T10 leather ball cricket tournament in Chandigarh. 24 teams (Boys & Girls), Sector 16 Stadium, ₹2 Lac prize pool. Punjab's biggest cricket league 2026, organized by Sarv Sewa Sashktikarn Sangthan (Regd).",
   keywords: [
     "Chandigarh Cricket Tournament",
     "Punjab Cricket Tournament",
@@ -41,12 +41,12 @@ export const metadata: Metadata = {
     "cricket tournament India 2026",
     "Girls Cricket Tournament Punjab",
     "leather ball cricket tournament",
-    "Sarv Sewa Sashktikaran Sangthan",
+    "Sarv Sewa Sashktikarn Sangthan (Regd)",
     "cricket registration Chandigarh",
   ],
-  authors: [{ name: "Sarv Sewa Sashktikaran Sangthan", url: "https://sarvsewabharat.org/" }],
-  creator: "Sarv Sewa Sashktikaran Sangthan",
-  publisher: "Sarv Sewa Sashktikaran Sangthan",
+  authors: [{ name: "Sarv Sewa Sashktikarn Sangthan (Regd)", url: "https://sarvsewabharat.org/" }],
+  creator: "Sarv Sewa Sashktikarn Sangthan (Regd)",
+  publisher: "Sarv Sewa Sashktikarn Sangthan (Regd)",
   robots: {
     index: true,
     follow: true,

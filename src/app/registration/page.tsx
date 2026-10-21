@@ -27,7 +27,9 @@ import {
   Sparkles,
   Loader2,
   Mail,
-  FileCheck
+  FileCheck,
+  Lock,
+  BadgeCheck
 } from 'lucide-react';
 
 // Fallback teams if backend API is initializing
@@ -121,6 +123,23 @@ export default function RegistrationPage() {
       });
   }, []);
 
+  // Compute normalized teams list
+  const fullBoysList: TeamItem[] = dbBoysTeams.length > 0 
+    ? dbBoysTeams 
+    : defaultBoysTeams.map((name, idx) => ({ id: idx + 1, name, slug: name.toLowerCase().replace(/\s+/g, '-'), division: 'boys', status: 'available' }));
+
+  const fullGirlsList: TeamItem[] = dbGirlsTeams.length > 0 
+    ? dbGirlsTeams 
+    : defaultGirlsTeams.map((name, idx) => ({ id: idx + 17, name, slug: name.toLowerCase().replace(/\s+/g, '-'), division: 'girls', status: name === 'Kaveri Queens' ? 'registered' : 'available' }));
+
+  const allTeamsCombined = [...fullBoysList, ...fullGirlsList];
+
+  // Verified & Confirmed Registered Teams
+  const registeredFromDB = allTeamsCombined.filter(t => t.status === 'registered' || (t as any).is_registered);
+  const confirmedTeams: TeamItem[] = registeredFromDB.length > 0 
+    ? registeredFromDB 
+    : [{ id: 22, name: 'Kaveri Queens', slug: 'kaveri-queens', division: 'girls', status: 'registered' }];
+
   const updatePlayer = (index: number, field: keyof PlayerData, value: any) => {
     setPlayers(prev => {
       const next = [...prev];
@@ -139,7 +158,7 @@ export default function RegistrationPage() {
 
   const handleTeamChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const teamName = e.target.value;
-    const foundTeam = [...dbBoysTeams, ...dbGirlsTeams].find(t => t.name === teamName);
+    const foundTeam = allTeamsCombined.find(t => t.name === teamName);
 
     if (foundTeam && (foundTeam.status === 'registered' || (foundTeam as any).is_registered)) {
       setSelectedTeam("");
@@ -277,7 +296,7 @@ export default function RegistrationPage() {
         {/* Page Heading */}
         <div className="mb-8">
           <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-[#d8392f] font-black uppercase text-xs tracking-widest block mb-1 hover:underline">
-            Sarv Sewa Sashktikaran Sangthan Presents
+            Sarv Sewa Sashktikarn Sangthan (Regd) Presents
           </a>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
@@ -302,8 +321,136 @@ export default function RegistrationPage() {
           </div>
         </div>
 
+        {/* ═══════════════════════════════════════════════════════════════════════
+            OPTION 1: LIVE TOURNAMENT ROSTER & CONFIRMED SQUADS SHOWCASE WALL
+            ═══════════════════════════════════════════════════════════════════════ */}
+        <section className="mb-10 bg-white rounded-3xl border border-slate-200/90 shadow-lg p-6 md:p-8 relative overflow-hidden">
+          {/* Subtle Ambient Glows */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-red-500/5 rounded-full blur-3xl pointer-events-none" />
+
+          {/* Top Header Row with Live Counter */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 mb-6 border-b border-slate-100 relative z-10">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-black uppercase tracking-wider mb-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <Shield className="w-3.5 h-3.5 text-emerald-600" />
+                Live Tournament Roster • Sector 16 Stadium
+              </div>
+              <h2 className="text-2xl md:text-3xl font-black uppercase italic tracking-tight text-[#0b162c]">
+                OFFICIALLY CONFIRMED <span className="text-emerald-600">SQUADS</span>
+              </h2>
+              <p className="text-slate-600 text-xs md:text-sm font-medium mt-1">
+                Verified squads with completed payment &amp; locked rosters. Limited tournament slots remaining!
+              </p>
+            </div>
+
+            {/* Live Counter & Progress */}
+            <div className="shrink-0 bg-slate-50 border border-slate-200 rounded-2xl p-4 min-w-[240px]">
+              <div className="flex items-center justify-between text-xs font-bold text-slate-700 mb-1.5">
+                <span>Slots Confirmed</span>
+                <span className="text-emerald-700 font-black">{confirmedTeams.length} / 24 Teams</span>
+              </div>
+              <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                <div 
+                  className="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full transition-all duration-500" 
+                  style={{ width: `${Math.max(4, (confirmedTeams.length / 24) * 100)}%` }}
+                />
+              </div>
+              <div className="flex items-center justify-between text-[10px] text-slate-500 font-semibold mt-1.5">
+                <span className="text-amber-600 font-bold">⚡ {24 - confirmedTeams.length} Slots Open</span>
+                <span>Knockout Bracket</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Confirmed Teams Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 relative z-10">
+            {confirmedTeams.map((team, idx) => {
+              const slug = team.slug || team.name.toLowerCase().replace(/\s+/g, '-');
+              const logo = teamLogos[slug];
+              return (
+                <div 
+                  key={idx}
+                  className="bg-gradient-to-b from-white to-slate-50 rounded-2xl border-2 border-emerald-400/80 shadow-md p-4 flex flex-col justify-between relative overflow-hidden group hover:shadow-xl transition-all"
+                >
+                  {/* Verified ribbon stamp */}
+                  <div className="absolute top-2.5 right-2.5 bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border border-emerald-300 flex items-center gap-1 shadow-2xs">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                    <span>Confirmed</span>
+                  </div>
+
+                  <div>
+                    {/* High-Contrast Emblem Showcase */}
+                    <div className="w-24 h-24 mx-auto mb-3 rounded-2xl bg-white border border-slate-200/80 p-2 shadow-inner flex items-center justify-center group-hover:scale-105 transition-transform">
+                      {logo ? (
+                        <Image
+                          src={logo}
+                          alt={team.name}
+                          width={88}
+                          height={88}
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      ) : (
+                        <Shield className="w-12 h-12 text-emerald-600" />
+                      )}
+                    </div>
+
+                    <div className="text-center">
+                      <span className="inline-block text-[10px] font-black uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded mb-1">
+                        {team.division === 'girls' ? "Girls Division (8)" : "Boys Division (16)"}
+                      </span>
+                      <h3 className="font-black text-base text-[#0b162c] uppercase italic tracking-tight line-clamp-1">
+                        {team.name}
+                      </h3>
+                      <p className="text-[11px] font-bold text-emerald-700 mt-0.5 flex items-center justify-center gap-1">
+                        <Lock className="w-3 h-3" />
+                        <span>Roster Locked &amp; Paid</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 pt-3 border-t border-slate-100 text-center">
+                    <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block">
+                      Sector 16 Stadium Squad
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Prompt Card: Claim Open Slot */}
+            <div className="rounded-2xl border-2 border-dashed border-[#d8392f]/40 bg-gradient-to-b from-red-50/50 via-white to-red-50/30 p-4 flex flex-col justify-between text-center group hover:border-[#d8392f] transition-all">
+              <div className="py-2">
+                <div className="w-14 h-14 mx-auto mb-2 rounded-2xl bg-white border border-red-200 flex items-center justify-center text-[#d8392f] shadow-sm group-hover:scale-110 transition-transform">
+                  <Sparkles className="w-7 h-7" />
+                </div>
+                <h3 className="font-black text-sm uppercase italic text-[#0b162c]">
+                  Your Team Identity
+                </h3>
+                <p className="text-xs text-slate-500 font-medium mt-1">
+                  Claim your desired river franchise before another collegiate team locks it!
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const formEl = document.getElementById('registration-form');
+                  formEl?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="w-full py-2 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white rounded-xl text-xs font-black uppercase italic tracking-wider shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-1.5"
+              >
+                <span>Claim Open Slot (₹4,999) ↓</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* 2-Column Split Layout */}
-        <div className="grid lg:grid-cols-12 gap-8 items-start">
+        <div id="registration-form" className="grid lg:grid-cols-12 gap-8 items-start scroll-mt-24">
           
           {/* ================= LEFT COLUMN: Instructions & Fee (Sticky) ================= */}
           <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24 space-y-6 order-2 lg:order-1">
@@ -476,12 +623,27 @@ export default function RegistrationPage() {
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <div>
                   <span className="text-[10px] uppercase font-black text-amber-400 block tracking-wider">Coordinator (Vishal)</span>
-                  <a href="tel:+919041540053" className="font-black text-base text-white block hover:text-amber-300 transition-colors">+91 90415 40053</a>
+                  <a href="tel:+918437409211" className="font-black text-base text-white block hover:text-amber-300 transition-colors">+91 84374 09211</a>
                 </div>
                 <a 
-                  href="tel:+919041540053" 
+                  href="tel:+918437409211" 
                   className="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center shadow-lg transition-transform hover:scale-105 shrink-0"
                   title="Call Vishal (Coordinator)"
+                >
+                  <Phone className="w-4 h-4" />
+                </a>
+              </div>
+
+              {/* Coordinator Karan Sama */}
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <div>
+                  <span className="text-[10px] uppercase font-black text-amber-400 block tracking-wider">Coordinator (Karan Sama)</span>
+                  <a href="tel:+919855109159" className="font-black text-base text-white block hover:text-amber-300 transition-colors">+91 98551 09159</a>
+                </div>
+                <a 
+                  href="tel:+919855109159" 
+                  className="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center shadow-lg transition-transform hover:scale-105 shrink-0"
+                  title="Call Karan Sama (Coordinator)"
                 >
                   <Phone className="w-4 h-4" />
                 </a>
@@ -542,7 +704,7 @@ export default function RegistrationPage() {
                       
                       {/* Boys Division Teams */}
                       <optgroup label="Boys Division (16 Teams)">
-                        {(dbBoysTeams.length > 0 ? dbBoysTeams : defaultBoysTeams.map((name, idx) => ({ id: idx + 1, name, slug: name, division: 'boys' as const, status: 'available' as const }))).map(team => {
+                        {fullBoysList.map(team => {
                           const isRegistered = team.status === 'registered' || (team as any).is_registered;
                           return (
                             <option key={team.id || team.name} value={team.name} disabled={isRegistered} className={isRegistered ? 'text-slate-400 bg-slate-100 italic' : 'font-semibold'}>
@@ -554,7 +716,7 @@ export default function RegistrationPage() {
 
                       {/* Girls Division Teams */}
                       <optgroup label="Girls Division (8 Teams)">
-                        {(dbGirlsTeams.length > 0 ? dbGirlsTeams : defaultGirlsTeams.map((name, idx) => ({ id: idx + 17, name, slug: name, division: 'girls' as const, status: 'available' as const }))).map(team => {
+                        {fullGirlsList.map(team => {
                           const isRegistered = team.status === 'registered' || (team as any).is_registered;
                           return (
                             <option key={team.id || team.name} value={team.name} disabled={isRegistered} className={isRegistered ? 'text-slate-400 bg-slate-100 italic' : 'font-semibold'}>
@@ -1064,7 +1226,10 @@ export default function RegistrationPage() {
                     <a href="tel:+919056333759" className="text-[#d8392f] hover:underline font-bold">+91 90563 33759</a>
                     <span className="text-white/20 hidden sm:inline">|</span>
                     <span className="font-bold text-amber-400 uppercase text-[10px] tracking-wider">Vishal:</span>
-                    <a href="tel:+919041540053" className="text-amber-400 hover:underline font-bold">+91 90415 40053</a>
+                    <a href="tel:+918437409211" className="text-amber-400 hover:underline font-bold">+91 84374 09211</a>
+                    <span className="text-white/20 hidden sm:inline">|</span>
+                    <span className="font-bold text-amber-400 uppercase text-[10px] tracking-wider">Karan Sama:</span>
+                    <a href="tel:+919855109159" className="text-amber-400 hover:underline font-bold">+91 98551 09159</a>
                   </div>
                   <a href="mailto:helposcricketcup@gmail.com" className="text-slate-400 hover:text-white transition-colors text-[11px]">
                     helposcricketcup@gmail.com

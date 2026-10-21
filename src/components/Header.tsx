@@ -15,7 +15,7 @@ export default function Header() {
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-2 font-bold tracking-wider text-[#d8392f]">
             <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-              SARV SEWA SASHKTIKARAN SANGTHAN
+              SARV SEWA SASHKTIKARN SANGTHAN (REGD)
             </a>
           </div>
           <div className="flex items-center gap-4 font-semibold tracking-wider text-slate-300">
@@ -53,8 +53,9 @@ export default function Header() {
             </Link>
             
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-4 xl:gap-6 font-bold text-xs xl:text-[13px] tracking-wider uppercase text-white/90 shrink-0">
+            <nav className="hidden lg:flex items-center gap-3.5 xl:gap-5 font-bold text-xs xl:text-[13px] tracking-wider uppercase text-white/90 shrink-0">
               <Link href="/#about" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">About</Link>
+              <Link href="/#tribute" className="text-amber-300 hover:text-amber-200 transition-colors pb-0.5 border-b-2 border-transparent hover:border-amber-400">Tribute</Link>
               <Link href="/#collaborations" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Collaborations</Link>
               <Link href="/#sponsorship" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Sponsorship</Link>
               <Link href="/#schedule" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Matches</Link>
@@ -111,6 +112,17 @@ export default function Header() {
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </Link>
                 <Link 
+                  href="/#tribute" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center justify-between px-3 py-2.5 rounded-xl text-amber-300 hover:text-amber-200 hover:bg-white/5 font-bold text-sm uppercase tracking-wider transition-colors border border-amber-500/20 bg-amber-500/5"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-amber-400" />
+                    Armed Forces Tribute
+                  </span>
+                  <ChevronRight className="w-4 h-4 text-amber-400/60" />
+                </Link>
+                <Link 
                   href="/#collaborations" 
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white/90 hover:text-white hover:bg-white/5 font-bold text-sm uppercase tracking-wider transition-colors"
@@ -165,7 +177,7 @@ export default function Header() {
                 <span className="text-[10px] uppercase font-bold text-slate-400 block px-3 tracking-wider">
                   Tournament Helplines
                 </span>
-                <div className="grid grid-cols-2 gap-2 px-1">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 px-1">
                   <a 
                     href="tel:+919056333759"
                     className="flex items-center gap-2 p-2 rounded-xl bg-white/5 border border-white/10 hover:border-[#d8392f] text-xs font-bold text-white transition-colors"
@@ -174,11 +186,18 @@ export default function Header() {
                     <span className="truncate">90563 33759</span>
                   </a>
                   <a 
-                    href="tel:+919041540053"
+                    href="tel:+918437409211"
                     className="flex items-center gap-2 p-2 rounded-xl bg-white/5 border border-white/10 hover:border-amber-400 text-xs font-bold text-amber-300 transition-colors"
                   >
                     <Phone className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                     <span className="truncate">Vishal (Coord)</span>
+                  </a>
+                  <a 
+                    href="tel:+919855109159"
+                    className="col-span-2 sm:col-span-1 flex items-center gap-2 p-2 rounded-xl bg-white/5 border border-white/10 hover:border-amber-400 text-xs font-bold text-amber-300 transition-colors"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                    <span className="truncate">Karan Sama (Coord)</span>
                   </a>
                 </div>
               </div>

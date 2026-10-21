@@ -159,7 +159,7 @@ function SuccessContent() {
             </div>
             <p>1. Custom jerseys will be distributed during the pre-tournament captains meeting.</p>
             <p>2. Report strictly <strong className="font-bold">60 minutes prior</strong> to your scheduled match at Sector 16 Cricket Stadium, Chandigarh.</p>
-            <p>3. For any queries or adjustments, contact our Official Helpline <strong className="font-bold">+91 90563 33759</strong> / Vishal <strong className="font-bold">+91 90415 40053</strong> or email <strong className="font-bold">helposcricketcup@gmail.com</strong>.</p>
+            <p>3. For any queries or adjustments, contact our Official Helpline <strong className="font-bold">+91 90563 33759</strong> / Vishal <strong className="font-bold">+91 84374 09211</strong> or email <strong className="font-bold">helposcricketcup@gmail.com</strong>.</p>
           </div>
 
           {/* Action Buttons */}
