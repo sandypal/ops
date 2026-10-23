@@ -129,6 +129,40 @@ export default function Footer() {
 
         </div>
         
+        {/* Official Tournament Sponsor Showcase */}
+        <div className="py-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="text-xs font-black uppercase tracking-widest text-slate-300">
+              Official Tournament Partner &amp; Sponsor:
+            </span>
+          </div>
+
+          <a
+            href="https://www.nikbakers.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 bg-white hover:bg-slate-50 px-4 py-2 rounded-xl border border-white/20 transition-all hover:scale-105 shadow-md group"
+            title="Nik Baker's — Official Partner"
+          >
+            <Image
+              src="/sponsors/nik-bakers.png"
+              alt="Nik Baker's"
+              width={160}
+              height={112}
+              className="max-h-10 w-auto object-contain filter drop-shadow-xs"
+            />
+            <div className="text-left border-l border-slate-200 pl-3">
+              <span className="text-xs font-black text-slate-900 block group-hover:text-[#d8392f] transition-colors leading-tight">
+                Nik Baker&apos;s
+              </span>
+              <span className="text-[10px] text-amber-600 font-bold block leading-tight">
+                Official Partner
+              </span>
+            </div>
+          </a>
+        </div>
+
         {/* Bottom Copyright Strip */}
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-xs font-medium">
           <p>© 2026 <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Sarv Sewa Sashktikarn Sangthan (Regd)</a>. All Rights Reserved.</p>
