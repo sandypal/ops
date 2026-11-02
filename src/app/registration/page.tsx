@@ -2,22 +2,23 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { teamLogos } from '@/data/teamsData';
-import { 
-  Upload, 
-  Users, 
-  Shield, 
-  User, 
-  Droplet, 
-  Calendar, 
-  Ruler, 
-  CheckCircle2, 
-  Clock, 
-  AlertTriangle, 
-  Activity, 
-  FileText, 
+import {
+  Upload,
+  Users,
+  Shield,
+  User,
+  Droplet,
+  Calendar,
+  Ruler,
+  CheckCircle2,
+  Clock,
+  AlertTriangle,
+  Activity,
+  FileText,
   Trophy,
   ChevronLeft,
   ChevronRight,
@@ -66,6 +67,8 @@ interface PlayerData {
   lowerSize: string;
   studentIdFile: File | null;
   studentIdFileName?: string;
+  profileImageFile?: File | null;
+  profileImageFileName?: string;
 }
 
 const initialPlayer = (): PlayerData => ({
@@ -78,6 +81,8 @@ const initialPlayer = (): PlayerData => ({
   lowerSize: '',
   studentIdFile: null,
   studentIdFileName: '',
+  profileImageFile: null,
+  profileImageFileName: '',
 });
 
 export default function RegistrationPage() {
@@ -91,7 +96,7 @@ export default function RegistrationPage() {
   const [viceCaptainIndex, setViceCaptainIndex] = useState(1);
   const [captainEmail, setCaptainEmail] = useState("");
 
-  const [players, setPlayers] = useState<PlayerData[]>(() => 
+  const [players, setPlayers] = useState<PlayerData[]>(() =>
     Array.from({ length: 12 }, () => initialPlayer())
   );
 
@@ -124,20 +129,20 @@ export default function RegistrationPage() {
   }, []);
 
   // Compute normalized teams list
-  const fullBoysList: TeamItem[] = dbBoysTeams.length > 0 
-    ? dbBoysTeams 
+  const fullBoysList: TeamItem[] = dbBoysTeams.length > 0
+    ? dbBoysTeams
     : defaultBoysTeams.map((name, idx) => ({ id: idx + 1, name, slug: name.toLowerCase().replace(/\s+/g, '-'), division: 'boys', status: 'available' }));
 
-  const fullGirlsList: TeamItem[] = dbGirlsTeams.length > 0 
-    ? dbGirlsTeams 
+  const fullGirlsList: TeamItem[] = dbGirlsTeams.length > 0
+    ? dbGirlsTeams
     : defaultGirlsTeams.map((name, idx) => ({ id: idx + 17, name, slug: name.toLowerCase().replace(/\s+/g, '-'), division: 'girls', status: name === 'Kaveri Queens' ? 'registered' : 'available' }));
 
   const allTeamsCombined = [...fullBoysList, ...fullGirlsList];
 
   // Verified & Confirmed Registered Teams
   const registeredFromDB = allTeamsCombined.filter(t => t.status === 'registered' || (t as any).is_registered);
-  const confirmedTeams: TeamItem[] = registeredFromDB.length > 0 
-    ? registeredFromDB 
+  const confirmedTeams: TeamItem[] = registeredFromDB.length > 0
+    ? registeredFromDB
     : [{ id: 22, name: 'Kaveri Queens', slug: 'kaveri-queens', division: 'girls', status: 'registered' }];
 
   const updatePlayer = (index: number, field: keyof PlayerData, value: any) => {
@@ -154,7 +159,21 @@ export default function RegistrationPage() {
     updatePlayer(index, 'studentIdFileName', file.name);
   };
 
-  const filledCount = players.filter(p => p.name.trim() !== '' && p.jerseyNumber.trim() !== '').length;
+  const handleProfilePhotoUpload = (index: number, file: File | null) => {
+    if (!file) return;
+    updatePlayer(index, 'profileImageFile', file);
+    updatePlayer(index, 'profileImageFileName', file.name);
+  };
+
+  const filledCount = players.filter(p =>
+    p.name.trim() !== '' &&
+    p.jerseyNumber.trim() !== '' &&
+    p.phone.trim() !== '' &&
+    p.age.trim() !== '' &&
+    p.tshirtSize !== '' &&
+    p.lowerSize !== '' &&
+    (p.studentIdFile !== null || p.studentIdFileName !== '')
+  ).length;
 
   const handleTeamChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const teamName = e.target.value;
@@ -195,11 +214,26 @@ export default function RegistrationPage() {
       return;
     }
 
-    // Validation: check players
+    // Validation: check players (Name, Jersey #, Mobile, Age, Kit Sizes, and Student ID Card are all required)
     for (let i = 0; i < 12; i++) {
       if (!players[i].name.trim()) {
         setActivePlayer(i);
         setErrorMessage(`Please enter Full Name for Player #${i + 1}`);
+        return;
+      }
+      if (!players[i].jerseyNumber || !players[i].jerseyNumber.trim()) {
+        setActivePlayer(i);
+        setErrorMessage(`Please enter Jersey Number for Player #${i + 1} (${players[i].name})`);
+        return;
+      }
+      if (!players[i].phone || !players[i].phone.trim()) {
+        setActivePlayer(i);
+        setErrorMessage(`Please enter Mobile Number for Player #${i + 1} (${players[i].name})`);
+        return;
+      }
+      if (!players[i].age || !players[i].age.trim()) {
+        setActivePlayer(i);
+        setErrorMessage(`Please enter Age for Player #${i + 1} (${players[i].name})`);
         return;
       }
       if (!players[i].tshirtSize) {
@@ -212,14 +246,14 @@ export default function RegistrationPage() {
         setErrorMessage(`Please select Lower Kit Size for Player #${i + 1} (${players[i].name})`);
         return;
       }
+      if (!players[i].studentIdFile && !players[i].studentIdFileName) {
+        setActivePlayer(i);
+        setErrorMessage(`Please attach Student ID Card for Player #${i + 1} (${players[i].name})`);
+        return;
+      }
     }
 
     const captain = players[captainIndex];
-    if (!captain.phone) {
-      setActivePlayer(captainIndex);
-      setErrorMessage(`Please provide a mobile contact number for Team Captain (${captain.name}).`);
-      return;
-    }
 
     setIsSubmitting(true);
 
@@ -253,10 +287,13 @@ export default function RegistrationPage() {
 
       formData.append('players', JSON.stringify(formattedPlayers));
 
-      // Append student ID files
+      // Append student ID files & optional profile photos
       players.forEach((p, idx) => {
         if (p.studentIdFile) {
           formData.append(`player_file_${idx}`, p.studentIdFile);
+        }
+        if (p.profileImageFile) {
+          formData.append(`player_photo_${idx}`, p.profileImageFile);
         }
       });
 
@@ -292,31 +329,78 @@ export default function RegistrationPage() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 pt-8 md:pt-10 pb-20 md:pb-28 max-w-7xl flex-1">
-        
+
         {/* Page Heading */}
         <div className="mb-8">
-          <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-[#d8392f] font-black uppercase text-xs tracking-widest block mb-1 hover:underline">
-            Sarv Sewa Sashktikarn Sangthan (Regd) Presents
-          </a>
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+            <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-[#d8392f] font-black uppercase text-xs tracking-widest block hover:underline">
+              Sarv Sewa Sashktikarn Sangthan (Regd) Presents
+            </a>
+
+            {/* Official Tournament Presenters: Powered By & Co-Powered By */}
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3.5 bg-gradient-to-r from-black/85 via-black/75 to-black/65 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-white/20 shadow-md">
+              {/* Powered By: Nik Baker's (Larger & Prominent) */}
+              <div className="flex items-center gap-2.5 pl-0.5">
+                <span className="text-[11px] sm:text-xs font-black uppercase tracking-widest text-amber-400">
+                  POWERED BY:
+                </span>
+                <a
+                  href="https://www.nikbakers.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="h-11 sm:h-12 px-3.5 sm:px-4 bg-white hover:bg-slate-50 rounded-xl border-2 border-amber-300/90 shadow-md flex items-center gap-2.5 hover:scale-105 transition-all group"
+                  title="Nik Baker's — Main Sponsor / Official Powered By Sponsor"
+                >
+                  <Image
+                    src="/sponsors/nik-bakers.png"
+                    alt="Nik Baker's Logo"
+                    width={90}
+                    height={60}
+                    className="max-h-8 sm:max-h-9 w-auto object-contain"
+                  />
+                  <span className="text-xs sm:text-sm font-black text-slate-900 leading-none group-hover:text-[#d8392f] transition-colors">
+                    Nik Baker&apos;s
+                  </span>
+                </a>
+              </div>
+
+              <span className="text-white/30 hidden sm:inline">•</span>
+
+              {/* Co-Powered By: Blank / Inviting Sponsor (Compact) */}
+              <div className="flex items-center gap-2 pl-0.5 sm:pl-0">
+                <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-slate-300">
+                  CO-POWERED BY:
+                </span>
+                <a
+                  href="/#sponsorship"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-white/10 hover:bg-white/20 border border-white/30 text-slate-300 hover:text-white text-xs font-bold uppercase tracking-wider transition-all"
+                  title="Inviting Co-Powered By Sponsor — Apply Now"
+                >
+                  <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
+                  <span>Inviting Sponsor</span>
+                </a>
+              </div>
+            </div>
+          </div>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter italic text-[#0b162c] leading-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-tighter italic text-[#0b162c] leading-tight">
                 Official Team <span className="text-[#d8392f]">Registration</span>
               </h1>
-              <p className="text-slate-600 text-sm md:text-base font-medium mt-1">
+              <p className="text-slate-600 text-xs sm:text-sm md:text-base font-medium mt-1">
                 Operation Sindoor Cricket Cup 2.0 • 5-Day Event • Sector 16 Stadium, Chandigarh
               </p>
             </div>
 
             {/* Quick Fee Badge */}
-            <div className="bg-[#0b162c] text-white px-5 py-3 rounded-2xl border-l-4 border-[#d8392f] shadow-md flex items-center gap-4 self-start md:self-auto">
+            <div className="bg-[#0b162c] text-white px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-2xl border-l-4 border-[#d8392f] shadow-md flex items-center gap-3 sm:gap-4 self-start md:self-auto">
               <div>
-                <span className="text-[11px] uppercase tracking-wider text-slate-400 font-bold block">Entry Fee</span>
-                <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-[#fb923c] italic leading-none">
+                <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-400 font-bold block">Entry Fee</span>
+                <span className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-[#fb923c] italic leading-none">
                   ₹4,999/-
                 </span>
               </div>
-              <span className="text-xs bg-white/10 px-2.5 py-1 rounded text-slate-300 font-semibold">12 Players • Jersey Kit Included</span>
+              <span className="text-[11px] sm:text-xs bg-white/10 px-2 sm:px-2.5 py-1 rounded text-slate-300 font-semibold">12 Players • Jersey Kit Included</span>
             </div>
           </div>
         </div>
@@ -324,15 +408,15 @@ export default function RegistrationPage() {
         {/* ═══════════════════════════════════════════════════════════════════════
             OPTION 1: LIVE TOURNAMENT ROSTER & CONFIRMED SQUADS SHOWCASE WALL
             ═══════════════════════════════════════════════════════════════════════ */}
-        <section className="mb-10 bg-white rounded-3xl border border-slate-200/90 shadow-lg p-6 md:p-8 relative overflow-hidden">
+        <section className="mb-8 sm:mb-10 bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-lg p-4 sm:p-6 md:p-8 relative overflow-hidden">
           {/* Subtle Ambient Glows */}
           <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-red-500/5 rounded-full blur-3xl pointer-events-none" />
 
           {/* Top Header Row with Live Counter */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 mb-6 border-b border-slate-100 relative z-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 sm:pb-6 mb-4 sm:mb-6 border-b border-slate-100 relative z-10">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-black uppercase tracking-wider mb-2">
+              <div className="inline-flex items-center gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] sm:text-xs font-black uppercase tracking-wider mb-2">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -340,10 +424,10 @@ export default function RegistrationPage() {
                 <Shield className="w-3.5 h-3.5 text-emerald-600" />
                 Live Tournament Roster • Sector 16 Stadium
               </div>
-              <h2 className="text-2xl md:text-3xl font-black uppercase italic tracking-tight text-[#0b162c]">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-black uppercase italic tracking-tight text-[#0b162c]">
                 OFFICIALLY CONFIRMED <span className="text-emerald-600">SQUADS</span>
               </h2>
-              <p className="text-slate-600 text-xs md:text-sm font-medium mt-1">
+              <p className="text-slate-600 text-xs sm:text-sm font-medium mt-1">
                 Verified squads with completed payment &amp; locked rosters. Limited tournament slots remaining!
               </p>
             </div>
@@ -355,8 +439,8 @@ export default function RegistrationPage() {
                 <span className="text-emerald-700 font-black">{confirmedTeams.length} / 24 Teams</span>
               </div>
               <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                <div 
-                  className="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full transition-all duration-500" 
+                <div
+                  className="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full transition-all duration-500"
                   style={{ width: `${Math.max(4, (confirmedTeams.length / 24) * 100)}%` }}
                 />
               </div>
@@ -373,9 +457,10 @@ export default function RegistrationPage() {
               const slug = team.slug || team.name.toLowerCase().replace(/\s+/g, '-');
               const logo = teamLogos[slug];
               return (
-                <div 
+                <Link
                   key={idx}
-                  className="bg-gradient-to-b from-white to-slate-50 rounded-2xl border-2 border-emerald-400/80 shadow-md p-4 flex flex-col justify-between relative overflow-hidden group hover:shadow-xl transition-all"
+                  href={`/teams/${slug}`}
+                  className="bg-gradient-to-b from-white to-slate-50 rounded-2xl border-2 border-emerald-400/80 shadow-md p-4 flex flex-col justify-between relative overflow-hidden group hover:shadow-xl hover:border-emerald-500 hover:-translate-y-1 transition-all cursor-pointer"
                 >
                   {/* Verified ribbon stamp */}
                   <div className="absolute top-2.5 right-2.5 bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border border-emerald-300 flex items-center gap-1 shadow-2xs">
@@ -403,7 +488,7 @@ export default function RegistrationPage() {
                       <span className="inline-block text-[10px] font-black uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded mb-1">
                         {team.division === 'girls' ? "Girls Division (8)" : "Boys Division (16)"}
                       </span>
-                      <h3 className="font-black text-base text-[#0b162c] uppercase italic tracking-tight line-clamp-1">
+                      <h3 className="font-black text-base text-[#0b162c] group-hover:text-[#d8392f] uppercase italic tracking-tight line-clamp-1 transition-colors">
                         {team.name}
                       </h3>
                       <p className="text-[11px] font-bold text-emerald-700 mt-0.5 flex items-center justify-center gap-1">
@@ -413,12 +498,15 @@ export default function RegistrationPage() {
                     </div>
                   </div>
 
-                  <div className="mt-3 pt-3 border-t border-slate-100 text-center">
-                    <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block">
-                      Sector 16 Stadium Squad
+                  <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
+                      Sector 16 Stadium
+                    </span>
+                    <span className="text-[11px] font-bold text-emerald-700 group-hover:text-emerald-900 flex items-center gap-0.5">
+                      View Squad <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                     </span>
                   </div>
-                </div>
+                </Link>
               );
             })}
 
@@ -451,14 +539,14 @@ export default function RegistrationPage() {
 
         {/* 2-Column Split Layout */}
         <div id="registration-form" className="grid lg:grid-cols-12 gap-8 items-start scroll-mt-24">
-          
+
           {/* ================= LEFT COLUMN: Instructions & Fee (Sticky) ================= */}
           <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24 space-y-6 order-2 lg:order-1">
-            
+
             {/* Entry Fee Card */}
             <div className="bg-gradient-to-br from-[#0b162c] via-[#112240] to-[#0b162c] text-white p-6 rounded-3xl border-2 border-[#d8392f] shadow-xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-48 h-48 bg-[#d8392f]/20 rounded-full blur-2xl pointer-events-none"></div>
-              
+
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
                   <span className="bg-[#d8392f] text-white text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full">
@@ -610,8 +698,8 @@ export default function RegistrationPage() {
                   <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Tournament Helpline</span>
                   <a href="tel:+919056333759" className="font-black text-base text-white block hover:text-[#d8392f] transition-colors">+91 90563 33759</a>
                 </div>
-                <a 
-                  href="tel:+919056333759" 
+                <a
+                  href="tel:+919056333759"
                   className="w-10 h-10 rounded-full bg-[#d8392f] hover:bg-[#b91c1c] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-105 shrink-0"
                   title="Call Official Helpline"
                 >
@@ -625,8 +713,8 @@ export default function RegistrationPage() {
                   <span className="text-[10px] uppercase font-black text-amber-400 block tracking-wider">Coordinator (Vishal)</span>
                   <a href="tel:+918437409211" className="font-black text-base text-white block hover:text-amber-300 transition-colors">+91 84374 09211</a>
                 </div>
-                <a 
-                  href="tel:+918437409211" 
+                <a
+                  href="tel:+918437409211"
                   className="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center shadow-lg transition-transform hover:scale-105 shrink-0"
                   title="Call Vishal (Coordinator)"
                 >
@@ -640,8 +728,8 @@ export default function RegistrationPage() {
                   <span className="text-[10px] uppercase font-black text-amber-400 block tracking-wider">Coordinator (Karan Sama)</span>
                   <a href="tel:+919855109159" className="font-black text-base text-white block hover:text-amber-300 transition-colors">+91 98551 09159</a>
                 </div>
-                <a 
-                  href="tel:+919855109159" 
+                <a
+                  href="tel:+919855109159"
                   className="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center shadow-lg transition-transform hover:scale-105 shrink-0"
                   title="Call Karan Sama (Coordinator)"
                 >
@@ -661,9 +749,9 @@ export default function RegistrationPage() {
 
           {/* ================= RIGHT COLUMN: Interactive Form (Compact) ================= */}
           <div className="lg:col-span-7 xl:col-span-8 space-y-6 order-1 lg:order-2">
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
-              
+
               {/* Error Banner */}
               {errorMessage && (
                 <div className="bg-red-50 border-2 border-red-300 p-4 rounded-2xl flex items-start gap-3 text-red-900 text-sm shadow-sm animate-pulse">
@@ -692,16 +780,16 @@ export default function RegistrationPage() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                      Team Name
+                      Team Name <span className="text-red-500 font-bold">*</span>
                     </label>
-                    <select 
+                    <select
                       className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-[#d8392f] focus:ring-2 focus:ring-red-100 outline-none transition-all appearance-none bg-slate-50 font-semibold text-slate-800"
                       value={selectedTeam}
                       onChange={handleTeamChange}
                       required
                     >
                       <option value="" disabled>-- Select Your Team --</option>
-                      
+
                       {/* Boys Division Teams */}
                       <optgroup label="Boys Division (16 Teams)">
                         {fullBoysList.map(team => {
@@ -807,6 +895,14 @@ export default function RegistrationPage() {
                   </div>
                 </div>
 
+                {/* Showcase Notice Banner */}
+                <div className="mb-5 bg-blue-50/90 border border-blue-200/80 rounded-xl px-3.5 py-2.5 flex items-center gap-2.5 text-xs text-blue-900 shadow-2xs">
+                  <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span className="font-medium text-[11px] sm:text-xs">
+                    <strong>Social Media &amp; Squad Showcase:</strong> Player profile photo, name, and jersey no. will be shown on official team social media posters and team pages.
+                  </span>
+                </div>
+
                 {/* Quick Player Navigator Tabs */}
                 <div className="mb-6">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
@@ -814,7 +910,13 @@ export default function RegistrationPage() {
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {Array.from({ length: 12 }).map((_, idx) => {
-                      const isComplete = players[idx].name.trim() !== '' && players[idx].tshirtSize !== '';
+                      const isComplete = players[idx].name.trim() !== '' &&
+                        players[idx].jerseyNumber.trim() !== '' &&
+                        players[idx].phone.trim() !== '' &&
+                        players[idx].age.trim() !== '' &&
+                        players[idx].tshirtSize !== '' &&
+                        players[idx].lowerSize !== '' &&
+                        (players[idx].studentIdFile !== null || players[idx].studentIdFileName !== '');
                       return (
                         <button
                           key={idx}
@@ -826,13 +928,12 @@ export default function RegistrationPage() {
                               if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             }
                           }}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all relative ${
-                            activePlayer === idx 
-                              ? 'bg-[#d8392f] text-white shadow-md scale-105' 
-                              : isComplete 
-                                ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' 
-                                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                          }`}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all relative ${activePlayer === idx
+                            ? 'bg-[#d8392f] text-white shadow-md scale-105'
+                            : isComplete
+                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-300'
+                              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                            }`}
                         >
                           #{idx + 1}
                           {idx === captainIndex ? ' (C)' : idx === viceCaptainIndex ? ' (VC)' : idx === 11 ? ' (Ex)' : ''}
@@ -863,22 +964,22 @@ export default function RegistrationPage() {
                       {activePlayer < 11 && (
                         <div className="flex items-center gap-4 text-xs bg-white px-3 py-1.5 rounded-lg border border-slate-200 w-max shadow-sm">
                           <label className="flex items-center gap-1.5 cursor-pointer" title="Mark as Captain">
-                            <input 
-                              type="radio" 
-                              name="captain-radio" 
-                              checked={captainIndex === activePlayer} 
-                              onChange={() => setCaptainIndex(activePlayer)} 
-                              className="w-3.5 h-3.5 text-[#d8392f]" 
+                            <input
+                              type="radio"
+                              name="captain-radio"
+                              checked={captainIndex === activePlayer}
+                              onChange={() => setCaptainIndex(activePlayer)}
+                              className="w-3.5 h-3.5 text-[#d8392f]"
                             />
                             <span className="font-semibold text-slate-700">Captain (C)</span>
                           </label>
                           <label className="flex items-center gap-1.5 cursor-pointer" title="Mark as Vice Captain">
-                            <input 
-                              type="radio" 
-                              name="vice-captain-radio" 
-                              checked={viceCaptainIndex === activePlayer} 
-                              onChange={() => setViceCaptainIndex(activePlayer)} 
-                              className="w-3.5 h-3.5 text-blue-600" 
+                            <input
+                              type="radio"
+                              name="vice-captain-radio"
+                              checked={viceCaptainIndex === activePlayer}
+                              onChange={() => setViceCaptainIndex(activePlayer)}
+                              className="w-3.5 h-3.5 text-blue-600"
                             />
                             <span className="font-semibold text-slate-700">Vice (VC)</span>
                           </label>
@@ -890,48 +991,53 @@ export default function RegistrationPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                       <div className="sm:col-span-2">
                         <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                          <User className="w-3.5 h-3.5 text-slate-400" /> Full Name *
+                          <User className="w-3.5 h-3.5 text-slate-400" /> Full Name <span className="text-red-500 font-bold">*</span>
                         </label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           value={players[activePlayer].name}
                           onChange={(e) => updatePlayer(activePlayer, 'name', e.target.value)}
-                          placeholder="e.g. Gurpreet Singh" 
-                          className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#d8392f] focus:ring-2 focus:ring-red-100 outline-none text-sm bg-white" 
-                          required 
+                          placeholder="e.g. Gurpreet Singh"
+                          className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#d8392f] focus:ring-2 focus:ring-red-100 outline-none text-sm bg-white"
+                          required
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-bold text-slate-700 mb-1">Jersey No. *</label>
-                        <input 
-                          type="number" 
-                          min="0" 
-                          max="999" 
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Jersey No. <span className="text-red-500 font-bold">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="999"
                           value={players[activePlayer].jerseyNumber}
                           onChange={(e) => updatePlayer(activePlayer, 'jerseyNumber', e.target.value)}
-                          placeholder="e.g. 7" 
-                          className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#d8392f] focus:ring-2 focus:ring-red-100 outline-none text-sm bg-white" 
-                          required 
+                          placeholder="e.g. 7"
+                          className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#d8392f] focus:ring-2 focus:ring-red-100 outline-none text-sm bg-white"
+                          required
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-bold text-slate-700 mb-1">Mobile No.</label>
-                        <input 
-                          type="tel" 
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Mobile No. <span className="text-red-500 font-bold">*</span>
+                        </label>
+                        <input
+                          type="tel"
                           value={players[activePlayer].phone}
                           onChange={(e) => updatePlayer(activePlayer, 'phone', e.target.value)}
-                          placeholder="+91" 
-                          className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#d8392f] focus:ring-2 focus:ring-red-100 outline-none text-sm bg-white" 
+                          placeholder="+91 Mobile Number"
+                          className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#d8392f] focus:ring-2 focus:ring-red-100 outline-none text-sm bg-white"
+                          required
                         />
                       </div>
 
                       <div>
                         <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                          <Droplet className="w-3.5 h-3.5 text-[#d8392f]" /> Blood Group
+                          <Droplet className="w-3.5 h-3.5 text-[#d8392f]" /> Blood Group <span className="text-[10px] text-slate-400 font-normal">(Optional)</span>
                         </label>
-                        <select 
+                        <select
                           value={players[activePlayer].bloodGroup}
                           onChange={(e) => updatePlayer(activePlayer, 'bloodGroup', e.target.value)}
                           className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#d8392f] outline-none text-sm bg-white"
@@ -943,27 +1049,28 @@ export default function RegistrationPage() {
 
                       <div>
                         <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5 text-slate-400" /> Age
+                          <Calendar className="w-3.5 h-3.5 text-slate-400" /> Age <span className="text-red-500 font-bold">*</span>
                         </label>
-                        <input 
-                          type="number" 
-                          min="10" 
-                          max="40" 
+                        <input
+                          type="number"
+                          min="10"
+                          max="40"
                           value={players[activePlayer].age}
                           onChange={(e) => updatePlayer(activePlayer, 'age', e.target.value)}
-                          placeholder="19" 
-                          className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#d8392f] outline-none text-sm bg-white" 
+                          placeholder="e.g. 21"
+                          className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#d8392f] focus:ring-2 focus:ring-red-100 outline-none text-sm bg-white"
+                          required
                         />
                       </div>
 
                       <div>
                         <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                          <Ruler className="w-3.5 h-3.5 text-slate-400" /> T-Shirt Size *
+                          <Ruler className="w-3.5 h-3.5 text-slate-400" /> T-Shirt Size <span className="text-red-500 font-bold">*</span>
                         </label>
-                        <select 
+                        <select
                           value={players[activePlayer].tshirtSize}
                           onChange={(e) => updatePlayer(activePlayer, 'tshirtSize', e.target.value)}
-                          className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#d8392f] outline-none text-sm bg-white font-semibold" 
+                          className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#d8392f] outline-none text-sm bg-white font-semibold"
                           required
                         >
                           <option value="">Select Size</option>
@@ -973,12 +1080,12 @@ export default function RegistrationPage() {
 
                       <div>
                         <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                          <Ruler className="w-3.5 h-3.5 text-slate-400" /> Lower Size *
+                          <Ruler className="w-3.5 h-3.5 text-slate-400" /> Lower Size <span className="text-red-500 font-bold">*</span>
                         </label>
-                        <select 
+                        <select
                           value={players[activePlayer].lowerSize}
                           onChange={(e) => updatePlayer(activePlayer, 'lowerSize', e.target.value)}
-                          className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#d8392f] outline-none text-sm bg-white font-semibold" 
+                          className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:border-[#d8392f] outline-none text-sm bg-white font-semibold"
                           required
                         >
                           <option value="">Select Size</option>
@@ -986,12 +1093,18 @@ export default function RegistrationPage() {
                         </select>
                       </div>
 
-                      {/* Student ID Upload */}
-                      <div className="sm:col-span-2 md:col-span-4 mt-2">
-                        <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1">
-                          <Upload className="w-3.5 h-3.5 text-slate-400" /> Student ID Card (Verification)
+                      {/* Uploads Section: Student ID (Mandatory) & Profile Photo (Optional) */}
+                      <div className="sm:col-span-1 md:col-span-2 mt-2">
+                        <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                          <span className="flex items-center gap-1">
+                            <Upload className="w-3.5 h-3.5 text-[#d8392f]" /> Student ID Card <span className="text-red-500 font-bold">*</span>
+                          </span>
+                          <span className="text-[10px] text-red-600 font-bold">Mandatory</span>
                         </label>
-                        <label className="flex items-center justify-between w-full h-[44px] border-2 border-slate-300 border-dashed rounded-xl cursor-pointer bg-white hover:bg-slate-100 transition-colors px-4">
+                        <label className={`flex items-center justify-between w-full h-[46px] border-2 border-dashed rounded-xl cursor-pointer transition-colors px-3 sm:px-4 ${players[activePlayer].studentIdFileName
+                          ? 'border-emerald-400 bg-emerald-50/50 hover:bg-emerald-50/80'
+                          : 'border-red-300/80 bg-red-50/20 hover:bg-red-50/40'
+                          }`}>
                           <div className="flex items-center gap-2 truncate">
                             {players[activePlayer].studentIdFileName ? (
                               <>
@@ -1002,21 +1115,69 @@ export default function RegistrationPage() {
                               </>
                             ) : (
                               <>
-                                <Upload className="w-4 h-4 text-blue-600 shrink-0" />
-                                <span className="text-xs font-bold text-blue-600">Upload Student ID Photo / PDF</span>
+                                <Upload className="w-4 h-4 text-[#d8392f] shrink-0" />
+                                <span className="text-xs font-bold text-[#d8392f] truncate">Student ID (Required) <span className="text-red-500">*</span></span>
                               </>
                             )}
                           </div>
-                          <span className="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-semibold shrink-0">
-                            Browse
+                          <span className={`text-[11px] px-2.5 py-1 rounded font-semibold shrink-0 ${players[activePlayer].studentIdFileName
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : 'bg-red-100 text-[#d8392f]'
+                            }`}>
+                            {players[activePlayer].studentIdFileName ? "Change" : "Browse *"}
                           </span>
-                          <input 
-                            type="file" 
-                            className="hidden" 
-                            accept=".jpg,.jpeg,.png,.pdf" 
+                          <input
+                            type="file"
+                            className="hidden"
+                            accept=".jpg,.jpeg,.png,.pdf"
                             onChange={(e) => handleFileUpload(activePlayer, e.target.files?.[0] || null)}
                           />
                         </label>
+                      </div>
+
+                      <div className="sm:col-span-1 md:col-span-2 mt-2">
+                        <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                          <span className="flex items-center gap-1">
+                            <User className="w-3.5 h-3.5 text-blue-600" /> Profile Photo <span className="text-[10px] text-slate-400 font-normal">(Optional)</span>
+                          </span>
+                          <span className="text-[10px] text-blue-600 font-semibold">Posters &amp; Team Page</span>
+                        </label>
+                        <label className={`flex items-center justify-between w-full h-[46px] border-2 border-dashed rounded-xl cursor-pointer transition-colors px-3 sm:px-4 ${players[activePlayer].profileImageFileName
+                          ? 'border-blue-400 bg-blue-50/50 hover:bg-blue-50/80'
+                          : 'border-slate-300 bg-slate-50/50 hover:bg-slate-100/60'
+                          }`}>
+                          <div className="flex items-center gap-2 truncate">
+                            {players[activePlayer].profileImageFileName ? (
+                              <>
+                                <FileCheck className="w-4 h-4 text-blue-600 shrink-0" />
+                                <span className="text-xs font-bold text-blue-700 truncate">
+                                  {players[activePlayer].profileImageFileName}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <Upload className="w-4 h-4 text-slate-400 shrink-0" />
+                                <span className="text-xs font-medium text-slate-500 truncate">Upload Photo (Optional)</span>
+                              </>
+                            )}
+                          </div>
+                          <span className={`text-[11px] px-2.5 py-1 rounded font-semibold shrink-0 ${players[activePlayer].profileImageFileName
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-slate-200 text-slate-700'
+                            }`}>
+                            {players[activePlayer].profileImageFileName ? "Change" : "Browse"}
+                          </span>
+                          <input
+                            type="file"
+                            className="hidden"
+                            accept=".jpg,.jpeg,.png,.webp"
+                            onChange={(e) => handleProfilePhotoUpload(activePlayer, e.target.files?.[0] || null)}
+                          />
+                        </label>
+                        <p className="text-[10.5px] text-blue-700 bg-blue-50/80 border border-blue-200/60 rounded-lg px-2.5 py-1.5 mt-1.5 font-medium flex items-center gap-1.5">
+                          <Sparkles className="w-3 h-3 text-blue-600 shrink-0" />
+                          <span>Profile image, name and jersey no. will be shown on team social media posters and team pages.</span>
+                        </p>
                       </div>
                     </div>
 
@@ -1026,11 +1187,10 @@ export default function RegistrationPage() {
                         type="button"
                         disabled={activePlayer === 0}
                         onClick={() => setActivePlayer(prev => Math.max(0, prev - 1))}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
-                          activePlayer === 0 
-                            ? 'opacity-40 cursor-not-allowed bg-slate-200 text-slate-500' 
-                            : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-100'
-                        }`}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${activePlayer === 0
+                          ? 'opacity-40 cursor-not-allowed bg-slate-200 text-slate-500'
+                          : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-100'
+                          }`}
                       >
                         <ChevronLeft className="w-4 h-4" /> Previous Player
                       </button>
@@ -1043,11 +1203,10 @@ export default function RegistrationPage() {
                         type="button"
                         disabled={activePlayer === 11}
                         onClick={() => setActivePlayer(prev => Math.min(11, prev + 1))}
-                        className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
-                          activePlayer === 11 
-                            ? 'opacity-40 cursor-not-allowed bg-slate-200 text-slate-500' 
-                            : 'bg-[#0b162c] text-white hover:bg-slate-800'
-                        }`}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${activePlayer === 11
+                          ? 'opacity-40 cursor-not-allowed bg-slate-200 text-slate-500'
+                          : 'bg-[#0b162c] text-white hover:bg-slate-800'
+                          }`}
                       >
                         Next Player <ChevronRight className="w-4 h-4" />
                       </button>
@@ -1059,14 +1218,13 @@ export default function RegistrationPage() {
                 {viewMode === 'all' && (
                   <div className="space-y-4">
                     {players.map((p, idx) => (
-                      <div 
-                        key={idx} 
+                      <div
+                        key={idx}
                         id={`player-card-${idx}`}
-                        className={`p-4 md:p-5 rounded-2xl border transition-all ${
-                          activePlayer === idx 
-                            ? 'border-[#d8392f] bg-red-50/20 shadow-sm' 
-                            : 'border-slate-200 bg-slate-50/50'
-                        }`}
+                        className={`p-4 md:p-5 rounded-2xl border transition-all ${activePlayer === idx
+                          ? 'border-[#d8392f] bg-red-50/20 shadow-sm'
+                          : 'border-slate-200 bg-slate-50/50'
+                          }`}
                       >
                         <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-200">
                           <div className="flex items-center gap-2">
@@ -1080,92 +1238,134 @@ export default function RegistrationPage() {
 
                           <div className="flex items-center gap-3 text-xs">
                             <label className="flex items-center gap-1 cursor-pointer">
-                              <input 
-                                type="radio" 
-                                name="captain-all" 
-                                checked={captainIndex === idx} 
-                                onChange={() => setCaptainIndex(idx)} 
-                                className="w-3 h-3 text-[#d8392f]" 
+                              <input
+                                type="radio"
+                                name="captain-all"
+                                checked={captainIndex === idx}
+                                onChange={() => setCaptainIndex(idx)}
+                                className="w-3 h-3 text-[#d8392f]"
                               />
                               <span className="font-semibold text-slate-600 text-[11px]">Captain</span>
                             </label>
                             <label className="flex items-center gap-1 cursor-pointer">
-                              <input 
-                                type="radio" 
-                                name="vice-captain-all" 
-                                checked={viceCaptainIndex === idx} 
-                                onChange={() => setViceCaptainIndex(idx)} 
-                                className="w-3 h-3 text-blue-600" 
+                              <input
+                                type="radio"
+                                name="vice-captain-all"
+                                checked={viceCaptainIndex === idx}
+                                onChange={() => setViceCaptainIndex(idx)}
+                                className="w-3 h-3 text-blue-600"
                               />
                               <span className="font-semibold text-slate-600 text-[11px]">Vice</span>
                             </label>
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-7 gap-2.5">
                           <div className="col-span-2">
-                            <input 
-                              type="text" 
-                              placeholder="Full Name *" 
+                            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                              Full Name <span className="text-red-500 font-bold">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="Full Name"
                               value={p.name}
                               onChange={(e) => updatePlayer(idx, 'name', e.target.value)}
-                              className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white focus:border-[#d8392f] outline-none" 
-                              required 
+                              className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs bg-white focus:border-[#d8392f] outline-none"
+                              required
                             />
                           </div>
                           <div>
-                            <input 
-                              type="number" 
-                              placeholder="Jersey # *" 
+                            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                              Jersey # <span className="text-red-500 font-bold">*</span>
+                            </label>
+                            <input
+                              type="number"
+                              placeholder="Jersey #"
                               value={p.jerseyNumber}
                               onChange={(e) => updatePlayer(idx, 'jerseyNumber', e.target.value)}
-                              className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white focus:border-[#d8392f] outline-none" 
-                              required 
+                              className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs bg-white focus:border-[#d8392f] outline-none"
+                              required
                             />
                           </div>
                           <div>
-                            <input 
-                              type="tel" 
-                              placeholder="Mobile" 
+                            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                              Mobile # <span className="text-red-500 font-bold">*</span>
+                            </label>
+                            <input
+                              type="tel"
+                              placeholder="Mobile #"
                               value={p.phone}
                               onChange={(e) => updatePlayer(idx, 'phone', e.target.value)}
-                              className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white focus:border-[#d8392f] outline-none" 
+                              className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs bg-white focus:border-[#d8392f] outline-none"
+                              required
                             />
                           </div>
                           <div>
-                            <select 
+                            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                              Age <span className="text-red-500 font-bold">*</span>
+                            </label>
+                            <input
+                              type="number"
+                              min="10"
+                              max="40"
+                              placeholder="Age"
+                              value={p.age}
+                              onChange={(e) => updatePlayer(idx, 'age', e.target.value)}
+                              className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs bg-white focus:border-[#d8392f] outline-none"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                              T-Shirt <span className="text-red-500 font-bold">*</span>
+                            </label>
+                            <select
                               value={p.tshirtSize}
                               onChange={(e) => updatePlayer(idx, 'tshirtSize', e.target.value)}
-                              className="w-full px-2 py-1.5 rounded-lg border border-slate-300 text-xs bg-white focus:border-[#d8392f] outline-none" 
+                              className="w-full px-2 py-1.5 rounded-lg border border-slate-300 text-xs bg-white focus:border-[#d8392f] outline-none"
                               required
                             >
-                              <option value="">T-Shirt</option>
+                              <option value="">Size</option>
                               {sizes.map(s => <option key={s} value={s}>{s}</option>)}
                             </select>
                           </div>
                           <div>
-                            <select 
+                            <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                              Lower <span className="text-red-500 font-bold">*</span>
+                            </label>
+                            <select
                               value={p.lowerSize}
                               onChange={(e) => updatePlayer(idx, 'lowerSize', e.target.value)}
-                              className="w-full px-2 py-1.5 rounded-lg border border-slate-300 text-xs bg-white focus:border-[#d8392f] outline-none" 
+                              className="w-full px-2 py-1.5 rounded-lg border border-slate-300 text-xs bg-white focus:border-[#d8392f] outline-none"
                               required
                             >
-                              <option value="">Lower</option>
+                              <option value="">Size</option>
                               {sizes.map(s => <option key={s} value={s}>{s}</option>)}
                             </select>
                           </div>
                         </div>
 
-                        {/* File Upload in All view */}
-                        <div className="mt-2 flex items-center justify-between text-xs">
-                          <label className="cursor-pointer text-blue-600 hover:underline flex items-center gap-1 font-semibold text-[11px]">
-                            <Upload className="w-3 h-3" />
-                            {p.studentIdFileName ? p.studentIdFileName : "Attach Student ID Card"}
-                            <input 
-                              type="file" 
-                              className="hidden" 
-                              accept=".jpg,.jpeg,.png,.pdf" 
+                        {/* File Uploads in All view */}
+                        <div className="mt-2.5 flex flex-wrap items-center justify-between gap-3 text-xs pt-1 border-t border-slate-100">
+                          <label className={`cursor-pointer flex items-center gap-1 font-semibold text-[11px] ${p.studentIdFileName ? 'text-emerald-700' : 'text-[#d8392f] hover:underline'}`}>
+                            {p.studentIdFileName ? <FileCheck className="w-3.5 h-3.5 text-emerald-600" /> : <Upload className="w-3.5 h-3.5 text-[#d8392f]" />}
+                            {p.studentIdFileName ? p.studentIdFileName : <>Attach Student ID <span className="text-red-500 font-bold">*</span></>}
+                            <input
+                              type="file"
+                              className="hidden"
+                              accept=".jpg,.jpeg,.png,.pdf"
                               onChange={(e) => handleFileUpload(idx, e.target.files?.[0] || null)}
+                            />
+                          </label>
+
+                          <label className={`cursor-pointer flex items-center gap-1 font-semibold text-[11px] ${p.profileImageFileName ? 'text-blue-700' : 'text-slate-500 hover:text-slate-800 hover:underline'}`}>
+                            {p.profileImageFileName ? <FileCheck className="w-3.5 h-3.5 text-blue-600" /> : <Upload className="w-3.5 h-3.5 text-slate-400" />}
+                            {p.profileImageFileName ? p.profileImageFileName : <>Profile Photo (Shown on posters &amp; team pages)</>}
+                            <input
+                              type="file"
+                              className="hidden"
+                              accept=".jpg,.jpeg,.png,.webp"
+                              onChange={(e) => handleProfilePhotoUpload(idx, e.target.files?.[0] || null)}
                             />
                           </label>
                         </div>
@@ -1179,15 +1379,15 @@ export default function RegistrationPage() {
               {/* STEP 3: Submission & Agreement */}
               <div className="bg-[#0b162c] text-white p-6 md:p-8 rounded-3xl shadow-xl border-t-4 border-[#d8392f] space-y-5">
                 <div className="flex items-start gap-3">
-                  <input 
-                    type="checkbox" 
-                    id="rules-agree" 
-                    checked={agreed} 
+                  <input
+                    type="checkbox"
+                    id="rules-agree"
+                    checked={agreed}
                     onChange={(e) => setAgreed(e.target.checked)}
                     className="mt-1 w-4 h-4 rounded text-[#d8392f] border-slate-600 focus:ring-red-500 cursor-pointer"
                   />
                   <label htmlFor="rules-agree" className="text-xs text-slate-300 leading-relaxed cursor-pointer select-none">
-                    I confirm that all entered player details are accurate, our team agrees to pay the <strong className="text-white">₹4,999 registration fee</strong> (inclusive of official custom jersey kits for 12 players), and all 12 players will strictly abide by the official playing conditions & tournament guidelines (including 1-hour reporting window, wearing committee-issued kits, and final authority clause).
+                    I confirm that all entered player details are accurate, our team agrees to pay the <strong className="text-white">₹4,999 registration fee</strong> (inclusive of official custom jersey kits for 12 players), and all 12 players will strictly abide by the official playing conditions &amp; tournament guidelines (including 1-hour reporting window, wearing committee-issued kits, and final authority clause). <span className="text-red-500 font-bold">*</span>
                   </label>
                 </div>
 
@@ -1198,14 +1398,13 @@ export default function RegistrationPage() {
                     <span className="text-[11px] text-emerald-400 font-medium block">Includes 12x Custom Jersey Kits</span>
                   </div>
 
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     disabled={!agreed || isSubmitting}
-                    className={`w-full sm:w-auto px-8 py-3.5 font-black italic text-base uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 ${
-                      agreed && !isSubmitting
-                        ? 'bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white shadow-[0_5px_20px_rgba(239,68,68,0.5)] hover:shadow-[0_5px_25px_rgba(239,68,68,0.7)] hover:-translate-y-0.5' 
-                        : 'bg-slate-700 text-slate-400 opacity-60 cursor-not-allowed'
-                    }`}
+                    className={`w-full sm:w-auto px-8 py-3.5 font-black italic text-base uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 ${agreed && !isSubmitting
+                      ? 'bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white shadow-[0_5px_20px_rgba(239,68,68,0.5)] hover:shadow-[0_5px_25px_rgba(239,68,68,0.7)] hover:-translate-y-0.5'
+                      : 'bg-slate-700 text-slate-400 opacity-60 cursor-not-allowed'
+                      }`}
                   >
                     {isSubmitting ? (
                       <>

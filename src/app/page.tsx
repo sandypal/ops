@@ -37,7 +37,26 @@ import {
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'boys' | 'girls'>('boys');
   const [isSponsorModalOpen, setIsSponsorModalOpen] = useState(false);
-  const [selectedSponsorTier, setSelectedSponsorTier] = useState<string>('Title Sponsor');
+  const [selectedSponsorTier, setSelectedSponsorTier] = useState<string>('Platinum Partner');
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsVideoModalOpen(false);
+      }
+    };
+    if (isVideoModalOpen) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isVideoModalOpen]);
 
   // Confirmed teams from API with default fallback
   const [registeredTeamsList, setRegisteredTeamsList] = useState<Array<{ name: string; slug: string; division: string }>>([
@@ -289,6 +308,42 @@ export default function Home() {
       ],
       link: "https://www.india.gov.in/",
       badgeColor: "bg-teal-50 text-teal-800 border-teal-200"
+    },
+    {
+      name: "Sapta Sindhu Cultural Heritage Forum",
+      subtitle: "ਸਪਤ ਸਿੰਧੁ ਪੰਜਾਬ • Vedic & Punjab Heritage Forum",
+      role: "Cultural & Heritage Partner",
+      tagline: "Preserving the Sacred Vedic Roots of Punjab",
+      description: "Dedicated to researching, preserving, and celebrating the civilizational heritage, historical river identity, and sacred culture of the Sapta Sindhu region.",
+      logos: [
+        {
+          src: "/collaborators/sapta-sindhu-forum.png",
+          alt: "Sapta Sindhu Cultural Heritage Forum Logo",
+          width: 140,
+          height: 140,
+          className: "max-h-20 w-auto object-contain"
+        }
+      ],
+      link: "#",
+      badgeColor: "bg-amber-50 text-amber-800 border-amber-200"
+    },
+    {
+      name: "Swadeshi Jagran Manch",
+      subtitle: "स्वदेशी जागरण मंच • Swadeshi Swabhiman Swavalamban",
+      role: "National Economic & Youth Movement",
+      tagline: "Indigenous Empowerment & Atmanirbhar Bharat",
+      description: "Championing economic self-reliance, local skill development, indigenous culture, and empowering youth leadership across all States and UTs of India.",
+      logos: [
+        {
+          src: "/collaborators/swadeshi-jagran-manch.png",
+          alt: "Swadeshi Jagran Manch Logo",
+          width: 140,
+          height: 140,
+          className: "max-h-20 w-auto object-contain"
+        }
+      ],
+      link: "https://www.swadeshionline.in/",
+      badgeColor: "bg-red-50 text-red-800 border-red-200"
     }
   ];
 
@@ -338,20 +393,20 @@ export default function Home() {
       phone: ""
     },
     {
-      name: "Gourav Choudhary",
-      role: "Organizing Committee",
-      designation: "Organizing Committee Member",
-      image: "/Gouravchoudhary.jpeg",
-      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
-      phone: "+91 90415 40053"
-    },
-    {
       name: "Ram Chander Singh",
       role: "Organizing Committee",
       designation: "Organizing Committee Member",
       image: "/Ramchandersingh.jpeg",
       organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
       phone: ""
+    },
+    {
+      name: "Gourav Choudhary",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Gouravchoudhary.jpeg",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
+      phone: "+91 90415 40053"
     },
     {
       name: "Gurwinder Singh",
@@ -432,116 +487,199 @@ export default function Home() {
       image: "/preet-handa.jpg",
       organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
       phone: ""
+    },
+    {
+      name: "Karandeep Singh",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Karandeepsingh.jpeg",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
+      phone: ""
+    },
+    {
+      name: "Harman Kamboj",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/HarmanKamboj.jpeg",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
+      phone: ""
+    },
+    {
+      name: "Aseem Kamboj",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/Aseemkamboj.jpeg",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
+      phone: ""
+    },
+    {
+      name: "Paras",
+      role: "Organizing Committee",
+      designation: "Organizing Committee Member",
+      image: "/paras.jpeg",
+      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
+      phone: ""
     }
   ];
 
-  // Active / Confirmed Sponsors (Add sponsors here to show their logos on the website)
+  // Active / Confirmed Sponsors
+  // HOW TO UPDATE / ADD SPONSOR LOGOS ACCORDING TO PACKAGE:
+  // 1. Place the brand's transparent PNG or SVG logo into the `/public/sponsors/` folder (e.g. `/public/sponsors/my-brand.png`).
+  // 2. Add an entry to the `activeSponsors` array below with:
+  //    - `brandName`: Name of the brand / sponsor
+  //    - `category`: 'Platinum Partner' | 'Gold Partner' | 'Silver Partner' | 'Bronze Partner' | 'Official Partner'
+  //    - `packageId`: 'platinum' | 'gold' | 'silver' | 'bronze' | 'custom' (matches package card id)
+  //    - `logo`: Path to the logo file in `/public/sponsors/...`
+  //    - `website`: Official website URL
   const activeSponsors: {
-    category: string;
+    category: 'Platinum Partner' | 'Gold Partner' | 'Silver Partner' | 'Bronze Partner' | 'Official Partner' | 'Medical Partner' | string;
+    packageId?: 'platinum' | 'gold' | 'silver' | 'bronze' | 'custom';
     brandName: string;
     logo?: string;
     website?: string;
     tagline?: string;
+    badgeStyle?: string;
   }[] = [
-      {
-        category: "Official Partner",
-        brandName: "Nik Baker's",
-        logo: "/sponsors/nik-bakers.png",
-        website: "https://www.nikbakers.com"
-      }
-    ];
+    {
+      category: "Platinum Partner",
+      packageId: "platinum",
+      brandName: "Nik Baker's",
+      logo: "/sponsors/nik-bakers.png",
+      website: "https://www.nikbakers.com",
+      tagline: "Official Powered By Sponsor (Main Sponsor)",
+      badgeStyle: "bg-amber-50 text-amber-950 border-amber-300"
+    },
+    {
+      category: "Silver Partner",
+      packageId: "silver",
+      brandName: "Avon Cycles",
+      logo: "/sponsors/avon-cycles.png",
+      website: "https://avoncycles.com/",
+      tagline: "Official Silver Partner",
+      badgeStyle: "bg-slate-100 text-slate-800 border-slate-300"
+    },
+    {
+      category: "Medical Partner",
+      packageId: "custom",
+      brandName: "Max Hospital",
+      logo: "/sponsors/max-healthcare.png",
+      website: "https://www.maxhealthcare.in/",
+      tagline: "Official Medical & Healthcare Partner",
+      badgeStyle: "bg-blue-50 text-blue-900 border-blue-300"
+    }
+  ];
 
-  // Sponsorship Categories Matrix (12 Partner Slots)
-  const sponsorshipTiers = [
+  // Official Media Partners (Dedicated Section)
+  const mediaPartners = [
     {
-      id: "title-sponsor",
-      category: "Title Sponsor",
-      hindiCategory: "टाइटल स्पॉन्सर",
-      partners: 1,
-      partnerLabel: "1 Slot (Exclusive)",
-      featured: true,
-      badge: "Exclusive Naming Rights",
-      badgeColor: "bg-amber-100 text-amber-900 border-amber-300",
-      accentBorder: "border-amber-400 shadow-amber-500/10",
-      perks: [
-        "Exclusive Tournament Naming Rights: '[Your Brand] Operation Sindoor Cricket Cup 2.0'",
-        "Primary Front Jersey Center Chest Logo across all 24 team kits (288+ players)",
-        "Dominant Pitch Mat, Sight-screen, Main Presentation Backdrop & Stadium Entrance Gate branding",
-        "VIP Trophy Handover Ceremony & Chief Guest honor at the Grand Finale",
-        "Full digital live-stream score bug & lower-third broadcast branding"
+      id: "pu-pulse",
+      name: "PU Pulse",
+      category: "Digital & Campus Media Partner",
+      logo: "/sponsors/pu-pulse.png",
+      website: "https://pupulse.in/",
+      instagram: "https://www.instagram.com/pu.pulse/",
+      tagline: "Chandigarh's Largest Campus News & Youth Media",
+      description: "Leading collegiate news network amplifying tournament updates, live player stories, and campus coverage across Panjab University and the Tricity.",
+      badgeStyle: "bg-purple-100 text-purple-900 border-purple-300"
+    },
+    {
+      id: "dnc",
+      name: "Daily News Crunch (DNC)",
+      category: "Digital News & Media Partner",
+      logo: "/sponsors/dnc-news.jpg",
+      website: "https://dailynewscrunch.com/",
+      instagram: "https://www.instagram.com/dailynewscrunch/",
+      tagline: "Every News • Every Truth • For EveryOne",
+      description: "Premier digital news portal bringing comprehensive round-the-clock match highlights, tournament interviews, and feature coverage.",
+      badgeStyle: "bg-red-100 text-red-900 border-red-300"
+    },
+    {
+      id: "81newz",
+      name: "81 Newz India",
+      category: "Broadcast & Regional News Partner",
+      logo: "/sponsors/81newz.jpg",
+      website: "https://www.youtube.com/@81newzindia",
+      tagline: "Voice of Truth & Sports Journalism",
+      description: "Dynamic video journalism and regional sports media outlet capturing stadium action, match moments, and ceremonies live from Sector 16 Stadium.",
+      badgeStyle: "bg-sky-100 text-sky-900 border-sky-300"
+    }
+  ];
+
+  // Official Sponsorship Packages (Section 11)
+  const sponsorshipPackages = [
+    {
+      id: "platinum",
+      packageNumber: "PACKAGE 01",
+      category: "Platinum Partner",
+      theme: "dark",
+      headerBg: "bg-[#12161f]",
+      headerBorder: "border-slate-800",
+      includes: [
+        { text: "Powered by", isBold: true },
+        { text: "Kiosk Stand", isBold: false },
+        { text: "Naming Rights", isBold: false },
+        { text: "Category Exclusivity (One brand per category)", isBold: false },
+        { text: "Jersey Branding (Front)", isBold: false },
+        { text: "Main Stage & On-ground Branding", isBold: false },
+        { text: "Digital & Print Creatives", isBold: false },
+        { text: "Social Media Promotion (5+ posts)", isBold: false },
+        { text: "Press & Media Recognition (Priority)", isBold: false },
+        { text: "Opening, Closing & Award Ceremony Mentions", isBold: false },
+        { text: "Premium Exhibition Stall", isBold: false },
+        { text: "On-ground Announcements", isBold: false },
+        { text: "Promotional Material Distribution", isBold: false },
+        { text: "Premium Memento of Appreciation", isBold: false }
       ]
     },
     {
-      id: "co-powered-by",
-      category: "Co-Powered By",
-      hindiCategory: "सह-संचालक पार्टनर",
-      partners: 2,
-      partnerLabel: "2 Partners",
-      featured: false,
-      badge: "Co-Presenting Brand",
-      badgeColor: "bg-blue-100 text-blue-900 border-blue-300",
-      accentBorder: "border-blue-300 shadow-blue-500/10",
-      perks: [
-        "'Co-Powered By [Your Brand]' branding on all official print, digital & stadium media",
-        "Upper Back of Jersey logo on all match day player uniforms",
-        "Ground perimeter boards & Team Dugout backdrop branding",
-        "Digital live-stream graphic sponsor bugs & press release attribution"
+      id: "gold",
+      packageNumber: "PACKAGE 02",
+      category: "Gold Partner",
+      theme: "red",
+      headerBg: "bg-gradient-to-r from-[#b91c1c] to-[#991b1b]",
+      headerBorder: "border-red-900",
+      includes: [
+        { text: "Co-powered by", isBold: true },
+        { text: "Category Exclusivity (On request)", isBold: false },
+        { text: "Jersey Branding (Sleeve)", isBold: false },
+        { text: "Main Stage & On-ground Branding", isBold: false },
+        { text: "Digital & Print Creatives", isBold: false },
+        { text: "Social Media Promotion (3 posts)", isBold: false },
+        { text: "Press & Media Recognition", isBold: false },
+        { text: "Opening, Closing & Award Ceremony Mentions", isBold: false },
+        { text: "Exhibition Stall", isBold: false },
+        { text: "On-ground Announcements", isBold: false },
+        { text: "Memento of Appreciation", isBold: false }
       ]
     },
     {
-      id: "associate-sponsor",
-      category: "Associate Sponsor",
-      hindiCategory: "एसोसिएट स्पॉन्सर",
-      partners: 3,
-      partnerLabel: "3 Partners",
-      featured: false,
-      badge: "High-Visibility Partner",
-      badgeColor: "bg-purple-100 text-purple-900 border-purple-300",
-      accentBorder: "border-purple-200",
-      perks: [
-        "Right/Left Jersey Sleeve prominent logo placement on official jerseys",
-        "2x Ground Perimeter A-frame boards at Sector 16 Stadium",
-        "Official Award naming partner (e.g. Man of the Match / Best Bowler)",
-        "Dedicated social media sponsor spotlight & digital shoutouts"
+      id: "silver",
+      packageNumber: "PACKAGE 03",
+      category: "Silver Partner",
+      theme: "dark",
+      headerBg: "bg-[#12161f]",
+      headerBorder: "border-slate-800",
+      includes: [
+        { text: "Digital & Print Creatives", isBold: false },
+        { text: "Social Media Promotion (2 posts)", isBold: false },
+        { text: "Press & Media Recognition", isBold: false }
       ]
     },
     {
-      id: "team-jersey-sponsor",
-      category: "Team/Jersey Sponsor",
-      hindiCategory: "टीम / जर्सी स्पॉन्सर",
-      partners: 2,
-      partnerLabel: "2 Partners",
-      featured: false,
-      badge: "Team Kit Partner",
-      badgeColor: "bg-emerald-100 text-emerald-900 border-emerald-300",
-      accentBorder: "border-emerald-200",
-      perks: [
-        "Direct Player Jersey branding worn across 24 collegiate cricket squads",
-        "Team dugout banner presence & official kit unveiling coverage",
-        "Photo-ops with team captains and player squads",
-        "Digital social media roster branding tags and match updates"
-      ]
-    },
-    {
-      id: "special-category-partner",
-      category: "Special Category Partner",
-      hindiCategory: "स्पेशल कैटेगरी पार्टनर",
-      partners: 4,
-      partnerLabel: "4 Partners",
-      featured: false,
-      badge: "Category Exclusive",
-      badgeColor: "bg-slate-100 text-slate-800 border-slate-300",
-      accentBorder: "border-slate-200",
-      perks: [
-        "Exclusive Domain Partnership (Beverage, Refreshment, Digital, Medical)",
-        "On-ground kiosk / stall and product sampling booth rights at stadium",
-        "Official Special Partner logo on event posters & social media banners",
-        "Live PA ground announcement acknowledgement during matches"
+      id: "bronze",
+      packageNumber: "PACKAGE 04",
+      category: "Bronze Partner",
+      theme: "red",
+      headerBg: "bg-gradient-to-r from-[#b91c1c] to-[#991b1b]",
+      headerBorder: "border-red-900",
+      includes: [
+        { text: "Digital & Print Creatives", isBold: false },
+        { text: "Social Media Promotion (1 post)", isBold: false }
       ]
     }
   ];
 
-  const openSponsorModal = (category: string = 'Title Sponsor') => {
+  const openSponsorModal = (category: string = 'Platinum Partner') => {
     setSelectedSponsorTier(category);
     setIsSponsorModalOpen(true);
   };
@@ -590,58 +728,126 @@ export default function Home() {
           <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0b162c] to-transparent" />
         </div>
 
-        <div className="container mx-auto px-4 py-16 md:py-24 relative z-10 flex flex-col md:flex-row items-center gap-8">
+        <div className="container mx-auto px-4 py-10 sm:py-14 md:py-20 lg:py-24 relative z-10 flex flex-col md:flex-row items-center gap-8">
           <div className="md:w-3/5 text-left">
-            <div className="flex flex-wrap items-center gap-2 mb-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded border border-[#d8392f]/50 text-[#d8392f] text-xs font-black uppercase tracking-widest bg-white/5 backdrop-blur-sm shadow-[0_0_10px_rgba(239,68,68,0.3)]">
+            <div className="flex flex-wrap items-center gap-2 mb-3 sm:mb-4">
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded border border-[#d8392f]/50 text-[#d8392f] text-[10px] sm:text-xs font-black uppercase tracking-widest bg-white/5 backdrop-blur-sm shadow-[0_0_10px_rgba(239,68,68,0.3)]">
                 <Shield className="w-3 h-3" />
                 Tribute to Armed Forces
               </div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded border border-blue-400/50 text-blue-300 text-xs font-black uppercase tracking-widest bg-white/5 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded border border-blue-400/50 text-blue-300 text-[10px] sm:text-xs font-black uppercase tracking-widest bg-white/5 backdrop-blur-sm">
                 <Users className="w-3 h-3" />
                 Open for Colleges & Universities
               </div>
             </div>
 
-            <h2 className="text-5xl md:text-[5.5rem] font-black tracking-tighter mb-4 leading-[0.9] text-white uppercase italic drop-shadow-2xl">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.2rem] font-black tracking-tighter mb-3 sm:mb-4 leading-[0.95] text-white uppercase italic drop-shadow-2xl">
               T10 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#d8392f] to-[#fb923c]">GLORY</span><br />
               AWAITS
-            </h2>
+              <span className="sr-only"> — Operation Sindoor Cricket Cup 2.0 Chandigarh</span>
+            </h1>
 
-            <p className="text-lg md:text-xl text-slate-300 max-w-2xl mb-8 font-medium">
+            <p className="text-sm sm:text-base md:text-lg text-slate-300 max-w-2xl mb-6 sm:mb-8 font-medium leading-relaxed">
               Open to <strong className="text-white">college &amp; university students</strong> across all States &amp; UTs. Join the battle at Sector 16 Stadium Chandigarh. 24 Teams. 5 Days. Ultimate T10 knockouts. Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-white font-bold hover:text-[#d8392f] underline underline-offset-2 transition-colors">Sarv Sewa Sashktikarn Sangthan (Regd)</a>.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 mb-5">
-              <a href="/registration" className="px-8 py-4 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white font-black italic text-xl uppercase tracking-wider rounded transition-all shadow-[0_10px_30px_rgba(220,38,38,0.6)] hover:shadow-[0_10px_40px_rgba(220,38,38,0.8)] hover:-translate-y-1 w-full sm:w-auto text-center border-b-4 border-[#7f1d1d] flex items-center justify-center gap-2">
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mb-4 sm:mb-5">
+              <a href="/registration" className="px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white font-black italic text-base sm:text-lg md:text-xl uppercase tracking-wider rounded transition-all shadow-[0_10px_30px_rgba(220,38,38,0.6)] hover:shadow-[0_10px_40px_rgba(220,38,38,0.8)] hover:-translate-y-1 w-full sm:w-auto text-center border-b-4 border-[#7f1d1d] flex items-center justify-center gap-2">
                 <span>REGISTER TEAM</span>
-                <span className="bg-white/20 px-2.5 py-0.5 rounded text-base font-black">₹4,999</span>
+                <span className="bg-white/20 px-2 sm:px-2.5 py-0.5 rounded text-sm sm:text-base font-black">₹4,999</span>
               </a>
-              <a href="#about" className="px-8 py-4 bg-transparent border-2 border-white/30 hover:border-white text-white font-black italic text-xl uppercase tracking-wider rounded transition-all w-full sm:w-auto text-center flex items-center justify-center gap-2">
-                <PlayCircle className="w-6 h-6" /> WATCH PROMO
-              </a>
+              <button
+                type="button"
+                onClick={() => setIsVideoModalOpen(true)}
+                className="group px-6 sm:px-8 py-3.5 sm:py-4 bg-white/10 hover:bg-white/20 border-2 border-white/40 hover:border-white text-white font-black italic text-base sm:text-lg md:text-xl uppercase tracking-wider rounded transition-all w-full sm:w-auto text-center flex items-center justify-center gap-3 backdrop-blur-sm cursor-pointer shadow-lg hover:shadow-red-500/20 hover:-translate-y-0.5"
+              >
+                <div className="relative flex items-center justify-center">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-60"></span>
+                  <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6 text-red-500 fill-white group-hover:scale-110 transition-transform relative" />
+                </div>
+                <span>WATCH PROMO</span>
+              </button>
             </div>
 
             {/* Prominent Price Highlight Strip */}
-            <div className="inline-flex flex-wrap items-center gap-2.5 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/20 text-xs text-slate-200 shadow-lg">
-              <div className="flex items-center gap-1.5 font-black text-amber-400 text-sm italic">
-                <Trophy className="w-4 h-4 text-amber-400" />
+            <div className="inline-flex flex-wrap items-center gap-2 sm:gap-2.5 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-white/20 text-[11px] sm:text-xs text-slate-200 shadow-lg">
+              <div className="flex items-center gap-1.5 font-black text-amber-400 text-xs sm:text-sm italic">
+                <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
                 <span>₹4,999 / Team</span>
               </div>
               <span className="text-white/40">•</span>
               <span className="font-semibold">Squad of 12 Players</span>
               <span className="text-white/40">•</span>
-              <span className="text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+              <span className="text-emerald-400 font-bold bg-emerald-500/10 px-1.5 sm:px-2 py-0.5 rounded-md border border-emerald-500/20">
                 12x Official Jersey Kits Included
               </span>
             </div>
           </div>
 
-          <div className="md:w-2/5 flex justify-center relative">
-            <div className="w-64 h-64 md:w-96 md:h-96 relative z-10 animate-pulse-slow">
-              <div className="absolute inset-0 bg-[#d8392f] rounded-full blur-[100px] opacity-30"></div>
-              {/* Replace with actual trophy image if available, using logo as placeholder */}
-              <Image src="/logo.png" alt="Trophy" width={400} height={400} className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(239,68,68,0.5)]" />
+          <div className="md:w-2/5 flex flex-col items-center justify-center relative w-full">
+            {/* Official Tournament Presenters: Organized on top of Operation Sindoor logo */}
+            <div className="w-full max-w-sm mb-4 sm:mb-6 z-20">
+              <div className="bg-gradient-to-b from-black/90 via-black/80 to-black/75 backdrop-blur-md p-3.5 sm:p-5 rounded-2xl border-2 border-amber-400/50 shadow-[0_15px_40px_rgba(0,0,0,0.7)] flex flex-col items-center text-center">
+                {/* POWERED BY: Nik Baker's (Prominent showcase with enlarged logo) */}
+                <div className="w-full flex flex-col items-center mb-2.5 sm:mb-3">
+                  <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400 mb-1.5 sm:mb-2 flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400" />
+                    <span>POWERED BY</span>
+                    <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400" />
+                  </span>
+                  <a
+                    href="https://www.nikbakers.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 sm:py-3 px-3 sm:px-4 bg-white hover:bg-slate-50 rounded-xl border-2 border-amber-400/80 shadow-lg flex items-center justify-center gap-2.5 sm:gap-3.5 hover:scale-[1.02] transition-all group"
+                    title="Nik Baker's — Main Sponsor / Official Powered By Sponsor"
+                  >
+                    <Image
+                      src="/sponsors/nik-bakers.png"
+                      alt="Nik Baker's Logo"
+                      width={160}
+                      height={110}
+                      className="h-12 sm:h-16 md:h-20 w-auto object-contain"
+                    />
+                    <div className="text-left border-l-2 border-slate-200 pl-2.5 sm:pl-3">
+                      <span className="text-xs sm:text-base md:text-lg font-black text-slate-900 block leading-tight group-hover:text-[#d8392f] transition-colors">
+                        Nik Baker&apos;s
+                      </span>
+                      <span className="text-[10px] sm:text-xs text-amber-700 font-black uppercase tracking-wider block">
+                        Main Sponsor
+                      </span>
+                    </div>
+                  </a>
+                </div>
+
+                {/* CO-POWERED BY: Inviting Sponsor (Compact & secondary) */}
+                <div className="w-full pt-2 sm:pt-2.5 border-t border-white/15 flex items-center justify-between gap-2 px-1">
+                  <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-300">
+                    CO-POWERED BY:
+                  </span>
+                  <a
+                    href="#sponsorship"
+                    className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/30 text-slate-200 hover:text-white text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all hover:border-amber-400/60"
+                    title="Inviting Co-Powered By Sponsor — Apply Now"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                    <span>Inviting Sponsor</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Operation Sindoor Logo */}
+            <div className="w-48 h-48 sm:w-60 sm:h-60 md:w-80 md:h-80 relative z-10 animate-pulse-slow">
+              <div className="absolute inset-0 bg-[#d8392f] rounded-full blur-[90px] opacity-30"></div>
+              <Image
+                src="/logo.png"
+                alt="Operation Sindoor Cricket Cup 2.0 Logo"
+                width={360}
+                height={360}
+                className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(239,68,68,0.5)]"
+                priority
+              />
             </div>
           </div>
         </div>
@@ -650,43 +856,47 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════════════════════
           OPTION 3A: LIVE CONFIRMED SQUADS TRUST RIBBON (Direct Logos)
           ═══════════════════════════════════════════════════════════════════════ */}
-      <div className="bg-[#070e1c] text-white border-y border-amber-500/20 py-3 sm:py-3.5 relative z-20 shadow-md">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+      <div className="bg-[#070e1c] text-white border-y border-amber-500/20 py-2.5 sm:py-3.5 relative z-20 shadow-md">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2.5 sm:gap-3 text-xs">
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 px-3 py-1 rounded-full font-black uppercase tracking-wider text-[11px]">
+            <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full font-black uppercase tracking-wider text-[10px] sm:text-[11px]">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
               <span>Live Confirmed Teams</span>
             </span>
-            <span className="text-slate-400 font-semibold hidden lg:inline">
+            <span className="text-slate-400 font-semibold hidden lg:inline text-xs">
               Verified Squads for Sector 16 Stadium:
             </span>
           </div>
 
-          <div className="w-full md:w-auto flex items-center justify-start md:justify-end gap-3 overflow-x-auto max-w-full py-1 custom-scrollbar">
+          <div className="w-full md:w-auto flex items-center justify-start md:justify-end gap-2.5 sm:gap-3 overflow-x-auto max-w-full py-1 custom-scrollbar">
             {registeredTeamsList.map((team, idx) => {
               const slug = team.slug || team.name.toLowerCase().replace(/\s+/g, '-');
               const logo = teamLogos[slug];
               return (
-                <div key={idx} className="flex items-center gap-2 bg-white/10 hover:bg-white/15 px-3 py-1 rounded-xl border border-white/15 shrink-0 transition-colors">
+                <Link
+                  key={idx}
+                  href={`/teams/${slug}`}
+                  className="flex items-center gap-1.5 sm:gap-2 bg-white/10 hover:bg-white/20 hover:border-emerald-400/40 px-2.5 sm:px-3 py-1 rounded-xl border border-white/15 shrink-0 transition-all cursor-pointer group"
+                >
                   {logo && (
-                    <div className="w-6 h-6 rounded-md bg-white p-0.5 flex items-center justify-center shrink-0 shadow-2xs">
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md bg-white p-0.5 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
                       <Image src={logo} alt={team.name} width={20} height={20} className="max-h-full max-w-full object-contain" />
                     </div>
                   )}
-                  <span className="font-black text-white text-xs uppercase italic">{team.name}</span>
-                  <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-1.5 py-0.5 rounded border border-emerald-500/30 flex items-center gap-1">
+                  <span className="font-black text-white group-hover:text-amber-300 text-[11px] sm:text-xs uppercase italic transition-colors">{team.name}</span>
+                  <span className="text-[9px] sm:text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-1.5 py-0.5 rounded border border-emerald-500/30 flex items-center gap-1">
                     <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
                     Confirmed Entry
                   </span>
-                </div>
+                </Link>
               );
             })}
             <a
               href="/registration"
-              className="text-xs font-black text-amber-400 hover:text-amber-300 hover:underline uppercase tracking-wider shrink-0 flex items-center gap-1 ml-2"
+              className="text-[11px] sm:text-xs font-black text-amber-400 hover:text-amber-300 hover:underline uppercase tracking-wider shrink-0 flex items-center gap-1 ml-1 sm:ml-2"
             >
               <span>+ Register Your Team (₹4,999)</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -696,7 +906,7 @@ export default function Home() {
       </div>
 
       {/* Quick Stats (Like IPL stats bar) */}
-      <section className="bg-white border border-slate-200/90 shadow-md relative z-20 mt-6 md:mt-8 mx-4 md:mx-auto md:w-11/12 rounded-2xl mb-14 md:mb-16 overflow-hidden">
+      <section className="bg-white border border-slate-200/90 shadow-md relative z-20 mt-4 sm:mt-6 md:mt-8 mx-3 sm:mx-4 md:mx-auto md:w-11/12 rounded-2xl mb-10 sm:mb-14 md:mb-16 overflow-hidden">
         <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-slate-100">
           {[
             { label: "Entry Fee", value: "₹4,999", sub: "12x Jersey Kits Included", highlight: true },
@@ -704,31 +914,29 @@ export default function Home() {
             { label: "Teams", value: "24", sub: "16 Boys • 8 Girls" },
             { label: "1st Prize", value: "₹51K", sub: "+ Official Trophy" }
           ].map((stat, i) => (
-            <div key={i} className={`p-6 text-center transition-colors cursor-pointer group ${stat.highlight ? 'bg-gradient-to-b from-amber-50/60 to-white' : 'hover:bg-slate-50'}`}>
-              <p className={`text-4xl font-black italic transition-colors ${stat.highlight ? 'text-[#d8392f]' : 'text-[#0b162c] group-hover:text-[#d8392f]'}`}>{stat.value}</p>
-              <h4 className="text-sm font-bold text-slate-500 uppercase tracking-widest">{stat.label}</h4>
-              <p className={`text-xs mt-1 font-semibold ${stat.highlight ? 'text-emerald-700' : 'text-slate-400'}`}>{stat.sub}</p>
+            <div key={i} className={`p-3.5 sm:p-5 md:p-6 text-center transition-colors cursor-pointer group ${stat.highlight ? 'bg-gradient-to-b from-amber-50/60 to-white' : 'hover:bg-slate-50'}`}>
+              <p className={`text-2xl sm:text-3xl md:text-4xl font-black italic transition-colors ${stat.highlight ? 'text-[#d8392f]' : 'text-[#0b162c] group-hover:text-[#d8392f]'}`}>{stat.value}</p>
+              <h4 className="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-widest mt-0.5">{stat.label}</h4>
+              <p className={`text-[10px] sm:text-xs mt-0.5 sm:mt-1 font-semibold ${stat.highlight ? 'text-emerald-700' : 'text-slate-400'}`}>{stat.sub}</p>
             </div>
           ))}
         </div>
       </section>
 
-
-
       {/* About Section */}
-      <section id="about" className="py-20 bg-gradient-to-b from-white via-slate-50 to-[#f3f5f8] border-b border-slate-200 relative overflow-hidden">
+      <section id="about" className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white via-slate-50 to-[#f3f5f8] border-b border-slate-200 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-12">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-8 sm:mb-12">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-red-100/80 text-[#d8392f] text-xs font-black uppercase tracking-widest mb-3 border border-red-200">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-red-100/80 text-[#d8392f] text-[11px] sm:text-xs font-black uppercase tracking-widest mb-2.5 sm:mb-3 border border-red-200">
                 <Shield className="w-3.5 h-3.5" />
                 Tribute to Armed Forces
               </div>
-              <h2 className="text-3xl md:text-5xl font-black uppercase italic text-[#0b162c] tracking-tighter leading-tight">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase italic text-[#0b162c] tracking-tighter leading-tight">
                 OPERATION SINDOOR <br />
                 <span className="text-[#d8392f]">CRICKET CUP 2.0</span>
               </h2>
-              <p className="text-slate-600 text-base md:text-lg mt-4 font-medium leading-relaxed">
+              <p className="text-slate-600 text-sm sm:text-base md:text-lg mt-3 sm:mt-4 font-medium leading-relaxed">
                 Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer"><strong className="text-slate-900 font-bold hover:text-[#d8392f] transition-colors">Sarv Sewa Sashktikarn Sangthan (Regd)</strong></a>, the Operation Sindoor Cricket Cup is a premier state-level cricket tournament held in salute to the brave men and women of the Indian Armed Forces.
               </p>
             </div>
@@ -826,26 +1034,67 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* 4. Confirmed Sponsors */}
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1 text-[10px] font-bold text-slate-600 uppercase tracking-wider shrink-0">
-                    <Sparkles className="w-3 h-3 text-amber-500" />
-                    <span>Sponsor:</span>
+                {/* 4. Confirmed Sponsors & Partners */}
+                <div className="pt-2.5 border-t border-slate-100 flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1 text-[10px] font-bold text-slate-600 uppercase tracking-wider shrink-0">
+                      <Sparkles className="w-3 h-3 text-amber-500" />
+                      <span>Sponsors &amp; Official Partners:</span>
+                    </div>
+                    <a href="#sponsorship" className="text-[10px] font-bold text-[#d8392f] hover:underline">
+                      View All Packages →
+                    </a>
                   </div>
-                  <a
-                    href="#sponsorship"
-                    className="h-7 px-2.5 rounded-full bg-white hover:bg-amber-50/50 border border-amber-300 shadow-2xs hover:shadow-md hover:border-amber-400 hover:scale-105 transition-all flex items-center gap-1.5 shrink-0"
-                    title="Nik Baker's — Official Partner"
-                  >
-                    <Image
-                      src="/sponsors/nik-bakers.png"
-                      alt="Nik Baker's"
-                      width={48}
-                      height={34}
-                      className="max-h-5 w-auto object-contain"
-                    />
-                    <span className="text-[10px] font-black text-slate-800">Nik Baker&apos;s</span>
-                  </a>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {/* Nik Baker's */}
+                    <a
+                      href="#sponsorship"
+                      className="h-7 px-2.5 rounded-full bg-white hover:bg-amber-50/50 border border-amber-300 shadow-2xs hover:shadow-md hover:border-amber-400 hover:scale-105 transition-all flex items-center gap-1.5 shrink-0"
+                      title="Nik Baker's — Main Sponsor / Powered By (Platinum Partner)"
+                    >
+                      <Image
+                        src="/sponsors/nik-bakers.png"
+                        alt="Nik Baker's"
+                        width={48}
+                        height={34}
+                        className="max-h-5 w-auto object-contain"
+                      />
+                      <span className="text-[10px] font-black text-slate-800">Nik Baker&apos;s</span>
+                      <span className="text-[9px] font-bold text-amber-800 bg-amber-100/80 px-1 rounded">Powered By</span>
+                    </a>
+                    {/* Avon Cycles */}
+                    <a
+                      href="#sponsorship"
+                      className="h-7 px-2.5 rounded-full bg-white hover:bg-slate-50 border border-slate-300 shadow-2xs hover:shadow-md hover:border-slate-400 hover:scale-105 transition-all flex items-center gap-1.5 shrink-0"
+                      title="Avon Cycles — Silver Partner"
+                    >
+                      <Image
+                        src="/sponsors/avon-cycles.png"
+                        alt="Avon Cycles"
+                        width={48}
+                        height={34}
+                        className="max-h-5 w-auto object-contain"
+                      />
+                      <span className="text-[10px] font-black text-slate-800">Avon Cycles</span>
+                      <span className="text-[9px] font-bold text-slate-700 bg-slate-100 px-1 rounded">Silver</span>
+                    </a>
+                    {/* Max Hospital */}
+                    <a
+                      href="#sponsorship"
+                      className="h-7 px-2.5 rounded-full bg-white hover:bg-blue-50/50 border border-blue-300 shadow-2xs hover:shadow-md hover:border-blue-400 hover:scale-105 transition-all flex items-center gap-1.5 shrink-0"
+                      title="Max Hospital — Medical & Healthcare Partner"
+                    >
+                      <Image
+                        src="/sponsors/max-healthcare.png"
+                        alt="Max Hospital"
+                        width={48}
+                        height={24}
+                        className="max-h-4.5 w-auto object-contain rounded-xs"
+                      />
+                      <span className="text-[10px] font-black text-slate-800">Max Hospital</span>
+                      <span className="text-[9px] font-bold text-blue-700 bg-blue-100/60 px-1 rounded">Medical</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -979,6 +1228,71 @@ export default function Home() {
 
             </div>
           </div>
+
+          {/* Official Tournament Promo Video Showcase Card */}
+          <div className="mt-12 bg-gradient-to-br from-[#0b162c] via-[#112240] to-[#070e1c] rounded-3xl p-6 sm:p-8 md:p-10 border-2 border-red-500/30 shadow-2xl overflow-hidden relative text-white">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div className="flex flex-col lg:flex-row items-center gap-8 relative z-10">
+              {/* Left Column: Info & Action */}
+              <div className="lg:w-1/2 space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 text-red-400 text-xs font-black uppercase tracking-widest border border-red-500/30">
+                  <PlayCircle className="w-3.5 h-3.5 text-red-500" />
+                  Official Tournament Promo
+                </div>
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase italic tracking-tight text-white leading-tight">
+                  FEEL THE PASSION &amp; <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#d8392f] to-[#fb923c]">GLORY</span>
+                </h3>
+                <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+                  Watch the official promo video of <strong className="text-white">Operation Sindoor Cricket Cup 2.0</strong>. Experience the battle ready spirit of 24 teams coming together at Sector 16 Stadium Chandigarh in salute to the Indian Armed Forces.
+                </p>
+
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsVideoModalOpen(true)}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] hover:from-[#b91c1c] hover:to-[#991b1b] text-white font-black italic rounded-xl uppercase tracking-wider text-xs sm:text-sm shadow-[0_4px_20px_rgba(216,57,47,0.4)] hover:shadow-[0_6px_25px_rgba(216,57,47,0.6)] hover:-translate-y-0.5 transition-all cursor-pointer"
+                  >
+                    <PlayCircle className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                    <span>Watch Fullscreen</span>
+                  </button>
+                  <a
+                    href="https://www.youtube.com/watch?v=R5pjfCfualY"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-xs sm:text-sm border border-white/20 transition-all hover:-translate-y-0.5"
+                  >
+                    <span>Watch on YouTube</span>
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-300" />
+                  </a>
+                </div>
+
+                <div className="pt-2 flex items-center gap-4 text-xs text-slate-400">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    Sector 16 Stadium, Chandigarh
+                  </span>
+                  <span>•</span>
+                  <span>
+                    Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-[#d8392f] underline underline-offset-2 font-bold transition-colors">Sarv Sewa Sashktikarn Sangthan (Regd)</a>
+                  </span>
+                </div>
+              </div>
+
+              {/* Right Column: Embedded 16:9 YouTube Video */}
+              <div className="lg:w-1/2 w-full">
+                <div className="relative aspect-video rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl bg-black group">
+                  <iframe
+                    src="https://www.youtube.com/embed/R5pjfCfualY"
+                    title="Operation Sindoor Cricket Cup 2.0 - Official Promo Video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    className="w-full h-full border-0"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1070,35 +1384,35 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════════════════════
           OFFICIAL INSTITUTIONAL COLLABORATIONS SECTION (Partners & Associations)
           ═══════════════════════════════════════════════════════════════════════ */}
-      <section id="collaborations" className="py-20 bg-gradient-to-b from-white via-slate-50/80 to-white border-b border-slate-200 relative overflow-hidden">
+      <section id="collaborations" className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white via-slate-50/80 to-white border-b border-slate-200 relative overflow-hidden">
         {/* Subtle background glow */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-red-500/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b-2 border-slate-100 pb-6 gap-4">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 border-b-2 border-slate-100 pb-4 sm:pb-6 gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-blue-100/80 text-blue-700 text-xs font-black uppercase tracking-widest mb-3 border border-blue-200">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-blue-100/80 text-blue-700 text-[11px] sm:text-xs font-black uppercase tracking-widest mb-2.5 sm:mb-3 border border-blue-200">
                 <Handshake className="w-3.5 h-3.5" />
                 Institutional Network
               </div>
-              <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-[#0b162c]">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase italic tracking-tighter text-[#0b162c]">
                 OFFICIAL <span className="text-[#d8392f]">COLLABORATIONS</span>
               </h2>
-              <p className="text-slate-600 text-sm md:text-base mt-2 font-medium max-w-2xl">
-                Organized by Sarv Sewa Sashktikarn Sangthan (Regd) in proud institutional collaboration with Panjab University, UT Sports Chandigarh, Ministry of Youth Affairs &amp; Sports, MY Bharat, NSS, NCC, and Viksit Bharat Abhiyan.
+              <p className="text-slate-600 text-xs sm:text-sm md:text-base mt-2 font-medium max-w-2xl leading-relaxed">
+                Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-slate-900 font-bold hover:text-[#d8392f] underline underline-offset-2 transition-colors">Sarv Sewa Sashktikarn Sangthan (Regd)</a> in proud institutional collaboration with Panjab University, UT Sports Chandigarh, Ministry of Youth Affairs &amp; Sports, MY Bharat, NSS, NCC, Viksit Bharat Abhiyan, Sapta Sindhu Cultural Heritage Forum, and Swadeshi Jagran Manch.
               </p>
             </div>
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider bg-white px-4 py-2.5 rounded-xl border border-slate-200 shadow-sm">
+            <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider bg-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-slate-200 shadow-sm self-start md:self-auto">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
               </span>
-              8 Official Institutional Collaborations
+              10 Official Institutional Collaborations
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {institutionalCollaborators.map((collab, index) => (
               <div
                 key={index}
@@ -1181,7 +1495,7 @@ export default function Home() {
       </section>
 
       {/* Sponsorship Section - Executive VIP Dark Onyx & Amber Prestige */}
-      <section id="sponsorship" className="py-24 bg-gradient-to-b from-[#060b17] via-[#0c1426] to-[#050914] text-white relative overflow-hidden border-b-2 border-amber-500/20">
+      <section id="sponsorship" className="py-14 sm:py-18 md:py-24 bg-gradient-to-b from-[#060b17] via-[#0c1426] to-[#050914] text-white relative overflow-hidden border-b-2 border-amber-500/20">
         {/* Luxury Gold & Crimson atmospheric glows */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[130px] pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[450px] h-[450px] bg-[#d8392f]/10 rounded-full blur-[130px] pointer-events-none" />
@@ -1189,31 +1503,31 @@ export default function Home() {
 
         <div className="container mx-auto px-4 relative z-10">
           {/* Header */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-14 border-b border-white/10 pb-8 gap-6">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 sm:mb-14 border-b border-white/10 pb-6 sm:pb-8 gap-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-amber-400/10 text-amber-400 text-xs font-black uppercase tracking-widest mb-3 border border-amber-400/20 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-amber-400/10 text-amber-400 text-[11px] sm:text-xs font-black uppercase tracking-widest mb-2.5 sm:mb-3 border border-amber-400/20 backdrop-blur-sm">
                 <Sparkles className="w-3.5 h-3.5" />
                 Brand Association & Growth
               </div>
-              <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-white">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase italic tracking-tighter text-white">
                 TOURNAMENT <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#d8392f] to-[#fb923c]">SPONSORSHIP</span>
               </h2>
-              <p className="text-slate-300 text-sm md:text-base mt-2 font-medium max-w-2xl leading-relaxed">
+              <p className="text-slate-300 text-xs sm:text-sm md:text-base mt-2 font-medium max-w-2xl leading-relaxed">
                 Position your brand at the center of North India’s premier collegiate cricket championship. Extensive stadium hoardings, live-stream broadcast exposure, and direct engagement with youth across all States &amp; UTs.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
               <button
-                onClick={() => openSponsorModal('Title Sponsor')}
-                className="px-6 py-3.5 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white font-black italic text-sm uppercase tracking-wider rounded-xl hover:shadow-[0_0_25px_rgba(239,68,68,0.6)] hover:-translate-y-0.5 transition-all flex items-center gap-2 shadow-lg cursor-pointer"
+                onClick={() => openSponsorModal('Platinum Partner')}
+                className="px-5 sm:px-6 py-3 sm:py-3.5 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white font-black italic text-xs sm:text-sm uppercase tracking-wider rounded-xl hover:shadow-[0_0_25px_rgba(239,68,68,0.6)] hover:-translate-y-0.5 transition-all flex items-center gap-2 shadow-lg cursor-pointer"
               >
                 <Briefcase className="w-4 h-4" />
                 <span>Apply for Sponsorship</span>
               </button>
               <a
                 href="tel:+919056333759"
-                className="px-5 py-3.5 bg-white/10 hover:bg-white/15 text-white font-bold text-sm rounded-xl border border-white/20 transition-all flex items-center gap-2"
+                className="px-4 sm:px-5 py-3 sm:py-3.5 bg-white/10 hover:bg-white/15 text-white font-bold text-xs sm:text-sm rounded-xl border border-white/20 transition-all flex items-center gap-2"
               >
                 <Phone className="w-4 h-4 text-[#d8392f]" />
                 <span>+91 90563 33759</span>
@@ -1231,12 +1545,12 @@ export default function Home() {
                 </h3>
               </div>
               <span className="text-xs font-semibold text-slate-400">
-                {activeSponsors.length} Confirmed • 11 Partner Slots Available
+                {activeSponsors.length} Confirmed • Partner Slots Available
               </span>
             </div>
 
             {/* Confirmed Sponsors Grid (Supports multiple sponsors) */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 mb-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
               {activeSponsors.map((sponsor, idx) => (
                 <a
                   key={idx}
@@ -1245,244 +1559,219 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="bg-white rounded-2xl p-4 sm:p-5 border-2 border-amber-400/80 hover:border-amber-400 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-between group relative overflow-hidden text-center"
                 >
-                  <div className="h-28 w-full flex items-center justify-center p-2 mb-2">
+                  <div className="mb-2 w-full">
+                    <span className={`inline-block text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border ${sponsor.badgeStyle || 'bg-amber-50 text-amber-900 border-amber-300'}`}>
+                      {sponsor.category}
+                    </span>
+                  </div>
+
+                  <div className="h-24 w-full flex items-center justify-center p-2 mb-2">
                     {sponsor.logo ? (
                       <Image
                         src={sponsor.logo}
                         alt={sponsor.brandName}
                         width={300}
                         height={200}
-                        className="max-h-24 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+                        className="max-h-18 sm:max-h-20 w-auto max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
                       <Building className="w-10 h-10 text-amber-500" />
                     )}
                   </div>
 
-                  <div className="pt-3 border-t border-slate-100 w-full flex items-center justify-center gap-1.5 text-xs font-bold text-slate-700 group-hover:text-[#d8392f] transition-colors">
-                    <span>Visit Website</span>
-                    <ExternalLink className="w-3.5 h-3.5 text-amber-500" />
+                  <div className="w-full">
+                    <span className="text-xs font-black text-slate-900 block truncate group-hover:text-[#d8392f] transition-colors mb-1.5" title={sponsor.brandName}>
+                      {sponsor.brandName}
+                    </span>
+                    <div className="pt-2 border-t border-slate-100 w-full flex items-center justify-center gap-1.5 text-xs font-bold text-slate-700 group-hover:text-[#d8392f] transition-colors">
+                      <span>Visit Partner</span>
+                      <ExternalLink className="w-3.5 h-3.5 text-amber-500" />
+                    </div>
                   </div>
                 </a>
               ))}
             </div>
-
-            {/* Open Sponsorship Tiers */}
-            <div className="border-t border-white/10 pt-10">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-                <div>
-                  <h4 className="text-lg font-black uppercase italic tracking-wide text-white">
-                    Available Sponsorship Categories &amp; Slots
-                  </h4>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Partner with North India&apos;s premier collegiate cricket championship at Sector 16 Stadium Chandigarh.
-                  </p>
-                </div>
-                <button
-                  onClick={() => openSponsorModal('Title Sponsor')}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 hover:text-amber-300 uppercase tracking-wider cursor-pointer shrink-0"
-                >
-                  <span>Apply for Slot</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                {sponsorshipTiers.map((tier) => (
-                  <div
-                    key={tier.id}
-                    className="bg-white/5 border border-white/10 hover:border-amber-400/50 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 group hover:bg-white/[0.08]"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded border ${tier.badgeColor}`}>
-                          {tier.partners} {tier.partners === 1 ? 'Slot Available' : 'Slots Available'}
-                        </span>
-                        <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                          Open
-                        </span>
-                      </div>
-                      <h4 className="font-black text-sm uppercase italic text-white tracking-wide group-hover:text-amber-300 transition-colors">
-                        {tier.category}
-                      </h4>
-                      <p className="text-[11px] text-slate-400 mt-0.5 font-medium">
-                        {tier.hindiCategory}
-                      </p>
-
-                      {/* Logo Placeholder Box */}
-                      <div className="my-3.5 h-16 rounded-xl border border-dashed border-white/20 bg-white/[0.02] flex flex-col items-center justify-center text-center group-hover:border-amber-400/40 transition-colors">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider group-hover:text-slate-200">
-                          Your Logo Here
-                        </span>
-                        <span className="text-[9px] text-emerald-400 font-semibold mt-0.5">
-                          Slot Open
-                        </span>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => openSponsorModal(tier.category)}
-                      className="w-full mt-2 py-2 px-3 bg-white/10 hover:bg-[#d8392f] text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-                    >
-                      <span>Claim This Slot</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
 
-          {/* Detailed Tier Cards */}
-          <div className="mb-14">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h3 className="text-2xl md:text-3xl font-black uppercase italic tracking-tight text-white">
-                  SPONSORSHIP <span className="text-[#d8392f]">PACKAGES &amp; DELIVERABLES</span>
-                </h3>
-                <p className="text-slate-400 text-xs md:text-sm mt-1">
-                  Comprehensive 360° branding rights across ground hoardings, team jersey kits, and digital live-streams.
+            {/* ═══════════════════════════════════════════════════════════════════
+                OFFICIAL SPONSORSHIP PACKAGES (MATCHING BROCHURE SECTION 11)
+                ═══════════════════════════════════════════════════════════════════ */}
+            <div className="border-t border-white/10 pt-10">
+              {/* Header Matching Brochure */}
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-white/10 gap-4">
+                <div>
+                  <div className="text-xs font-black uppercase tracking-widest text-[#d8392f] flex items-center gap-2 mb-1.5">
+                    <span>SECTION 11</span>
+                    <span className="text-white/40">|</span>
+                    <span>SPONSORSHIP</span>
+                  </div>
+                  <h3 className="text-3xl md:text-4xl font-black uppercase italic tracking-tight text-white">
+                    SPONSORSHIP <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#d8392f] to-[#fb923c]">PACKAGES</span>
+                  </h3>
+                </div>
+                <p className="text-slate-300 text-sm font-medium">
+                  Choose the package that aligns with your brand values
                 </p>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sponsorshipTiers.map((tier) => (
-                <div
-                  key={tier.id}
-                  className={`rounded-2xl border p-6 flex flex-col justify-between transition-all duration-300 relative ${tier.featured
-                    ? 'bg-gradient-to-b from-amber-500/10 via-[#112240] to-[#0b162c] border-amber-400/60 shadow-[0_0_30px_rgba(245,158,11,0.15)] lg:scale-[1.02]'
-                    : 'bg-[#112240] border-white/10 hover:border-white/25 hover:shadow-xl'
-                    }`}
-                >
-                  {tier.featured && (
-                    <div className="absolute -top-3 right-6 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">
-                      ★ Prime Exclusive
-                    </div>
-                  )}
+              {/* 4 Packages Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+                {sponsorshipPackages.map((pkg) => {
+                  const pkgSponsors = activeSponsors.filter(
+                    (s) => s.packageId === pkg.id || s.category.toLowerCase() === pkg.category.toLowerCase()
+                  );
 
-                  <div>
-                    <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded border ${tier.badgeColor}`}>
-                        {tier.badge}
-                      </span>
-                      <span className="text-xs font-bold text-slate-400">
-                        {tier.partnerLabel}
-                      </span>
-                    </div>
-
-                    <h4 className="text-2xl font-black uppercase italic tracking-tight text-white mb-1">
-                      {tier.category}
-                    </h4>
-                    <p className="text-xs text-slate-400 font-semibold mb-5 pb-4 border-b border-white/10">
-                      {tier.hindiCategory}
-                    </p>
-
-                    {/* Deliverables List */}
-                    <div className="space-y-2.5 mb-6">
-                      <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-2">
-                        Included Deliverables:
+                  return (
+                    <div
+                      key={pkg.id}
+                      className="bg-white text-slate-900 rounded-2xl shadow-xl border border-slate-200 overflow-hidden flex flex-col justify-between hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group"
+                    >
+                      {/* Header Block matching brochure colors */}
+                      <div className={`${pkg.headerBg} p-5 text-white border-b-4 ${pkg.headerBorder}`}>
+                        <h4 className="font-black text-xl tracking-tight uppercase leading-none">
+                          {pkg.category}
+                        </h4>
+                        <span className="text-[11px] font-black uppercase tracking-widest text-white/80 block mt-2">
+                          {pkg.packageNumber}
+                        </span>
                       </div>
-                      {tier.perks.map((perk, pIdx) => (
-                        <div key={pIdx} className="flex items-start gap-2 text-xs text-slate-300 leading-snug">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                          <span>{perk}</span>
+
+                      {/* Card Body */}
+                      <div className="p-5 sm:p-6 flex-1 flex flex-col">
+                        {/* Confirmed Sponsors for this Package (Logo Only - No Text Name) */}
+                        {pkgSponsors.length > 0 && (
+                          <div className="mb-4 p-3 bg-gradient-to-b from-slate-50 to-slate-100/80 border border-slate-200 rounded-2xl shadow-xs">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-[10px] font-black uppercase tracking-wider text-slate-700 bg-white px-2.5 py-0.5 rounded-full border border-slate-200/90 flex items-center gap-1.5 shadow-2xs">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#d8392f]"></span>
+                                Official Partner
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-2">
+                              {pkgSponsors.map((s, sIdx) => (
+                                <a
+                                  key={sIdx}
+                                  href={s.website || '#'}
+                                  target={s.website ? "_blank" : undefined}
+                                  rel="noopener noreferrer"
+                                  className="h-14 w-full bg-white rounded-xl border border-slate-200 p-2 flex items-center justify-center hover:shadow-md hover:border-[#d8392f]/40 hover:scale-[1.02] transition-all group/logo shadow-2xs"
+                                  title={`${s.brandName} — ${pkg.category}`}
+                                >
+                                  {s.logo && (
+                                    <Image
+                                      src={s.logo}
+                                      alt={s.brandName}
+                                      width={160}
+                                      height={56}
+                                      className="max-h-10 w-auto object-contain transition-transform group-hover/logo:scale-105"
+                                    />
+                                  )}
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Deliverables */}
+                        <div className="mb-6 flex-1">
+                          <div className="text-xs font-black uppercase tracking-wider text-[#d8392f] mb-3">
+                            INCLUDES
+                          </div>
+                          <ul className="space-y-2.5">
+                            {pkg.includes.map((item, idx) => (
+                              <li key={idx} className="flex items-start gap-2 text-xs text-slate-700 leading-snug">
+                                <Check className="w-4 h-4 text-[#d8392f] shrink-0 mt-0.5 stroke-[2.5]" />
+                                <span className={item.isBold ? "font-bold text-slate-950" : "font-normal"}>
+                                  {item.text}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
-                      ))}
+
+                        {/* CTA Button */}
+                        <button
+                          type="button"
+                          onClick={() => openSponsorModal(pkg.category)}
+                          className="w-full mt-auto py-3 px-4 bg-[#0b162c] hover:bg-[#d8392f] text-white font-black text-xs uppercase italic tracking-wider rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+                        >
+                          <span>Select {pkg.category}</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-
-                  <button
-                    onClick={() => openSponsorModal(tier.category)}
-                    className={`w-full py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${tier.featured
-                      ? 'bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 shadow-lg shadow-amber-500/20'
-                      : 'bg-white/10 hover:bg-[#d8392f] text-white'
-                      }`}
-                  >
-                    <span>Apply for {tier.category}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Official Sponsorship Matrix Table - Commented out for now */}
-          {false && (
-            <div className="bg-[#112240] rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
-              <div className="p-5 md:p-6 bg-gradient-to-r from-white/5 to-transparent border-b border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div>
-                  <h4 className="text-lg font-black uppercase italic tracking-tight text-white flex items-center gap-2">
-                    <span>Official Sponsorship Matrix</span>
-                    <span className="text-xs font-bold text-emerald-400 bg-emerald-400/10 px-2.5 py-0.5 rounded-full border border-emerald-400/20">
-                      12 Partner Slots Available
-                    </span>
-                  </h4>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Full category allocation across all 12 partner slots for Operation Sindoor Cricket Cup 2.0.
-                  </p>
-                </div>
-                <button
-                  onClick={() => openSponsorModal('Title Sponsor')}
-                  className="px-4 py-2 bg-[#d8392f] hover:bg-[#b91c1c] text-white font-black text-xs uppercase tracking-wider rounded-lg transition-colors cursor-pointer shrink-0"
-                >
-                  Inquire All Categories
-                </button>
+                  );
+                })}
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm text-slate-300">
-                  <thead className="bg-white/5 text-[11px] font-black uppercase tracking-wider text-slate-400 border-b border-white/10">
-                    <tr>
-                      <th className="py-3.5 px-6">Sponsorship Category (श्रेणी)</th>
-                      <th className="py-3.5 px-6 text-center">Partners (पार्टनर्स)</th>
-                      <th className="py-3.5 px-6">Badge / Benefit</th>
-                      <th className="py-3.5 px-6 text-center">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5 font-medium">
-                    {sponsorshipTiers.map((tier) => (
-                      <tr key={tier.id} className="hover:bg-white/[0.03] transition-colors group">
-                        <td className="py-4 px-6">
-                          <div className="font-bold text-white group-hover:text-amber-300 transition-colors">
-                            {tier.category}
-                          </div>
-                          <div className="text-xs text-slate-400 font-normal">
-                            {tier.hindiCategory}
-                          </div>
-                        </td>
-                        <td className="py-4 px-6 text-center">
-                          <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/10 font-bold text-white text-xs">
-                            {tier.partners}
-                          </span>
-                        </td>
-                        <td className="py-4 px-6 text-sm text-amber-300 font-semibold">
-                          {tier.badge}
-                        </td>
-                        <td className="py-4 px-6 text-center">
-                          <button
-                            onClick={() => openSponsorModal(tier.category)}
-                            className="px-3.5 py-1.5 bg-white/10 hover:bg-[#d8392f] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer"
-                          >
-                            Apply Now
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              {/* Brochure Footnote */}
+              <p className="text-xs italic text-slate-400 mt-6 text-center sm:text-left font-medium">
+                Tailored and customized sponsorship packages with deliverables are available on request. In-kind partnerships are also welcome.
+              </p>
             </div>
-          )}
         </div>
       </section>
 
-      {/* Tournament Transition Ribbon between Sponsorship & Schedule */}
+      {/* ═══════════════════════════════════════════════════════════════════
+          OFFICIAL MEDIA PARTNERS SECTION (DEDICATED)
+          ═══════════════════════════════════════════════════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════════════
+          OFFICIAL MEDIA PARTNERS - GRAND LOGO CAROUSEL SECTION
+          ═══════════════════════════════════════════════════════════════════ */}
+      <section id="media-partners" className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-white via-slate-50 to-white border-b-2 border-slate-200 relative overflow-hidden">
+        {/* Subtle decorative glow */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#d8392f]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="container mx-auto px-4 mb-8 sm:mb-10 text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1 sm:py-1.5 rounded-full bg-red-50 border border-red-200 text-[#d8392f] text-[11px] sm:text-xs md:text-sm font-black uppercase tracking-widest shadow-2xs mb-2.5 sm:mb-3">
+            <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-[#d8392f] animate-pulse"></span>
+            <span>Official Press &amp; Broadcast Coverage</span>
+          </div>
+          <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase italic tracking-tight text-slate-950 mb-2 sm:mb-3">
+            MEDIA <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#d8392f] via-rose-600 to-amber-600">PARTNERS</span>
+          </h2>
+          <p className="text-slate-500 text-xs sm:text-sm md:text-base font-medium max-w-xl mx-auto">
+            Amplifying match action, highlights &amp; collegiate cricket across India
+          </p>
+        </div>
+
+        {/* Carousel Container with Deep Fade Edges */}
+        <div className="relative w-full overflow-hidden py-2 sm:py-3">
+          {/* Gradient Edges */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-32 md:w-48 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-32 md:w-48 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
+
+          {/* Marquee Carousel Track (Continuous Smooth Scroll with Big Logo Cards) */}
+          <div className="animate-marquee py-3 sm:py-4 flex items-center">
+            {[...mediaPartners, ...mediaPartners, ...mediaPartners, ...mediaPartners].map((partner, idx) => (
+              <a
+                key={idx}
+                href={partner.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-28 sm:h-36 md:h-44 w-60 sm:w-80 md:w-96 bg-white rounded-2xl sm:rounded-3xl border-2 border-slate-200/90 shadow-md hover:shadow-2xl hover:border-[#d8392f]/60 hover:scale-105 transition-all duration-300 flex items-center justify-center p-4 sm:p-6 md:p-8 mx-3 sm:mx-6 shrink-0 group cursor-pointer relative overflow-hidden"
+                title={`${partner.name} — Official Media Partner (Click to visit)`}
+              >
+                <Image
+                  src={partner.logo}
+                  alt={partner.name}
+                  width={380}
+                  height={160}
+                  className="max-h-16 sm:max-h-22 md:max-h-28 w-auto max-w-[85%] object-contain filter group-hover:scale-110 transition-transform duration-300 drop-shadow-xs"
+                />
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Tournament Transition Ribbon between Media Partners & Schedule */}
       <div className="h-2 w-full bg-gradient-to-r from-amber-400 via-[#d8392f] to-blue-500 shadow-md relative z-20" />
 
       {/* Schedule / Match Center - Athletic Floodlit Stadium Arena */}
-      <section id="schedule" className="py-24 bg-gradient-to-b from-[#0e172a] via-[#142343] to-[#0a101f] text-white relative overflow-hidden border-b-2 border-slate-700/80">
+      <section id="schedule" className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-[#0e172a] via-[#142343] to-[#0a101f] text-white relative overflow-hidden border-b-2 border-slate-700/80">
         {/* Stadium Floodlight Accents & Mesh Grid */}
         <div className="absolute -top-32 left-1/4 w-[500px] h-[350px] bg-blue-500/15 rounded-full blur-[110px] pointer-events-none" />
         <div className="absolute -top-32 right-1/4 w-[500px] h-[350px] bg-sky-400/10 rounded-full blur-[110px] pointer-events-none" />
@@ -1490,84 +1779,84 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.035] pointer-events-none" />
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-blue-500/20 pb-6 gap-4">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 border-b border-blue-500/20 pb-4 sm:pb-6 gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/15 text-blue-300 text-xs font-black uppercase tracking-widest mb-3 border border-blue-400/30 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/15 text-blue-300 text-[11px] sm:text-xs font-black uppercase tracking-widest mb-2.5 sm:mb-3 border border-blue-400/30 backdrop-blur-sm">
                 <Calendar className="w-3.5 h-3.5 text-blue-400" />
                 Tournament Match Center &amp; Brackets
               </div>
-              <h2 className="text-3xl md:text-5xl font-black uppercase italic text-white tracking-tighter">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase italic text-white tracking-tighter">
                 TOURNAMENT <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-300 to-white">SCHEDULE</span>
               </h2>
-              <p className="text-slate-300 text-sm md:text-base mt-2 font-medium max-w-2xl">
+              <p className="text-slate-300 text-xs sm:text-sm md:text-base mt-2 font-medium max-w-2xl leading-relaxed">
                 Official 5-day T10 knockout roadmaps hosted under floodlights at Sector 16 Stadium, Chandigarh.
               </p>
             </div>
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-sky-300 uppercase tracking-wider bg-blue-950/60 px-4 py-2 rounded-xl border border-blue-400/30">
+            <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-bold text-sky-300 uppercase tracking-wider bg-blue-950/60 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border border-blue-400/30 self-start md:self-auto">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               22 Knockout Matches • 5 Days
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
             {/* Boys Roadmap - Deep Royal Cobalt */}
-            <div className="bg-gradient-to-b from-[#16274a] to-[#0d182e] rounded-3xl p-6 sm:p-8 border-2 border-blue-400/40 shadow-2xl relative overflow-hidden">
-              <div className="flex items-center justify-between mb-6 pb-4 border-b border-blue-500/20">
+            <div className="bg-gradient-to-b from-[#16274a] to-[#0d182e] rounded-3xl p-5 sm:p-8 border-2 border-blue-400/40 shadow-2xl relative overflow-hidden">
+              <div className="flex items-center justify-between mb-5 sm:mb-6 pb-3 sm:pb-4 border-b border-blue-500/20">
                 <div>
                   <div className="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-0.5">Men&apos;s Championship</div>
-                  <h3 className="font-black text-2xl uppercase italic tracking-wider text-white">Boys Division</h3>
+                  <h3 className="font-black text-xl sm:text-2xl uppercase italic tracking-wider text-white">Boys Division</h3>
                 </div>
-                <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30">
+                <span className="text-[11px] sm:text-xs font-bold px-2.5 sm:px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30">
                   16 Teams • 15 Matches
                 </span>
               </div>
-              <div className="space-y-3.5">
+              <div className="space-y-3 sm:space-y-3.5">
                 {[
                   { phase: "Round of 16", matches: "8 Matches", teams: "16 Teams" },
                   { phase: "Quarter-Finals", matches: "4 Matches", teams: "8 Teams" },
                   { phase: "Semi-Finals", matches: "2 Matches", teams: "4 Teams" },
                   { phase: "Grand Final", matches: "1 Match", teams: "2 Teams" }
                 ].map((step, i) => (
-                  <div key={i} className="bg-[#091122]/90 p-4 rounded-xl border border-blue-500/20 flex justify-between items-center group hover:border-blue-400 hover:bg-[#0f1b34] transition-all hover:translate-x-1">
-                    <div className="flex items-center gap-4">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 font-black text-white flex items-center justify-center shrink-0 shadow-md">{i + 1}</div>
+                  <div key={i} className="bg-[#091122]/90 p-3 sm:p-4 rounded-xl border border-blue-500/20 flex justify-between items-center group hover:border-blue-400 hover:bg-[#0f1b34] transition-all hover:translate-x-1">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 font-black text-white flex items-center justify-center shrink-0 shadow-md text-xs sm:text-sm">{i + 1}</div>
                       <div>
-                        <h4 className="font-bold uppercase tracking-wider text-white group-hover:text-blue-300 transition-colors">{step.phase}</h4>
-                        <p className="text-xs text-slate-400">{step.teams}</p>
+                        <h4 className="font-bold uppercase tracking-wider text-white group-hover:text-blue-300 transition-colors text-xs sm:text-sm">{step.phase}</h4>
+                        <p className="text-[10px] sm:text-xs text-slate-400">{step.teams}</p>
                       </div>
                     </div>
-                    <div className="font-black text-sky-400 italic text-base">{step.matches}</div>
+                    <div className="font-black text-sky-400 italic text-sm sm:text-base">{step.matches}</div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Girls Roadmap - Rich Ruby Crimson */}
-            <div className="bg-gradient-to-b from-[#351523] to-[#1c0c14] rounded-3xl p-6 sm:p-8 border-2 border-[#d8392f]/40 shadow-2xl relative overflow-hidden">
-              <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#d8392f]/20">
+            <div className="bg-gradient-to-b from-[#351523] to-[#1c0c14] rounded-3xl p-5 sm:p-8 border-2 border-[#d8392f]/40 shadow-2xl relative overflow-hidden">
+              <div className="flex items-center justify-between mb-5 sm:mb-6 pb-3 sm:pb-4 border-b border-[#d8392f]/20">
                 <div>
                   <div className="text-[10px] font-black uppercase tracking-widest text-rose-400 mb-0.5">Women&apos;s Championship</div>
-                  <h3 className="font-black text-2xl uppercase italic tracking-wider text-white">Girls Division</h3>
+                  <h3 className="font-black text-xl sm:text-2xl uppercase italic tracking-wider text-white">Girls Division</h3>
                 </div>
-                <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#d8392f]/20 text-rose-300 border border-[#d8392f]/30">
+                <span className="text-[11px] sm:text-xs font-bold px-2.5 sm:px-3 py-1 rounded-full bg-[#d8392f]/20 text-rose-300 border border-[#d8392f]/30">
                   8 Teams • 7 Matches
                 </span>
               </div>
-              <div className="space-y-3.5">
+              <div className="space-y-3 sm:space-y-3.5">
                 {[
                   { phase: "Quarter-Finals", matches: "4 Matches", teams: "8 Teams" },
                   { phase: "Semi-Finals", matches: "2 Matches", teams: "4 Teams" },
                   { phase: "Grand Final", matches: "1 Match", teams: "2 Teams" }
                 ].map((step, i) => (
-                  <div key={i} className="bg-[#180811]/90 p-4 rounded-xl border border-[#d8392f]/20 flex justify-between items-center group hover:border-[#d8392f] hover:bg-[#250d1a] transition-all hover:translate-x-1">
-                    <div className="flex items-center gap-4">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#d8392f] to-[#b91c1c] font-black text-white flex items-center justify-center shrink-0 shadow-md">{i + 1}</div>
+                  <div key={i} className="bg-[#180811]/90 p-3 sm:p-4 rounded-xl border border-[#d8392f]/20 flex justify-between items-center group hover:border-[#d8392f] hover:bg-[#250d1a] transition-all hover:translate-x-1">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#d8392f] to-[#b91c1c] font-black text-white flex items-center justify-center shrink-0 shadow-md text-xs sm:text-sm">{i + 1}</div>
                       <div>
-                        <h4 className="font-bold uppercase tracking-wider text-white group-hover:text-rose-300 transition-colors">{step.phase}</h4>
-                        <p className="text-xs text-slate-400">{step.teams}</p>
+                        <h4 className="font-bold uppercase tracking-wider text-white group-hover:text-rose-300 transition-colors text-xs sm:text-sm">{step.phase}</h4>
+                        <p className="text-[10px] sm:text-xs text-slate-400">{step.teams}</p>
                       </div>
                     </div>
-                    <div className="font-black text-rose-400 italic text-base">{step.matches}</div>
+                    <div className="font-black text-rose-400 italic text-sm sm:text-base">{step.matches}</div>
                   </div>
                 ))}
               </div>
@@ -1575,50 +1864,50 @@ export default function Home() {
           </div>
 
           {/* Registration Price & Kit Inclusions Callout Card */}
-          <div className="mt-10 bg-gradient-to-r from-[#0b162c] via-[#152342] to-[#0b162c] text-white rounded-3xl p-6 md:p-8 flex flex-col lg:flex-row items-center gap-6 justify-between shadow-2xl border-2 border-amber-400/80 relative overflow-hidden">
+          <div className="mt-8 sm:mt-10 bg-gradient-to-r from-[#0b162c] via-[#152342] to-[#0b162c] text-white rounded-3xl p-5 sm:p-6 md:p-8 flex flex-col lg:flex-row items-center gap-6 justify-between shadow-2xl border-2 border-amber-400/80 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#d8392f]/20 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="relative z-10 text-left">
               <div className="flex items-center gap-2 mb-2">
-                <span className="bg-[#d8392f] text-white text-[11px] font-black uppercase tracking-wider px-3 py-0.5 rounded-full">
+                <span className="bg-[#d8392f] text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2.5 sm:px-3 py-0.5 rounded-full">
                   Official Squad Entry
                 </span>
                 <span className="text-xs text-amber-400 font-bold flex items-center gap-1">
                   <Trophy className="w-3.5 h-3.5" /> 24 Teams Only
                 </span>
               </div>
-              <h3 className="font-black text-3xl md:text-4xl uppercase italic tracking-tighter text-white">
+              <h3 className="font-black text-2xl sm:text-3xl md:text-4xl uppercase italic tracking-tighter text-white">
                 Team Registration Fee: <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-200 to-[#fb923c]">₹4,999/-</span>
               </h3>
-              <p className="font-medium text-slate-300 text-sm mt-1 max-w-xl">
+              <p className="font-medium text-slate-300 text-xs sm:text-sm mt-1 max-w-xl">
                 Fixed squad of 12 players (11 Playing XI + 1 Extra) • Sector 16 Stadium, Chandigarh • 5-Day Event
               </p>
 
-              <div className="flex flex-wrap gap-x-5 gap-y-2 mt-4 pt-3 border-t border-white/10 text-xs text-slate-300 font-medium">
+              <div className="flex flex-wrap gap-x-4 sm:gap-x-5 gap-y-2 mt-3 sm:mt-4 pt-3 border-t border-white/10 text-xs text-slate-300 font-medium">
                 <div className="flex items-center gap-1.5">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
                   <span>12x Official Custom Jersey Kits (Jersey + Trouser)</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
                   <span>Regulation White Leather Match Balls</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
                   <span>Match Refreshments &amp; BCCI Grade Umpires</span>
                 </div>
               </div>
             </div>
 
-            <div className="relative z-10 w-full lg:w-auto shrink-0 flex flex-col sm:flex-row lg:flex-col gap-3">
+            <div className="relative z-10 w-full lg:w-auto shrink-0 flex flex-col sm:flex-row lg:flex-col gap-2.5 sm:gap-3">
               <a
                 href="/registration"
-                className="px-8 py-4 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] hover:from-[#b91c1c] hover:to-[#991b1b] text-white font-black italic text-lg uppercase tracking-wider rounded-2xl transition-all shadow-[0_10px_25px_rgba(239,68,68,0.5)] hover:shadow-[0_10px_35px_rgba(239,68,68,0.7)] hover:-translate-y-0.5 text-center flex items-center justify-center gap-2 border-b-4 border-[#7f1d1d]"
+                className="px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] hover:from-[#b91c1c] hover:to-[#991b1b] text-white font-black italic text-base sm:text-lg uppercase tracking-wider rounded-2xl transition-all shadow-[0_10px_25px_rgba(239,68,68,0.5)] hover:shadow-[0_10px_35px_rgba(239,68,68,0.7)] hover:-translate-y-0.5 text-center flex items-center justify-center gap-2 border-b-4 border-[#7f1d1d]"
               >
                 <span>REGISTER TEAM NOW</span>
                 <ChevronRight className="w-5 h-5" />
               </a>
-              <span className="text-[11px] text-center text-slate-400 font-medium">
+              <span className="text-[10px] sm:text-[11px] text-center text-slate-400 font-medium">
                 Instant Online Easebuzz Checkout
               </span>
             </div>
@@ -1627,11 +1916,11 @@ export default function Home() {
       </section>
 
       {/* Teams Grid (IPL Franchise Style) */}
-      <section id="teams" className="py-16">
+      <section id="teams" className="py-12 sm:py-16">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-end mb-8 border-b-2 border-[#112240] pb-4">
+          <div className="flex justify-between items-end mb-6 sm:mb-8 border-b-2 border-[#112240] pb-3 sm:pb-4">
             <div>
-              <h2 className="text-3xl md:text-5xl font-black uppercase italic text-[#0b162c] tracking-tighter">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase italic text-[#0b162c] tracking-tighter">
                 TOURNAMENT <span className="text-[#d8392f]">TEAMS</span>
               </h2>
             </div>
@@ -1782,75 +2071,75 @@ export default function Home() {
       </section>
 
       {/* Rules & Features Block (IPL format styling) */}
-      <section id="rules" className="py-16 bg-[#0b162c] text-white">
+      <section id="rules" className="py-12 sm:py-16 bg-[#0b162c] text-white">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row gap-12">
+          <div className="flex flex-col md:flex-row gap-8 sm:gap-12">
 
             <div className="md:w-1/3">
-              <h2 className="text-4xl md:text-5xl font-black uppercase italic text-white tracking-tighter mb-6">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase italic text-white tracking-tighter mb-4 sm:mb-6">
                 TOURNAMENT<br />
                 <span className="text-[#d8392f]">REGULATIONS</span>
               </h2>
-              <p className="text-slate-400 mb-8 font-medium">Standard T10 rules apply. Action-packed, fast-paced matches designed for pure entertainment and skill.</p>
+              <p className="text-slate-400 mb-6 sm:mb-8 font-medium text-xs sm:text-sm">Standard T10 rules apply. Action-packed, fast-paced matches designed for pure entertainment and skill.</p>
 
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="bg-[#d8392f] p-3 rounded-lg text-white shrink-0 shadow-[0_5px_15px_rgba(239,68,68,0.4)]">
-                    <Clock className="w-6 h-6" />
+              <div className="space-y-4 sm:space-y-6">
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="bg-[#d8392f] p-2.5 sm:p-3 rounded-lg text-white shrink-0 shadow-[0_5px_15px_rgba(239,68,68,0.4)]">
+                    <Clock className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-xl uppercase italic">3 Over Powerplay</h4>
-                    <p className="text-slate-400 text-sm">Overs 1 to 3 with standard limited-overs fielding circle restrictions.</p>
+                    <h4 className="font-bold text-lg sm:text-xl uppercase italic">3 Over Powerplay</h4>
+                    <p className="text-slate-400 text-xs sm:text-sm">Overs 1 to 3 with standard limited-overs fielding circle restrictions.</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="bg-[#d8392f] p-3 rounded-lg text-white shrink-0 shadow-[0_5px_15px_rgba(239,68,68,0.4)]">
-                    <Activity className="w-6 h-6" />
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="bg-[#d8392f] p-2.5 sm:p-3 rounded-lg text-white shrink-0 shadow-[0_5px_15px_rgba(239,68,68,0.4)]">
+                    <Activity className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-xl uppercase italic">Bowler Quota</h4>
-                    <p className="text-slate-400 text-sm">Max 2 overs per bowler. Minimum 5 bowlers must be utilized.</p>
+                    <h4 className="font-bold text-lg sm:text-xl uppercase italic">Bowler Quota</h4>
+                    <p className="text-slate-400 text-xs sm:text-sm">Max 2 overs per bowler. Minimum 5 bowlers must be utilized.</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="bg-[#d8392f] p-3 rounded-lg text-white shrink-0 shadow-[0_5px_15px_rgba(239,68,68,0.4)]">
-                    <Shield className="w-6 h-6" />
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="bg-[#d8392f] p-2.5 sm:p-3 rounded-lg text-white shrink-0 shadow-[0_5px_15px_rgba(239,68,68,0.4)]">
+                    <Shield className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-xl uppercase italic">DRS & Super Over</h4>
-                    <p className="text-slate-400 text-sm">1 Review/innings (retained if successful). Super Over for ties; DLS for rain.</p>
+                    <h4 className="font-bold text-lg sm:text-xl uppercase italic">DRS & Super Over</h4>
+                    <p className="text-slate-400 text-xs sm:text-sm">1 Review/innings (retained if successful). Super Over for ties; DLS for rain.</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="bg-[#d8392f] p-3 rounded-lg text-white shrink-0 shadow-[0_5px_15px_rgba(239,68,68,0.4)]">
-                    <Clock className="w-6 h-6" />
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="bg-[#d8392f] p-2.5 sm:p-3 rounded-lg text-white shrink-0 shadow-[0_5px_15px_rgba(239,68,68,0.4)]">
+                    <Clock className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-xl uppercase italic">1 Hour Reporting</h4>
-                    <p className="text-slate-400 text-sm">Teams must report 1 hour prior. Toss 15m before match. Strict scratching policy.</p>
+                    <h4 className="font-bold text-lg sm:text-xl uppercase italic">1 Hour Reporting</h4>
+                    <p className="text-slate-400 text-xs sm:text-sm">Teams must report 1 hour prior. Toss 15m before match. Strict scratching policy.</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="bg-[#d8392f] p-3 rounded-lg text-white shrink-0 shadow-[0_5px_15px_rgba(239,68,68,0.4)]">
-                    <Users className="w-6 h-6" />
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="bg-[#d8392f] p-2.5 sm:p-3 rounded-lg text-white shrink-0 shadow-[0_5px_15px_rgba(239,68,68,0.4)]">
+                    <Users className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-xl uppercase italic">Kit & Equipment</h4>
-                    <p className="text-slate-400 text-sm">Official playing apparel (jersey & trousers) provided by committee. Teams bring personal gear.</p>
+                    <h4 className="font-bold text-lg sm:text-xl uppercase italic">Kit & Equipment</h4>
+                    <p className="text-slate-400 text-xs sm:text-sm">Official playing apparel (jersey & trousers) provided by committee. Teams bring personal gear.</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="bg-[#d8392f] p-3 rounded-lg text-white shrink-0 shadow-[0_5px_15px_rgba(239,68,68,0.4)]">
-                    <Trophy className="w-6 h-6" />
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="bg-[#d8392f] p-2.5 sm:p-3 rounded-lg text-white shrink-0 shadow-[0_5px_15px_rgba(239,68,68,0.4)]">
+                    <Trophy className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-xl uppercase italic">Entry Fee: ₹4,999</h4>
-                    <p className="text-slate-400 text-sm">Squad of 12 players. Includes 12x official jersey kits, match balls & refreshments.</p>
+                    <h4 className="font-bold text-lg sm:text-xl uppercase italic">Entry Fee: ₹4,999</h4>
+                    <p className="text-slate-400 text-xs sm:text-sm">Squad of 12 players. Includes 12x official jersey kits, match balls & refreshments.</p>
                   </div>
                 </div>
               </div>
@@ -1861,47 +2150,47 @@ export default function Home() {
                 <div className="absolute top-0 right-0 p-8 opacity-5">
                   <Medal className="w-48 h-48" />
                 </div>
-                <div className="p-8 md:p-12 relative z-10">
-                  <h3 className="text-3xl font-black uppercase italic text-[#0b162c] mb-8">Prize Structure</h3>
+                <div className="p-5 sm:p-8 md:p-12 relative z-10">
+                  <h3 className="text-2xl sm:text-3xl font-black uppercase italic text-[#0b162c] mb-6 sm:mb-8">Prize Structure</h3>
 
-                  <div className="grid gap-6">
-                    <div className="flex items-center gap-6 bg-slate-50 p-4 md:p-6 rounded-xl border border-slate-200">
-                      <div className="text-4xl md:text-5xl text-[#d8392f] font-black italic">1ST</div>
+                  <div className="grid gap-4 sm:gap-6">
+                    <div className="flex items-center gap-4 sm:gap-6 bg-slate-50 p-3.5 sm:p-5 md:p-6 rounded-xl border border-slate-200">
+                      <div className="text-3xl sm:text-4xl md:text-5xl text-[#d8392f] font-black italic">1ST</div>
                       <div>
-                        <h4 className="font-bold text-xl text-slate-900 uppercase">Winner</h4>
-                        <p className="text-slate-500 font-medium">Trophy + ₹51,000 Cash Prize</p>
+                        <h4 className="font-bold text-lg sm:text-xl text-slate-900 uppercase">Winner</h4>
+                        <p className="text-slate-500 font-medium text-xs sm:text-sm">Trophy + ₹51,000 Cash Prize</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-6 bg-slate-50 p-4 md:p-6 rounded-xl border border-slate-200">
-                      <div className="text-4xl md:text-5xl text-slate-400 font-black italic">2ND</div>
+                    <div className="flex items-center gap-4 sm:gap-6 bg-slate-50 p-3.5 sm:p-5 md:p-6 rounded-xl border border-slate-200">
+                      <div className="text-3xl sm:text-4xl md:text-5xl text-slate-400 font-black italic">2ND</div>
                       <div>
-                        <h4 className="font-bold text-xl text-slate-900 uppercase">Runner Up</h4>
-                        <p className="text-slate-500 font-medium">Trophy + ₹31,000 Cash Prize</p>
+                        <h4 className="font-bold text-lg sm:text-xl text-slate-900 uppercase">Runner Up</h4>
+                        <p className="text-slate-500 font-medium text-xs sm:text-sm">Trophy + ₹31,000 Cash Prize</p>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-orange-50 p-4 rounded-xl border border-orange-200">
-                        <div className="text-orange-500 font-black uppercase italic text-sm mb-1">Orange Cap</div>
-                        <h4 className="font-bold text-slate-900">Best Batter</h4>
-                        <p className="text-slate-600 text-sm font-medium">₹2,100</p>
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                      <div className="bg-orange-50 p-3 sm:p-4 rounded-xl border border-orange-200">
+                        <div className="text-orange-500 font-black uppercase italic text-xs sm:text-sm mb-1">Orange Cap</div>
+                        <h4 className="font-bold text-slate-900 text-xs sm:text-sm">Best Batter</h4>
+                        <p className="text-slate-600 text-xs sm:text-sm font-medium">₹2,100</p>
                       </div>
-                      <div className="bg-purple-50 p-4 rounded-xl border border-purple-200">
-                        <div className="text-purple-500 font-black uppercase italic text-sm mb-1">Purple Cap</div>
-                        <h4 className="font-bold text-slate-900">Best Bowler</h4>
-                        <p className="text-slate-600 text-sm font-medium">₹2,100</p>
+                      <div className="bg-purple-50 p-3 sm:p-4 rounded-xl border border-purple-200">
+                        <div className="text-purple-500 font-black uppercase italic text-xs sm:text-sm mb-1">Purple Cap</div>
+                        <h4 className="font-bold text-slate-900 text-xs sm:text-sm">Best Bowler</h4>
+                        <p className="text-slate-600 text-xs sm:text-sm font-medium">₹2,100</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-6 bg-amber-50 p-4 md:p-6 rounded-xl border border-amber-200">
-                      <div className="w-14 h-14 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center shrink-0">
-                        <Trophy className="w-7 h-7 text-amber-500" />
+                    <div className="flex items-center gap-4 sm:gap-6 bg-amber-50 p-3.5 sm:p-5 md:p-6 rounded-xl border border-amber-200">
+                      <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center shrink-0">
+                        <Trophy className="w-5 h-5 sm:w-7 sm:h-7 text-amber-500" />
                       </div>
                       <div>
-                        <div className="text-amber-500 font-black uppercase italic text-xs tracking-widest mb-0.5">Every Match</div>
-                        <h4 className="font-bold text-xl text-slate-900 uppercase">Man of the Match</h4>
-                        <p className="text-slate-500 font-medium">Official Trophy awarded after each match</p>
+                        <div className="text-amber-500 font-black uppercase italic text-[10px] sm:text-xs tracking-widest mb-0.5">Every Match</div>
+                        <h4 className="font-bold text-lg sm:text-xl text-slate-900 uppercase">Man of the Match</h4>
+                        <p className="text-slate-500 font-medium text-xs sm:text-sm">Official Trophy awarded after each match</p>
                       </div>
                     </div>
                   </div>
@@ -1915,22 +2204,33 @@ export default function Home() {
       </section>
 
       {/* Organizing Committee Section */}
-      <section id="organizers" className="py-16 bg-white border-t border-slate-100">
+      <section id="organizers" className="py-12 sm:py-16 bg-white border-t border-slate-100">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-end mb-10 border-b-2 border-slate-100 pb-4">
+          <div className="flex flex-col sm:flex-row justify-between sm:items-end mb-6 sm:mb-8 border-b-2 border-slate-100 pb-3 sm:pb-4 gap-4">
             <div>
               <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-[#d8392f] font-black uppercase text-xs tracking-widest block mb-1 hover:underline">Sarv Sewa Sashktikarn Sangthan (Regd)</a>
-              <h2 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-[#0b162c]">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase italic tracking-tighter text-[#0b162c]">
                 ORGANIZING <span className="text-[#d8392f]">COMMITTEE</span>
               </h2>
             </div>
+            <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-slate-600">
+              <a href="tel:+919056333759" className="inline-flex items-center gap-1.5 hover:text-[#d8392f] transition-colors bg-slate-50 hover:bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-full">
+                <Phone className="w-3.5 h-3.5 text-[#d8392f]" />
+                <span>+91 90563 33759</span>
+              </a>
+              <a href="mailto:helposcricketcup@gmail.com" className="inline-flex items-center gap-1.5 hover:text-[#d8392f] transition-colors bg-slate-50 hover:bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-full">
+                <Mail className="w-3.5 h-3.5 text-[#d8392f]" />
+                <span>helposcricketcup@gmail.com</span>
+              </a>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {organizers.map((member, index) => (
+          {/* Row 1: 6 Records (Core Leadership & Coordinators) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+            {organizers.slice(0, 6).map((member, index) => (
               <div
                 key={index}
-                className="bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-[#d8392f] hover:shadow-md transition-all duration-300 group"
+                className="bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-[#d8392f] hover:shadow-lg transition-all duration-300 group flex flex-col"
               >
                 <div className="relative aspect-square overflow-hidden bg-slate-100">
                   {member.image ? (
@@ -1938,7 +2238,7 @@ export default function Home() {
                       src={member.image}
                       alt={member.name}
                       fill
-                      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 16vw"
+                      unoptimized
                       className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
@@ -1951,54 +2251,105 @@ export default function Home() {
                       </span>
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
                   <div className="absolute bottom-2 left-2 right-2">
-                    <span className="bg-[#d8392f] text-white text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow-md line-clamp-1">
+                    <span className="bg-[#d8392f] text-white text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow-md line-clamp-1 inline-block">
                       {member.role}
                     </span>
                   </div>
                 </div>
-                <div className="p-3">
-                  <h3 className="text-sm font-black uppercase italic tracking-wide text-[#0b162c] group-hover:text-[#d8392f] transition-colors leading-tight">
-                    {member.name}
-                  </h3>
-                  <p className="text-[#d8392f] font-bold text-[10px] uppercase tracking-wider mt-0.5 leading-tight">
-                    {member.designation}
-                  </p>
-                  <p className="text-slate-400 text-[10px] font-medium mt-0.5 leading-tight">
-                    {member.organization}
-                  </p>
-                  {member.phone ? (
-                    <a href={`tel:${member.phone.replace(/\s+/g, '')}`} className="inline-flex items-center gap-1 text-[10px] text-slate-600 hover:text-[#d8392f] transition-colors mt-1.5 font-bold">
-                      <Phone className="w-3 h-3 text-[#d8392f]" /> {member.phone}
-                    </a>
+                <div className="p-3 flex flex-col flex-1 justify-between">
+                  <div>
+                    <h3 className="text-sm font-black uppercase italic tracking-wide text-[#0b162c] group-hover:text-[#d8392f] transition-colors leading-tight">
+                      {member.name}
+                    </h3>
+                    <p className="text-[#d8392f] font-bold text-[10px] uppercase tracking-wider mt-0.5 leading-tight">
+                      {member.designation}
+                    </p>
+                    <p className="text-slate-400 text-[10px] font-medium mt-0.5 leading-tight line-clamp-1">
+                      {member.organization}
+                    </p>
+                  </div>
+                  <div className="border-t border-slate-100 mt-2.5 pt-2">
+                    {member.phone ? (
+                      <a href={`tel:${member.phone.replace(/\s+/g, '')}`} className="inline-flex items-center gap-1 text-[11px] text-slate-700 hover:text-[#d8392f] transition-colors font-bold">
+                        <Phone className="w-3 h-3 text-[#d8392f]" /> {member.phone}
+                      </a>
+                    ) : (
+                      <div className="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+                        <Shield className="w-3 h-3 text-slate-400" />
+                        <span>Executive Council</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Row 2 & 3: 8 Records Per Row (Crisp Portrait Grid) */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
+            {organizers.slice(6).map((member, index) => (
+              <div
+                key={index + 6}
+                className="bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-[#d8392f] hover:shadow-md transition-all duration-300 group flex flex-col"
+              >
+                <div className="relative aspect-[3/4] overflow-hidden bg-slate-100">
+                  {member.image ? (
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      unoptimized
+                      className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    />
                   ) : (
-                    <div className="text-[10px] text-slate-400 font-medium mt-1.5 flex items-center gap-1">
-                      <Shield className="w-3 h-3 text-slate-400" />
-                      <span>Executive Council</span>
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-100 via-slate-50 to-red-50/40 text-[#0b162c] p-2 text-center">
+                      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#d8392f] to-[#b91c1c] text-white flex items-center justify-center font-black text-xs shadow-sm">
+                        {member.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()}
+                      </div>
                     </div>
                   )}
-                  <div className="border-t border-slate-100 mt-2 pt-2 space-y-1">
-                    <a href="tel:+919056333759" className="flex items-center gap-1 text-[10px] text-slate-500 hover:text-[#d8392f] transition-colors font-semibold">
-                      <Phone className="w-2.5 h-2.5 text-[#d8392f] shrink-0" />
-                      <span>90563 33759</span>
-                    </a>
-                    <a href="mailto:helposcricketcup@gmail.com" className="flex items-center gap-1 text-[10px] text-slate-500 hover:text-[#d8392f] transition-colors font-semibold break-all">
-                      <Mail className="w-2.5 h-2.5 text-[#d8392f] shrink-0" />
-                      <span className="break-all">helposcricketcup@gmail.com</span>
-                    </a>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-1.5 left-1.5 right-1.5">
+                    <span className="bg-[#d8392f] text-white text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded shadow-sm line-clamp-1 inline-block">
+                      {member.role === 'Organizing Committee' ? 'Committee' : member.role}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-2.5 flex flex-col flex-1 justify-between bg-white">
+                  <div>
+                    <h3 className="text-xs font-black uppercase italic tracking-wide text-[#0b162c] group-hover:text-[#d8392f] transition-colors leading-tight line-clamp-2 min-h-[30px]" title={member.name}>
+                      {member.name}
+                    </h3>
+                    <p className="text-[#d8392f] font-bold text-[9px] uppercase tracking-wider mt-0.5 leading-tight line-clamp-1" title={member.designation}>
+                      {member.designation}
+                    </p>
+                  </div>
+                  <div className="border-t border-slate-100 mt-1.5 pt-1.5">
+                    {member.phone ? (
+                      <a href={`tel:${member.phone.replace(/\s+/g, '')}`} className="inline-flex items-center gap-1 text-[9px] text-slate-700 hover:text-[#d8392f] transition-colors font-bold truncate w-full" title={member.phone}>
+                        <Phone className="w-2.5 h-2.5 text-[#d8392f] shrink-0" />
+                        <span className="truncate">{member.phone}</span>
+                      </a>
+                    ) : (
+                      <div className="text-[9px] text-slate-400 font-medium flex items-center gap-1">
+                        <Shield className="w-2.5 h-2.5 text-slate-400 shrink-0" />
+                        <span className="truncate">Council</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             ))}
 
             {/* Upcoming Members Slot */}
-            <div className="bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 p-4 flex flex-col items-center justify-center text-center min-h-[200px] hover:border-slate-300 transition-colors">
+            <div className="bg-slate-50 rounded-xl border-2 border-dashed border-slate-200 p-3 flex flex-col items-center justify-center text-center hover:border-slate-300 transition-colors h-full min-h-[220px]">
               <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-2">
                 <Users className="w-5 h-5" />
               </div>
-              <h4 className="font-bold text-slate-400 uppercase tracking-wider text-xs mb-1">More Members</h4>
-              <p className="text-slate-400 text-[10px]">Coming soon</p>
+              <h4 className="font-bold text-slate-400 uppercase tracking-wider text-[11px] leading-tight">More Members</h4>
+              <p className="text-slate-400 text-[9px] mt-1">Coming soon</p>
             </div>
           </div>
         </div>
@@ -2089,9 +2440,9 @@ export default function Home() {
                   <span className="text-xs font-black uppercase tracking-wider text-slate-400">
                     Vishal Kamboj (Coordinator)
                   </span>
-                  <span className="text-[10px] font-semibold text-slate-400">
+                  <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-[10px] font-semibold text-slate-400 hover:text-white transition-colors">
                     Sarv Sewa Sashktikarn Sangthan (Regd)
-                  </span>
+                  </a>
                 </div>
                 <a
                   href="tel:+918437409211"
@@ -2126,9 +2477,9 @@ export default function Home() {
                   <span className="text-xs font-black uppercase tracking-wider text-slate-400">
                     Karan Sama (Coordinator)
                   </span>
-                  <span className="text-[10px] font-semibold text-slate-400">
+                  <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-[10px] font-semibold text-slate-400 hover:text-white transition-colors">
                     Sarv Sewa Sashktikarn Sangthan (Regd)
-                  </span>
+                  </a>
                 </div>
                 <a
                   href="tel:+919855109159"
@@ -2182,6 +2533,82 @@ export default function Home() {
               <MessageCircle className="w-5 h-5" />
               <span>Connect on WhatsApp for {selectedSponsorTier}</span>
             </a>
+          </div>
+        </div>
+      )}
+
+      {/* Official Promo Video Modal */}
+      {isVideoModalOpen && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-md animate-fadeIn"
+          onClick={() => setIsVideoModalOpen(false)}
+        >
+          <div 
+            className="bg-[#0b162c] text-white rounded-3xl border-2 border-[#d8392f]/70 max-w-4xl w-full p-4 sm:p-6 shadow-2xl relative overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header / Controls */}
+            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/10 mb-3 sm:mb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center border border-red-500/40 shrink-0">
+                  <PlayCircle className="w-4 h-4 text-red-500" />
+                </div>
+                <div>
+                  <h4 className="text-sm sm:text-base font-black uppercase italic tracking-tight text-white line-clamp-1">
+                    Operation Sindoor Cricket Cup 2.0 • Official Promo
+                  </h4>
+                  <p className="text-[11px] text-slate-400">
+                    Run for sindhu • Sector 16 Stadium Chandigarh
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <a
+                  href="https://www.youtube.com/watch?v=R5pjfCfualY"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden sm:inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg border border-white/10 transition-colors"
+                  title="Open on YouTube"
+                >
+                  <span>YouTube</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+                <button
+                  onClick={() => setIsVideoModalOpen(false)}
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer border border-white/10"
+                  aria-label="Close Promo Video Modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Video Player */}
+            <div className="relative aspect-video rounded-2xl overflow-hidden bg-black shadow-inner border border-white/10">
+              <iframe
+                src="https://www.youtube.com/embed/R5pjfCfualY?autoplay=1&rel=0"
+                title="Operation Sindoor Cricket Cup 2.0 Official Promo Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="w-full h-full border-0"
+              />
+            </div>
+
+            {/* Footer Strip */}
+            <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+              <span className="text-[11px] italic">
+                Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-[#d8392f] underline underline-offset-2 transition-colors">Sarv Sewa Sashktikarn Sangthan (Regd)</a> • Salute to Armed Forces
+              </span>
+              <a
+                href="/registration"
+                className="text-amber-400 hover:text-amber-300 font-bold uppercase tracking-wider text-[11px] flex items-center gap-1"
+                onClick={() => setIsVideoModalOpen(false)}
+              >
+                <span>Register Team (₹4,999)</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
         </div>
       )}

@@ -78,12 +78,65 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SportsEvent",
+      "@id": "https://operationsindoorcricketcup.com/#event",
+      "name": "Operation Sindoor Cricket Cup 2.0",
+      "description":
+        "India's premier nationwide collegiate cricket tournament 2026 across all States & UTs. T10 leather ball format, 24 teams (Boys & Girls), Sector 16 Stadium Chandigarh.",
+      "sport": "Cricket",
+      "location": {
+        "@type": "Place",
+        "name": "Sector 16 Cricket Stadium",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Sector 16",
+          "addressLocality": "Chandigarh",
+          "addressRegion": "Chandigarh",
+          "postalCode": "160016",
+          "addressCountry": "IN",
+        },
+      },
+      "organizer": {
+        "@type": "Organization",
+        "name": "Sarv Sewa Sashktikarn Sangthan (Regd)",
+        "url": "https://sarvsewabharat.org/",
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "https://operationsindoorcricketcup.com/registration",
+        "price": "4999",
+        "priceCurrency": "INR",
+        "availability": "https://schema.org/InStock",
+        "validFrom": "2026-01-01",
+      },
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://operationsindoorcricketcup.com/#organization",
+      "name": "Operation Sindoor Cricket Cup 2.0",
+      "url": "https://operationsindoorcricketcup.com",
+      "logo": "https://operationsindoorcricketcup.com/logo.png",
+      "sameAs": ["https://sarvsewabharat.org/"],
+    },
+  ],
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import TeamSquadSection from '@/components/TeamSquadSection';
 import { teamsData, allTeamSlugs, TeamDetail } from '@/data/teamsData';
 import { 
   Shield, 
@@ -48,6 +49,26 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
+async function getTeamSquad(slug: string) {
+  const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://sarvsewabharat.org/api/api/';
+  const baseApiUrl = rawApiUrl.replace(/\/+$/, '');
+
+  try {
+    const res = await fetch(`${baseApiUrl}/tournament/team/${slug}/squad`, {
+      cache: 'no-store',
+    });
+    if (res.ok) {
+      const json = await res.json();
+      if (json?.status === 'success' && json?.data) {
+        return json.data;
+      }
+    }
+  } catch (err) {
+    console.warn('Could not pre-fetch squad from live API:', err);
+  }
+  return null;
+}
+
 export default async function TeamDetailPage({ params }: Props) {
   const { slug } = await params;
   const team: TeamDetail | undefined = teamsData[slug];
@@ -55,6 +76,14 @@ export default async function TeamDetailPage({ params }: Props) {
   if (!team) {
     notFound();
   }
+
+  const squadData = await getTeamSquad(slug);
+  const isRegistered = Boolean(
+    squadData?.is_registered &&
+    squadData?.registration &&
+    squadData?.players &&
+    squadData.players.length > 0
+  );
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col font-sans selection:bg-[#d8392f] selection:text-white">
@@ -78,8 +107,53 @@ export default async function TeamDetailPage({ params }: Props) {
 
       <main className="flex-1 pb-16">
         {/* ================= HERO SECTION (LIGHT & FLAT) ================= */}
-        <section className="bg-white border-b border-slate-200 py-10 md:py-12">
+        <section className="bg-white border-b border-slate-200 py-8 md:py-10">
           <div className="container mx-auto px-4">
+            {/* Official Tournament Presenters: Powered By & Co-Powered By */}
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6 bg-gradient-to-r from-black/85 via-black/75 to-black/65 backdrop-blur-md p-3 sm:p-3.5 rounded-2xl border border-white/20 w-fit shadow-md">
+              {/* Powered By: Nik Baker's (Prominent & Larger) */}
+              <div className="flex items-center gap-2.5 pl-1.5">
+                <span className="text-[11px] sm:text-xs font-black uppercase tracking-widest text-amber-400">
+                  POWERED BY:
+                </span>
+                <a
+                  href="https://www.nikbakers.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="h-11 sm:h-12 px-3.5 sm:px-4 bg-white hover:bg-slate-50 rounded-xl border-2 border-amber-400/60 shadow-lg flex items-center gap-2.5 hover:scale-105 transition-all group"
+                  title="Nik Baker's — Main Sponsor / Official Powered By Sponsor"
+                >
+                  <Image
+                    src="/sponsors/nik-bakers.png"
+                    alt="Nik Baker's Logo"
+                    width={90}
+                    height={60}
+                    className="max-h-8 sm:max-h-9 w-auto object-contain"
+                  />
+                  <span className="text-xs sm:text-sm font-black text-slate-900 leading-none group-hover:text-[#d8392f] transition-colors">
+                    Nik Baker&apos;s
+                  </span>
+                </a>
+              </div>
+
+              <span className="text-white/30 hidden sm:inline">•</span>
+
+              {/* Co-Powered By: Blank / Inviting Sponsor (Compact) */}
+              <div className="flex items-center gap-2 pl-1.5 sm:pl-0">
+                <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-slate-300">
+                  CO-POWERED BY:
+                </span>
+                <Link
+                  href="/#sponsorship"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/30 text-slate-300 hover:text-white text-xs font-bold uppercase tracking-wider transition-all"
+                  title="Inviting Co-Powered By Sponsor — Apply Now"
+                >
+                  <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
+                  <span>Inviting Sponsor</span>
+                </Link>
+              </div>
+            </div>
+
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               
               <div className="flex flex-col sm:flex-row sm:items-center gap-6 max-w-3xl">
@@ -113,15 +187,22 @@ export default async function TeamDetailPage({ params }: Props) {
                       <Droplets className="w-3.5 h-3.5 text-blue-600" />
                       {team.river}
                     </span>
+
+                    {isRegistered && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-300">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        Verified Squad Locked
+                      </span>
+                    )}
                   </div>
 
                   {/* Team Heading */}
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl font-black italic tracking-tight text-[#0b162c] uppercase leading-none mb-3">
+                  <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black italic tracking-tight text-[#0b162c] uppercase leading-tight mb-2 sm:mb-3">
                     {team.name}
                   </h1>
 
                   {/* Tagline */}
-                  <p className="text-base sm:text-lg md:text-xl font-medium text-slate-600 italic">
+                  <p className="text-sm sm:text-base md:text-lg font-medium text-slate-600 italic">
                     &ldquo;{team.tagline}&rdquo;
                   </p>
                 </div>
@@ -129,13 +210,23 @@ export default async function TeamDetailPage({ params }: Props) {
 
               {/* Quick Hero CTA */}
               <div className="flex flex-wrap items-center gap-3 shrink-0">
-                <Link
-                  href="/registration"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#d8392f] hover:bg-[#b91c1c] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl shadow-sm transition-colors"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  Register This Team
-                </Link>
+                {isRegistered ? (
+                  <a
+                    href="#squad-roster"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl shadow-sm transition-colors"
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    View Official Squad
+                  </a>
+                ) : (
+                  <Link
+                    href={`/registration?team=${encodeURIComponent(team.name)}`}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#d8392f] hover:bg-[#b91c1c] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl shadow-sm transition-colors"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    Register This Team
+                  </Link>
+                )}
                 <Link
                   href="/#teams"
                   className="inline-flex items-center gap-2 px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl border border-slate-200 transition-colors"
@@ -276,114 +367,14 @@ export default async function TeamDetailPage({ params }: Props) {
               {/* ================= RIGHT COLUMN: SQUAD SIDEBAR WIDGET (4 COLS) ================= */}
               <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-6">
                 
-                {/* Squad Sidebar Box */}
-                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                  
-                  {/* Sidebar Header */}
-                  <div className="bg-[#0b162c] text-white p-5 border-b-2 border-[#d8392f] flex items-center gap-3.5">
-                    {team.logo && (
-                      <div className="w-13 h-13 bg-white/95 rounded-2xl p-1.5 shadow-md flex items-center justify-center shrink-0 border border-white/40">
-                        <Image src={team.logo} alt="" width={52} height={52} className="w-full h-full object-contain" />
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2 mb-1">
-                        <span className="text-[10px] font-black tracking-widest uppercase text-slate-400 flex items-center gap-1.5">
-                          <Shirt className="w-3.5 h-3.5 text-[#d8392f]" />
-                          Official Squad
-                        </span>
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                          <Clock className="w-3 h-3" />
-                          Coming Soon
-                        </span>
-                      </div>
-                      <h3 className="text-lg font-black uppercase tracking-tight text-white truncate">
-                        {team.name} Roster
-                      </h3>
-                      <p className="text-xs text-slate-300 mt-0.5">
-                        12 certified slots allocated.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Announcement Banner inside Sidebar */}
-                  <div className="p-4 bg-amber-50/70 border-b border-amber-100 text-xs text-amber-900 leading-relaxed">
-                    <p className="font-semibold text-amber-950 flex items-center gap-1.5 mb-1">
-                      <Clock className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-                      Names Revealed Post-Registration
-                    </p>
-                    <p className="text-[11px] text-amber-800">
-                      Official player names and assigned jersey numbers (#01 to #12) will be published here once registration and player verification complete.
-                    </p>
-                  </div>
-
-                  {/* 12-Slot Compact Roster List */}
-                  <div className="p-4 divide-y divide-slate-100 max-h-[380px] overflow-y-auto">
-                    {team.squad.map((player) => {
-                      const isCaptain = player.role.toLowerCase().includes('captain') && !player.role.toLowerCase().includes('vice');
-                      const isViceCaptain = player.role.toLowerCase().includes('vice captain');
-
-                      return (
-                        <div key={player.number} className="py-2.5 first:pt-0 last:pb-0 flex items-center justify-between gap-3 text-xs">
-                          <div className="flex items-center gap-2.5 min-w-0">
-                            {/* Jersey Badge */}
-                            <span className="w-7 h-7 rounded-lg bg-slate-100 border border-slate-200 text-slate-800 font-black text-[11px] flex items-center justify-center shrink-0">
-                              #{player.jerseyNumber}
-                            </span>
-                            <div className="min-w-0">
-                              <p className="font-semibold text-slate-800 truncate text-[11px] leading-tight">
-                                {player.name || "Slot Reserved"}
-                              </p>
-                              <p className="text-[10px] text-slate-400 truncate leading-tight mt-0.5">
-                                {player.role}
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="shrink-0 text-right">
-                            {isCaptain ? (
-                              <span className="inline-block bg-[#d8392f] text-white text-[9px] font-black uppercase px-2 py-0.5 rounded">
-                                Captain
-                              </span>
-                            ) : isViceCaptain ? (
-                              <span className="inline-block bg-blue-600 text-white text-[9px] font-black uppercase px-2 py-0.5 rounded">
-                                Vice Cap
-                              </span>
-                            ) : (
-                              <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
-                                TBA
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Sidebar Registration Action Box */}
-                  <div className="p-5 bg-slate-50 border-t border-slate-200 space-y-3">
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-[11px] font-bold text-slate-500 uppercase">Registration Fee</span>
-                      <div className="text-right">
-                        <span className="text-xl font-black text-[#0b162c]">₹4,999/-</span>
-                        <span className="text-[10px] text-emerald-600 font-bold block">Includes 12 Custom Kits</span>
-                      </div>
-                    </div>
-
-                    <Link
-                      href="/registration"
-                      className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#d8392f] hover:bg-[#b91c1c] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-sm transition-colors"
-                    >
-                      <Sparkles className="w-3.5 h-3.5" />
-                      Register This Team Now
-                    </Link>
-
-                    <p className="text-[10px] text-slate-400 text-center">
-                      Auto-locked once payment succeeds.
-                    </p>
-                  </div>
-
-                </div>
+                {/* Dynamic Squad Section from API */}
+                <TeamSquadSection
+                  slug={team.slug}
+                  teamName={team.name}
+                  teamLogo={team.logo}
+                  fallbackSquad={team.squad}
+                  initialData={squadData}
+                />
 
                 {/* Tournament Coordinator Helpdesk Card */}
                 <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs text-xs space-y-2">

@@ -27,6 +27,7 @@ interface RegistrationData {
     lower_size: string;
     is_captain: boolean;
     is_vice_captain: boolean;
+    photo?: string | null;
   }>;
 }
 
@@ -134,14 +135,28 @@ function SuccessContent() {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                 {data.players.map((p) => (
-                  <div key={p.player_number} className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex items-center justify-between">
-                    <div>
-                      <span className="font-bold text-slate-900">
-                        #{p.player_number} {p.name}
-                        {p.is_captain && <span className="ml-1 text-[10px] text-red-600 font-black">(C)</span>}
-                        {p.is_vice_captain && <span className="ml-1 text-[10px] text-blue-600 font-black">(VC)</span>}
-                      </span>
-                      <span className="block text-[11px] text-slate-500">Jersey #{p.jersey_number || 'N/A'}</span>
+                  <div key={p.player_number} className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      {p.photo ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={p.photo}
+                          alt={p.name}
+                          className="w-8 h-8 rounded-lg object-cover border border-slate-200 shrink-0"
+                        />
+                      ) : (
+                        <span className="w-7 h-7 rounded-lg bg-slate-200 text-slate-800 font-black text-[11px] flex items-center justify-center shrink-0">
+                          #{p.jersey_number || p.player_number}
+                        </span>
+                      )}
+                      <div className="min-w-0">
+                        <span className="font-bold text-slate-900 truncate block">
+                          #{p.player_number} {p.name}
+                          {p.is_captain && <span className="ml-1 text-[10px] text-red-600 font-black">(C)</span>}
+                          {p.is_vice_captain && <span className="ml-1 text-[10px] text-blue-600 font-black">(VC)</span>}
+                        </span>
+                        <span className="block text-[11px] text-slate-500">Jersey #{p.jersey_number || 'N/A'}</span>
+                      </div>
                     </div>
                     <span className="bg-white px-2 py-1 rounded text-slate-600 font-semibold border border-slate-200">
                       T: {p.tshirt_size || '-'} | L: {p.lower_size || '-'}
