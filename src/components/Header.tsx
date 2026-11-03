@@ -55,12 +55,12 @@ export default function Header() {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-3.5 xl:gap-5 font-bold text-xs xl:text-[13px] tracking-wider uppercase text-white/90 shrink-0">
               <Link href="/#about" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">About</Link>
+              <Link href="/gallery" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Gallery</Link>
               <Link href="/#tribute" className="text-amber-300 hover:text-amber-200 transition-colors pb-0.5 border-b-2 border-transparent hover:border-amber-400">Tribute</Link>
               <Link href="/#collaborations" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Collaborations</Link>
               <Link href="/#sponsorship" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Sponsorship</Link>
               <Link href="/#schedule" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Matches</Link>
               <Link href="/#teams" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Teams</Link>
-              <Link href="/#rules" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Rules</Link>
               <Link href="/#organizers" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Organizers</Link>
             </nav>
 
@@ -112,6 +112,14 @@ export default function Header() {
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </Link>
                 <Link 
+                  href="/gallery" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white/90 hover:text-white hover:bg-white/5 font-bold text-sm uppercase tracking-wider transition-colors"
+                >
+                  <span>Gallery Highlights</span>
+                  <ChevronRight className="w-4 h-4 text-slate-500" />
+                </Link>
+                <Link 
                   href="/#tribute" 
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="flex items-center justify-between px-3 py-2.5 rounded-xl text-amber-300 hover:text-amber-200 hover:bg-white/5 font-bold text-sm uppercase tracking-wider transition-colors border border-amber-500/20 bg-amber-500/5"
@@ -152,14 +160,6 @@ export default function Header() {
                   className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white/90 hover:text-white hover:bg-white/5 font-bold text-sm uppercase tracking-wider transition-colors"
                 >
                   <span>All Teams (24)</span>
-                  <ChevronRight className="w-4 h-4 text-slate-500" />
-                </Link>
-                <Link 
-                  href="/#rules" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white/90 hover:text-white hover:bg-white/5 font-bold text-sm uppercase tracking-wider transition-colors"
-                >
-                  <span>Rules & Guidelines</span>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </Link>
                 <Link 

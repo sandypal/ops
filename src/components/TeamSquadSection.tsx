@@ -128,10 +128,10 @@ export default function TeamSquadSection({
       isMounted = false;
     };
   }, [slug]);
-
+  console.log(initialData, 'initialData');
   return (
     <div id="squad-roster" className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300">
-      
+
       {/* Sidebar Header */}
       <div className="bg-[#0b162c] text-white p-5 border-b-2 border-[#d8392f] flex items-center gap-3.5">
         {teamLogo && (

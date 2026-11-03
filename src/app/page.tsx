@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import TournamentGallery from '@/components/TournamentGallery';
 import { teamLogos, teamsData } from '@/data/teamsData';
 import {
   Calendar,
@@ -587,7 +588,7 @@ export default function Home() {
       name: "Daily News Crunch (DNC)",
       category: "Digital News & Media Partner",
       logo: "/sponsors/dnc-news.jpg",
-      website: "https://dailynewscrunch.com/",
+      website: "https://dnc24.com/",
       instagram: "https://www.instagram.com/dailynewscrunch/",
       tagline: "Every News • Every Truth • For EveryOne",
       description: "Premier digital news portal bringing comprehensive round-the-clock match highlights, tournament interviews, and feature coverage.",
@@ -598,7 +599,7 @@ export default function Home() {
       name: "81 Newz India",
       category: "Broadcast & Regional News Partner",
       logo: "/sponsors/81newz.jpg",
-      website: "https://www.youtube.com/@81newzindia",
+      website: "https://www.youtube.com/@81Newz",
       tagline: "Voice of Truth & Sports Journalism",
       description: "Dynamic video journalism and regional sports media outlet capturing stadium action, match moments, and ceremonies live from Sector 16 Stadium.",
       badgeStyle: "bg-sky-100 text-sky-900 border-sky-300"
@@ -1295,6 +1296,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+          TOURNAMENT GALLERY SECTION (Option 2 - Right after About)
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <TournamentGallery />
 
       {/* ═══════════════════════════════════════════════════════════════════════
           ARMED FORCES TRIBUTE SECTION (Sacred Salute - Separate from Collaborators)

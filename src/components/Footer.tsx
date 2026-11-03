@@ -48,6 +48,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/gallery" className="hover:text-[#d8392f] transition-colors">
+                  Photo Gallery
+                </Link>
+              </li>
+              <li>
                 <a
                   href="https://www.youtube.com/watch?v=R5pjfCfualY"
                   target="_blank"
