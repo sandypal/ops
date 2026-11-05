@@ -6,14 +6,14 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import TeamSquadSection from '@/components/TeamSquadSection';
 import { teamsData, allTeamSlugs, TeamDetail } from '@/data/teamsData';
-import { 
-  Shield, 
-  MapPin, 
-  Droplets, 
-  Compass, 
-  ArrowLeft, 
-  ChevronRight, 
-  Sparkles, 
+import {
+  Shield,
+  MapPin,
+  Droplets,
+  Compass,
+  ArrowLeft,
+  ChevronRight,
+  Sparkles,
   Flag,
   Clock,
   Shirt,
@@ -155,7 +155,7 @@ export default async function TeamDetailPage({ params }: Props) {
             </div>
 
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-              
+
               <div className="flex flex-col sm:flex-row sm:items-center gap-6 max-w-3xl">
                 {/* Official Team Logo */}
                 {team.logo && (
@@ -174,11 +174,10 @@ export default async function TeamDetailPage({ params }: Props) {
                 <div>
                   {/* Division & River Badges */}
                   <div className="flex flex-wrap items-center gap-2.5 mb-3">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-                      team.division === 'boys' 
-                        ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${team.division === 'boys'
+                        ? 'bg-blue-50 text-blue-700 border border-blue-200'
                         : 'bg-rose-50 text-rose-700 border border-rose-200'
-                    }`}>
+                      }`}>
                       <Shield className="w-3.5 h-3.5" />
                       {team.division === 'boys' ? 'Boys Division (16 Teams)' : 'Girls Division (8 Teams)'}
                     </span>
@@ -242,14 +241,14 @@ export default async function TeamDetailPage({ params }: Props) {
         {/* ================= 2-COLUMN MAIN CONTENT & SQUAD SIDEBAR ================= */}
         <section className="py-10 md:py-12">
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              
-              {/* ================= LEFT COLUMN: RIVER HERITAGE & CULTURE (8 COLS) ================= */}
-              <div className="lg:col-span-8 space-y-6">
-                
+            <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 items-start">
+
+              {/* ================= LEFT COLUMN: RIVER HERITAGE & CULTURE (6 COLS OF 10) ================= */}
+              <div className="lg:col-span-6 space-y-6">
+
                 {/* Main Cultural Feature Card */}
                 <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 md:p-10 shadow-xs">
-                  
+
                   {/* Article Header */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-6 border-b border-slate-100">
                     <div className="flex items-center gap-3">
@@ -287,6 +286,59 @@ export default async function TeamDetailPage({ params }: Props) {
                       </p>
                     </div>
                   </div>
+
+                  {/* ================= HINDI RIVER HERITAGE HIGHLIGHT ================= */}
+                  {team.riverHindi && (
+                    <div className="mt-8 p-5 sm:p-7 rounded-2xl bg-gradient-to-br from-amber-50/70 via-orange-50/30 to-red-50/40 border-2 border-amber-200/90 shadow-2xs relative">
+                      <div className="flex flex-wrap items-center justify-between gap-2.5 mb-3.5 pb-3 border-b border-amber-200/70">
+                        <div className="flex items-center gap-2.5">
+                          <span className="p-2 bg-gradient-to-br from-[#d8392f] to-amber-600 text-white rounded-xl shadow-xs">
+                            <Droplets className="w-4 h-4" />
+                          </span>
+                          <div>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-[#d8392f] block">
+                              विशेष सांस्कृतिक गौरव गाथा • River Heritage
+                            </span>
+                            <h3 className="text-base sm:text-lg font-black text-slate-900 leading-tight">
+                              {team.riverHindi.riverNameHindi}
+                            </h3>
+                          </div>
+                        </div>
+                        <span className="text-[11px] font-bold text-amber-900 bg-amber-100 border border-amber-300 px-2.5 py-0.5 rounded-full">
+                          हिंदी विवरण
+                        </span>
+                      </div>
+
+                      {team.riverHindi.taglineHindi && (
+                        <p className="text-xs sm:text-sm font-bold text-[#b91c1c] italic mb-2.5">
+                          &ldquo;{team.riverHindi.taglineHindi}&rdquo;
+                        </p>
+                      )}
+
+                      <p className="text-slate-800 text-base sm:text-[17px] leading-relaxed pl-4 border-l-4 border-[#d8392f] bg-white/80 p-3.5 rounded-r-xl font-normal shadow-2xs">
+                        {team.riverHindi.summaryHindi}
+                      </p>
+
+                      {(team.riverHindi.originHindi || team.riverHindi.lengthHindi) && (
+                        <div className="mt-3.5 pt-3 border-t border-amber-200/60 flex flex-wrap items-center gap-2 text-xs">
+                          {team.riverHindi.originHindi && (
+                            <span className="inline-flex items-center gap-1.5 bg-white border border-amber-200 text-slate-700 px-3 py-1 rounded-lg text-xs font-medium shadow-2xs">
+                              <strong className="text-amber-800 font-bold">उद्गम:</strong> {team.riverHindi.originHindi}
+                            </span>
+                          )}
+                          {team.riverHindi.lengthHindi && (
+                            <span className="inline-flex items-center gap-1.5 bg-white border border-amber-200 text-slate-700 px-3 py-1 rounded-lg text-xs font-medium shadow-2xs">
+                              <strong className="text-amber-800 font-bold">प्रवाह/लंबाई:</strong> {team.riverHindi.lengthHindi}
+                            </span>
+                          )}
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 ml-auto">
+                            <Sparkles className="w-3 h-3 text-amber-500" />
+                            {team.name}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {/* River Factsheet Strip */}
                   <div className="mt-8 pt-6 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -366,7 +418,7 @@ export default async function TeamDetailPage({ params }: Props) {
 
               {/* ================= RIGHT COLUMN: SQUAD SIDEBAR WIDGET (4 COLS) ================= */}
               <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-6">
-                
+
                 {/* Dynamic Squad Section from API */}
                 <TeamSquadSection
                   slug={team.slug}
@@ -374,6 +426,7 @@ export default async function TeamDetailPage({ params }: Props) {
                   teamLogo={team.logo}
                   fallbackSquad={team.squad}
                   initialData={squadData}
+                  division={team.division}
                 />
 
                 {/* Tournament Coordinator Helpdesk Card */}
