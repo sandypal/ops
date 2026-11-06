@@ -11,8 +11,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Operation Sindoor Cricket Cup 2025 Gallery Images",
     description:
-      "29 official gallery images from the Operation Sindoor Cricket Cup 2025 tournament.",
-    images: ["/galleries/gallery-01.jpeg"],
+      "30 official gallery images from the Operation Sindoor Cricket Cup tournament including the 2026 poster release with Governor of Punjab & UT Administrator Chandigarh, Shri Gulab Chand Kataria.",
+    images: ["/galleries/poster-release-2026-governor-gulab-chand-kataria.jpeg"],
   },
 };
 

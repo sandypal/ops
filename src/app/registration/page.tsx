@@ -171,8 +171,7 @@ export default function RegistrationPage() {
     p.phone.trim() !== '' &&
     p.age.trim() !== '' &&
     p.tshirtSize !== '' &&
-    p.lowerSize !== '' &&
-    (p.studentIdFile !== null || p.studentIdFileName !== '')
+    p.lowerSize !== ''
   ).length;
 
   const handleTeamChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -214,7 +213,7 @@ export default function RegistrationPage() {
       return;
     }
 
-    // Validation: check players (Name, Jersey #, Mobile, Age, Kit Sizes, and Student ID Card are all required)
+    // Validation: check players (Name, Jersey #, Mobile, Age, and Kit Sizes are required; Student ID is optional)
     for (let i = 0; i < 12; i++) {
       if (!players[i].name.trim()) {
         setActivePlayer(i);
@@ -244,11 +243,6 @@ export default function RegistrationPage() {
       if (!players[i].lowerSize) {
         setActivePlayer(i);
         setErrorMessage(`Please select Lower Kit Size for Player #${i + 1} (${players[i].name})`);
-        return;
-      }
-      if (!players[i].studentIdFile && !players[i].studentIdFileName) {
-        setActivePlayer(i);
-        setErrorMessage(`Please attach Student ID Card for Player #${i + 1} (${players[i].name})`);
         return;
       }
     }
@@ -915,8 +909,7 @@ export default function RegistrationPage() {
                         players[idx].phone.trim() !== '' &&
                         players[idx].age.trim() !== '' &&
                         players[idx].tshirtSize !== '' &&
-                        players[idx].lowerSize !== '' &&
-                        (players[idx].studentIdFile !== null || players[idx].studentIdFileName !== '');
+                        players[idx].lowerSize !== '';
                       return (
                         <button
                           key={idx}
@@ -1093,17 +1086,17 @@ export default function RegistrationPage() {
                         </select>
                       </div>
 
-                      {/* Uploads Section: Student ID (Mandatory) & Profile Photo (Optional) */}
+                      {/* Uploads Section: Student ID (Optional) & Profile Photo (Optional) */}
                       <div className="sm:col-span-1 md:col-span-2 mt-2">
                         <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
                           <span className="flex items-center gap-1">
-                            <Upload className="w-3.5 h-3.5 text-[#d8392f]" /> Student ID Card <span className="text-red-500 font-bold">*</span>
+                            <Upload className="w-3.5 h-3.5 text-slate-500" /> Student ID Card <span className="text-slate-400 font-normal">(Optional)</span>
                           </span>
-                          <span className="text-[10px] text-red-600 font-bold">Mandatory</span>
+                          <span className="text-[10px] text-slate-400 font-medium">Optional</span>
                         </label>
                         <label className={`flex items-center justify-between w-full h-[46px] border-2 border-dashed rounded-xl cursor-pointer transition-colors px-3 sm:px-4 ${players[activePlayer].studentIdFileName
                           ? 'border-emerald-400 bg-emerald-50/50 hover:bg-emerald-50/80'
-                          : 'border-red-300/80 bg-red-50/20 hover:bg-red-50/40'
+                          : 'border-slate-300 bg-slate-50 hover:bg-slate-100'
                           }`}>
                           <div className="flex items-center gap-2 truncate">
                             {players[activePlayer].studentIdFileName ? (
@@ -1115,16 +1108,16 @@ export default function RegistrationPage() {
                               </>
                             ) : (
                               <>
-                                <Upload className="w-4 h-4 text-[#d8392f] shrink-0" />
-                                <span className="text-xs font-bold text-[#d8392f] truncate">Student ID (Required) <span className="text-red-500">*</span></span>
+                                <Upload className="w-4 h-4 text-slate-400 shrink-0" />
+                                <span className="text-xs font-medium text-slate-500 truncate">Student ID (Optional)</span>
                               </>
                             )}
                           </div>
                           <span className={`text-[11px] px-2.5 py-1 rounded font-semibold shrink-0 ${players[activePlayer].studentIdFileName
                             ? 'bg-emerald-100 text-emerald-800'
-                            : 'bg-red-100 text-[#d8392f]'
+                            : 'bg-slate-200 text-slate-700'
                             }`}>
-                            {players[activePlayer].studentIdFileName ? "Change" : "Browse *"}
+                            {players[activePlayer].studentIdFileName ? "Change" : "Browse"}
                           </span>
                           <input
                             type="file"
@@ -1347,9 +1340,9 @@ export default function RegistrationPage() {
 
                         {/* File Uploads in All view */}
                         <div className="mt-2.5 flex flex-wrap items-center justify-between gap-3 text-xs pt-1 border-t border-slate-100">
-                          <label className={`cursor-pointer flex items-center gap-1 font-semibold text-[11px] ${p.studentIdFileName ? 'text-emerald-700' : 'text-[#d8392f] hover:underline'}`}>
-                            {p.studentIdFileName ? <FileCheck className="w-3.5 h-3.5 text-emerald-600" /> : <Upload className="w-3.5 h-3.5 text-[#d8392f]" />}
-                            {p.studentIdFileName ? p.studentIdFileName : <>Attach Student ID <span className="text-red-500 font-bold">*</span></>}
+                          <label className={`cursor-pointer flex items-center gap-1 font-semibold text-[11px] ${p.studentIdFileName ? 'text-emerald-700' : 'text-slate-600 hover:text-slate-900 hover:underline'}`}>
+                            {p.studentIdFileName ? <FileCheck className="w-3.5 h-3.5 text-emerald-600" /> : <Upload className="w-3.5 h-3.5 text-slate-400" />}
+                            {p.studentIdFileName ? p.studentIdFileName : <>Attach Student ID <span className="text-slate-400 font-normal text-[10px]">(Optional)</span></>}
                             <input
                               type="file"
                               className="hidden"

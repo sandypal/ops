@@ -17,38 +17,46 @@ import {
 export interface GalleryItem {
   id: number;
   src: string;
+  title?: string;
+  description?: string;
 }
 
 export const GALLERY_ITEMS: GalleryItem[] = [
-  { id: 1, src: "/galleries/gallery-01.jpeg" },
-  { id: 2, src: "/galleries/gallery-04.jpeg" },
-  { id: 3, src: "/galleries/gallery-02.jpeg" },
-  { id: 4, src: "/galleries/gallery-18.jpeg" },
-  { id: 5, src: "/galleries/gallery-07.jpeg" },
-  { id: 6, src: "/galleries/gallery-08.jpeg" },
-  { id: 7, src: "/galleries/gallery-24.jpeg" },
-  { id: 8, src: "/galleries/gallery-03.jpeg" },
-  { id: 9, src: "/galleries/gallery-05.jpeg" },
-  { id: 10, src: "/galleries/gallery-06.jpeg" },
-  { id: 11, src: "/galleries/gallery-09.jpeg" },
-  { id: 12, src: "/galleries/gallery-10.jpeg" },
-  { id: 13, src: "/galleries/gallery-11.jpeg" },
-  { id: 14, src: "/galleries/gallery-12.jpeg" },
-  { id: 15, src: "/galleries/gallery-13.jpeg" },
-  { id: 16, src: "/galleries/gallery-14.jpeg" },
-  { id: 17, src: "/galleries/gallery-15.jpeg" },
-  { id: 18, src: "/galleries/gallery-16.jpeg" },
-  { id: 19, src: "/galleries/gallery-17.jpeg" },
-  { id: 20, src: "/galleries/gallery-19.jpeg" },
-  { id: 21, src: "/galleries/gallery-20.jpeg" },
-  { id: 22, src: "/galleries/gallery-21.jpeg" },
-  { id: 23, src: "/galleries/gallery-22.jpeg" },
-  { id: 24, src: "/galleries/gallery-23.jpeg" },
-  { id: 25, src: "/galleries/gallery-25.jpeg" },
-  { id: 26, src: "/galleries/gallery-26.jpeg" },
-  { id: 27, src: "/galleries/gallery-27.jpeg" },
-  { id: 28, src: "/galleries/gallery-28.jpeg" },
-  { id: 29, src: "/galleries/gallery-29.jpeg" },
+  {
+    id: 1,
+    src: "/galleries/poster-release-2026-governor-gulab-chand-kataria.jpeg",
+    title: "2026 Poster Release Ceremony",
+    description: "Official Poster Release of Operation Sindoor Cricket Cup 2026 in the august presence of Hon'ble Governor of Punjab & UT Administrator Chandigarh, Shri Gulab Chand Kataria."
+  },
+  { id: 2, src: "/galleries/gallery-01.jpeg" },
+  { id: 3, src: "/galleries/gallery-04.jpeg" },
+  { id: 4, src: "/galleries/gallery-02.jpeg" },
+  { id: 5, src: "/galleries/gallery-18.jpeg" },
+  { id: 6, src: "/galleries/gallery-07.jpeg" },
+  { id: 7, src: "/galleries/gallery-08.jpeg" },
+  { id: 8, src: "/galleries/gallery-24.jpeg" },
+  { id: 9, src: "/galleries/gallery-03.jpeg" },
+  { id: 10, src: "/galleries/gallery-05.jpeg" },
+  { id: 11, src: "/galleries/gallery-06.jpeg" },
+  { id: 12, src: "/galleries/gallery-09.jpeg" },
+  { id: 13, src: "/galleries/gallery-10.jpeg" },
+  { id: 14, src: "/galleries/gallery-11.jpeg" },
+  { id: 15, src: "/galleries/gallery-12.jpeg" },
+  { id: 16, src: "/galleries/gallery-13.jpeg" },
+  { id: 17, src: "/galleries/gallery-14.jpeg" },
+  { id: 18, src: "/galleries/gallery-15.jpeg" },
+  { id: 19, src: "/galleries/gallery-16.jpeg" },
+  { id: 20, src: "/galleries/gallery-17.jpeg" },
+  { id: 21, src: "/galleries/gallery-19.jpeg" },
+  { id: 22, src: "/galleries/gallery-20.jpeg" },
+  { id: 23, src: "/galleries/gallery-21.jpeg" },
+  { id: 24, src: "/galleries/gallery-22.jpeg" },
+  { id: 25, src: "/galleries/gallery-23.jpeg" },
+  { id: 26, src: "/galleries/gallery-25.jpeg" },
+  { id: 27, src: "/galleries/gallery-26.jpeg" },
+  { id: 28, src: "/galleries/gallery-27.jpeg" },
+  { id: 29, src: "/galleries/gallery-28.jpeg" },
+  { id: 30, src: "/galleries/gallery-29.jpeg" },
 ];
 
 const BENTO_ITEMS = GALLERY_ITEMS.slice(0, 7);
@@ -161,12 +169,23 @@ export default function TournamentGallery() {
           >
             <Image
               src={BENTO_ITEMS[0].src}
-              alt="Operation Sindoor Cricket Cup 2025 Gallery Image 1"
+              alt="Operation Sindoor Cricket Cup 2026 Poster Release in the presence of Hon'ble Governor of Punjab & UT Administrator Chandigarh, Gulab Chand Kataria"
               fill
               priority
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover object-center group-hover:scale-108 transition-transform duration-700 ease-out"
             />
+            {/* 2026 Lead Feature Badge */}
+            <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-10 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[10px] sm:text-xs font-bold shadow-lg">
+              <span className="w-2 h-2 rounded-full bg-[#d8392f] animate-pulse" />
+              <span>2026 Poster Release • Punjab Governor &amp; UT Administrator</span>
+            </div>
+            {/* Bottom Caption Overlay */}
+            <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-none">
+              <p className="text-white font-bold text-xs sm:text-sm line-clamp-1 drop-shadow">
+                2026 Poster Release with Hon&apos;ble Governor Shri Gulab Chand Kataria
+              </p>
+            </div>
             {/* Subtle Hover Zoom Overlay */}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors duration-300 flex items-center justify-center">
               <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100 shadow-xl border border-white/20">
@@ -338,8 +357,8 @@ export default function TournamentGallery() {
                 OPERATION SINDOOR CRICKET CUP 2025 ARCHIVES
               </h4>
               <p className="text-slate-400 text-xs sm:text-sm">
-                Explore all 29 high-definition photos from the Operation
-                Sindoor Cricket Cup 2025 tournament.
+                Explore all {GALLERY_ITEMS.length} high-definition photos from the Operation
+                Sindoor Cricket Cup tournament.
               </p>
             </div>
           </div>
@@ -373,11 +392,10 @@ export default function TournamentGallery() {
               <span className="w-2.5 h-2.5 rounded-full bg-[#d8392f] animate-pulse" />
               <div className="flex flex-col">
                 <span className="text-white font-bold text-sm sm:text-base leading-tight">
-                  Operation Sindoor Cricket Cup 2025
+                  {GALLERY_ITEMS[lightboxIndex].title || "Operation Sindoor Cricket Cup"}
                 </span>
-                <span className="text-slate-400 text-xs">
-                  Season 1 Archives • Photo {lightboxIndex + 1} of{" "}
-                  {GALLERY_ITEMS.length}
+                <span className="text-slate-400 text-xs line-clamp-1">
+                  {GALLERY_ITEMS[lightboxIndex].description || `Tournament Archives • Photo ${lightboxIndex + 1} of ${GALLERY_ITEMS.length}`}
                 </span>
               </div>
             </div>

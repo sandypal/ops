@@ -2172,20 +2172,45 @@ export default function Home() {
                       <div className="text-3xl sm:text-4xl md:text-5xl text-slate-400 font-black italic">2ND</div>
                       <div>
                         <h4 className="font-bold text-lg sm:text-xl text-slate-900 uppercase">Runner Up</h4>
-                        <p className="text-slate-500 font-medium text-xs sm:text-sm">Trophy + ₹31,000 Cash Prize</p>
+                        <p className="text-slate-500 font-medium text-xs sm:text-sm">₹31,000 Cash Prize</p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                      <div className="bg-orange-50 p-3 sm:p-4 rounded-xl border border-orange-200">
-                        <div className="text-orange-500 font-black uppercase italic text-xs sm:text-sm mb-1">Orange Cap</div>
-                        <h4 className="font-bold text-slate-900 text-xs sm:text-sm">Best Batter</h4>
-                        <p className="text-slate-600 text-xs sm:text-sm font-medium">₹2,100</p>
+                      <div className="bg-gradient-to-br from-orange-50 via-amber-50/40 to-white p-3 sm:p-4 rounded-xl border border-orange-200 flex items-center gap-2.5 sm:gap-3.5 relative overflow-hidden group hover:border-orange-400 hover:shadow-md transition-all">
+                        <div className="w-11 h-11 sm:w-14 sm:h-14 shrink-0 relative flex items-center justify-center">
+                          <Image
+                            src="/orange-cap.png"
+                            alt="Orange Cap"
+                            width={56}
+                            height={56}
+                            unoptimized
+                            className="object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300"
+                          />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-orange-600 font-black uppercase italic text-[10px] sm:text-xs tracking-wider mb-0.5">Orange Cap</div>
+                          <h4 className="font-bold text-slate-900 text-xs sm:text-sm truncate">Best Batter</h4>
+                          <p className="text-slate-600 text-xs sm:text-sm font-semibold">₹2,100</p>
+                        </div>
                       </div>
-                      <div className="bg-purple-50 p-3 sm:p-4 rounded-xl border border-purple-200">
-                        <div className="text-purple-500 font-black uppercase italic text-xs sm:text-sm mb-1">Purple Cap</div>
-                        <h4 className="font-bold text-slate-900 text-xs sm:text-sm">Best Bowler</h4>
-                        <p className="text-slate-600 text-xs sm:text-sm font-medium">₹2,100</p>
+
+                      <div className="bg-gradient-to-br from-purple-50 via-fuchsia-50/40 to-white p-3 sm:p-4 rounded-xl border border-purple-200 flex items-center gap-2.5 sm:gap-3.5 relative overflow-hidden group hover:border-purple-400 hover:shadow-md transition-all">
+                        <div className="w-11 h-11 sm:w-14 sm:h-14 shrink-0 relative flex items-center justify-center">
+                          <Image
+                            src="/purple-cap.png"
+                            alt="Purple Cap"
+                            width={56}
+                            height={56}
+                            unoptimized
+                            className="object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300"
+                          />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-purple-600 font-black uppercase italic text-[10px] sm:text-xs tracking-wider mb-0.5">Purple Cap</div>
+                          <h4 className="font-bold text-slate-900 text-xs sm:text-sm truncate">Best Bowler</h4>
+                          <p className="text-slate-600 text-xs sm:text-sm font-semibold">₹2,100</p>
+                        </div>
                       </div>
                     </div>
 

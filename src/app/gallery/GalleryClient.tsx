@@ -20,11 +20,11 @@ import { GALLERY_ITEMS } from "@/components/TournamentGallery";
 
 // Image dimensions map for natural masonry aspect ratio
 const IMAGE_RATIOS: Record<number, { width: number; height: number }> = {
-  1: { width: 1280, height: 960 },
-  2: { width: 960, height: 1280 }, // portrait
-  3: { width: 1280, height: 960 },
+  1: { width: 1024, height: 575 }, // 2026 Poster Release with Governor
+  2: { width: 1280, height: 960 },
+  3: { width: 960, height: 1280 }, // portrait
   4: { width: 1280, height: 960 },
-  5: { width: 1280, height: 853 },
+  5: { width: 1280, height: 960 },
   6: { width: 1280, height: 853 },
   7: { width: 1280, height: 853 },
   8: { width: 1280, height: 853 },
@@ -34,26 +34,27 @@ const IMAGE_RATIOS: Record<number, { width: number; height: number }> = {
   12: { width: 1280, height: 853 },
   13: { width: 1280, height: 853 },
   14: { width: 1280, height: 853 },
-  15: { width: 960, height: 1280 }, // portrait
-  16: { width: 1280, height: 853 },
+  15: { width: 1280, height: 853 },
+  16: { width: 960, height: 1280 }, // portrait
   17: { width: 1280, height: 853 },
   18: { width: 1280, height: 853 },
   19: { width: 1280, height: 853 },
   20: { width: 1280, height: 853 },
-  21: { width: 1280, height: 720 }, // wide
-  22: { width: 960, height: 1280 }, // portrait
-  23: { width: 1280, height: 960 },
+  21: { width: 1280, height: 853 },
+  22: { width: 1280, height: 720 }, // wide
+  23: { width: 960, height: 1280 }, // portrait
   24: { width: 1280, height: 960 },
-  25: { width: 1280, height: 853 },
+  25: { width: 1280, height: 960 },
   26: { width: 1280, height: 853 },
   27: { width: 1280, height: 853 },
   28: { width: 1280, height: 853 },
-  29: { width: 1280, height: 960 },
+  29: { width: 1280, height: 853 },
+  30: { width: 1280, height: 960 },
 };
 
 // First 7 items for Featured Bento Showcase
 const FEATURED_BENTO = GALLERY_ITEMS.slice(0, 7);
-// Remaining 22 items for the Masonry Mosaic
+// Remaining items for the Masonry Mosaic
 const MASONRY_ITEMS = GALLERY_ITEMS.slice(7);
 
 export default function GalleryClient() {
@@ -203,12 +204,23 @@ export default function GalleryClient() {
             >
               <Image
                 src={FEATURED_BENTO[0].src}
-                alt="Operation Sindoor Cricket Cup 2025 Highlight 1"
+                alt="Operation Sindoor Cricket Cup 2026 Poster Release in the presence of Hon'ble Governor of Punjab & UT Administrator Chandigarh, Gulab Chand Kataria"
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover object-center group-hover:scale-108 transition-transform duration-700 ease-out"
               />
+              {/* 2026 Lead Feature Badge */}
+              <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-10 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[10px] sm:text-xs font-bold shadow-lg">
+                <span className="w-2 h-2 rounded-full bg-[#d8392f] animate-pulse" />
+                <span>2026 Poster Release • Punjab Governor &amp; UT Administrator</span>
+              </div>
+              {/* Bottom Caption Overlay */}
+              <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-none">
+                <p className="text-white font-bold text-xs sm:text-sm line-clamp-1 drop-shadow">
+                  2026 Poster Release with Hon&apos;ble Governor Shri Gulab Chand Kataria
+                </p>
+              </div>
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors duration-300 flex items-center justify-center">
                 <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100 shadow-xl border border-white/20">
                   <ZoomIn className="w-5 h-5" />
@@ -441,11 +453,10 @@ export default function GalleryClient() {
               <span className="w-2.5 h-2.5 rounded-full bg-[#d8392f] animate-pulse" />
               <div className="flex flex-col">
                 <span className="text-white font-bold text-sm sm:text-base leading-tight">
-                  Operation Sindoor Cricket Cup 2025
+                  {GALLERY_ITEMS[lightboxIndex].title || "Operation Sindoor Cricket Cup"}
                 </span>
-                <span className="text-slate-400 text-xs">
-                  Season 1 Archives • Photo {lightboxIndex + 1} of{" "}
-                  {GALLERY_ITEMS.length}
+                <span className="text-slate-400 text-xs line-clamp-1">
+                  {GALLERY_ITEMS[lightboxIndex].description || `Tournament Archives • Photo ${lightboxIndex + 1} of ${GALLERY_ITEMS.length}`}
                 </span>
               </div>
             </div>
