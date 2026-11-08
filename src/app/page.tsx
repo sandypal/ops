@@ -450,30 +450,6 @@ export default function Home() {
       phone: ""
     },
     {
-      name: "Ranjit Singh",
-      role: "Organizing Committee",
-      designation: "Organizing Committee Member",
-      image: "/Ranjitsingh.jpeg",
-      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
-      phone: ""
-    },
-    {
-      name: "Gursimrat Singh",
-      role: "Organizing Committee",
-      designation: "Organizing Committee Member",
-      image: "/Gursimrat-Singh.jpeg",
-      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
-      phone: ""
-    },
-    {
-      name: "Vishavjot Chandi",
-      role: "Organizing Committee",
-      designation: "Organizing Committee Member",
-      image: "/vishavjot-chandi.jpg",
-      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
-      phone: ""
-    },
-    {
       name: "Kabir Soni",
       role: "Organizing Committee",
       designation: "Organizing Committee Member",
@@ -486,14 +462,6 @@ export default function Home() {
       role: "Organizing Committee",
       designation: "Organizing Committee Member",
       image: "/preet-handa.jpg",
-      organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
-      phone: ""
-    },
-    {
-      name: "Karandeep Singh",
-      role: "Organizing Committee",
-      designation: "Organizing Committee Member",
-      image: "/Karandeepsingh.jpeg",
       organization: "Sarv Sewa Sashktikarn Sangthan (Regd)",
       phone: ""
     },
@@ -2256,9 +2224,9 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Row 1: 6 Records (Core Leadership & Coordinators) */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-            {organizers.slice(0, 6).map((member, index) => (
+          {/* Row 1: 5 Records (Core Leadership & Coordinators) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+            {organizers.slice(0, 5).map((member, index) => (
               <div
                 key={index}
                 className="bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-[#d8392f] hover:shadow-lg transition-all duration-300 group flex flex-col"
@@ -2320,9 +2288,9 @@ export default function Home() {
 
           {/* Row 2 & 3: 8 Records Per Row (Crisp Portrait Grid) */}
           <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
-            {organizers.slice(6).map((member, index) => (
+            {organizers.slice(5).map((member, index) => (
               <div
-                key={index + 6}
+                key={index + 5}
                 className="bg-white rounded-xl overflow-hidden border border-slate-200 hover:border-[#d8392f] hover:shadow-md transition-all duration-300 group flex flex-col"
               >
                 <div className="relative aspect-[3/4] overflow-hidden bg-slate-100">

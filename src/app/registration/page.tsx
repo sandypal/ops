@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
@@ -86,6 +86,36 @@ const initialPlayer = (): PlayerData => ({
 });
 
 export default function RegistrationPage() {
+  const squadsCarouselRef = useRef<HTMLDivElement>(null);
+  const [isSquadsPaused, setIsSquadsPaused] = useState(false);
+
+  const scrollSquads = (direction: 'left' | 'right') => {
+    if (squadsCarouselRef.current) {
+      const scrollAmount = direction === 'left' ? -300 : 300;
+      squadsCarouselRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  // Auto-scroll carousel every 3 seconds across all devices
+  useEffect(() => {
+    if (isSquadsPaused) return;
+
+    const interval = setInterval(() => {
+      if (!squadsCarouselRef.current) return;
+      const el = squadsCarouselRef.current;
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      if (maxScroll <= 0) return;
+
+      if (el.scrollLeft >= maxScroll - 15) {
+        el.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        el.scrollBy({ left: 300, behavior: 'smooth' });
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isSquadsPaused]);
+
   const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null);
   const [selectedTeam, setSelectedTeam] = useState("");
   const [activePlayer, setActivePlayer] = useState(0); // 0 to 11
@@ -426,27 +456,69 @@ export default function RegistrationPage() {
               </p>
             </div>
 
-            {/* Live Counter & Progress */}
-            <div className="shrink-0 bg-slate-50 border border-slate-200 rounded-2xl p-4 min-w-[240px]">
-              <div className="flex items-center justify-between text-xs font-bold text-slate-700 mb-1.5">
-                <span>Slots Confirmed</span>
-                <span className="text-emerald-700 font-black">{confirmedTeams.length} / 24 Teams</span>
+            {/* Live Counter & Progress + Carousel Controls */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <div className="shrink-0 bg-slate-50 border border-slate-200 rounded-2xl p-3 sm:p-4 min-w-[220px] sm:min-w-[240px]">
+                <div className="flex items-center justify-between text-xs font-bold text-slate-700 mb-1.5">
+                  <span>Slots Confirmed</span>
+                  <span className="text-emerald-700 font-black">{confirmedTeams.length} / 24 Teams</span>
+                </div>
+                <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                  <div
+                    className="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full transition-all duration-500"
+                    style={{ width: `${Math.max(4, (confirmedTeams.length / 24) * 100)}%` }}
+                  />
+                </div>
+                <div className="flex items-center justify-between text-[10px] text-slate-500 font-semibold mt-1.5">
+                  <span className="text-amber-600 font-bold">⚡ {24 - confirmedTeams.length} Slots Open</span>
+                  <span>Knockout Bracket</span>
+                </div>
               </div>
-              <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                <div
-                  className="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full transition-all duration-500"
-                  style={{ width: `${Math.max(4, (confirmedTeams.length / 24) * 100)}%` }}
-                />
-              </div>
-              <div className="flex items-center justify-between text-[10px] text-slate-500 font-semibold mt-1.5">
-                <span className="text-amber-600 font-bold">⚡ {24 - confirmedTeams.length} Slots Open</span>
-                <span>Knockout Bracket</span>
+
+              {/* Universal Left/Right Nav Buttons (All Devices) */}
+              <div className="flex items-center justify-end gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => scrollSquads('left')}
+                  className="w-10 h-10 rounded-2xl bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-slate-700 hover:text-[#d8392f] transition-all shadow-xs active:scale-95 cursor-pointer"
+                  title="Previous Squad"
+                  aria-label="Previous Squad"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollSquads('right')}
+                  className="w-10 h-10 rounded-2xl bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-slate-700 hover:text-[#d8392f] transition-all shadow-xs active:scale-95 cursor-pointer"
+                  title="Next Squad"
+                  aria-label="Next Squad"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
               </div>
             </div>
           </div>
 
-          {/* Confirmed Teams Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 relative z-10">
+          {/* Carousel Status Strip (Auto-scroll & Pause Indicator) */}
+          <div className="flex items-center justify-between mb-3 text-xs">
+            <span className="text-slate-500 font-bold text-[11px] sm:text-xs flex items-center gap-2">
+              <span className={`w-2 h-2 rounded-full ${isSquadsPaused ? 'bg-amber-400' : 'bg-emerald-500 animate-pulse'}`} />
+              <span>{isSquadsPaused ? 'Auto-scroll paused (hovered)' : 'Auto-scrolling squads • Swipe or hover to pause'}</span>
+            </span>
+            <span className="text-[11px] text-slate-400 font-medium hidden sm:inline-block">
+              Click any squad card to inspect verified roster
+            </span>
+          </div>
+
+          {/* Confirmed Teams: Auto-Scrolling Carousel for ALL Devices */}
+          <div
+            ref={squadsCarouselRef}
+            onMouseEnter={() => setIsSquadsPaused(true)}
+            onMouseLeave={() => setIsSquadsPaused(false)}
+            onTouchStart={() => setIsSquadsPaused(true)}
+            onTouchEnd={() => setIsSquadsPaused(false)}
+            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-4 pb-4 pt-1 relative z-10 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          >
             {confirmedTeams.map((team, idx) => {
               const slug = team.slug || team.name.toLowerCase().replace(/\s+/g, '-');
               const logo = teamLogos[slug];
@@ -454,7 +526,7 @@ export default function RegistrationPage() {
                 <Link
                   key={idx}
                   href={`/teams/${slug}`}
-                  className="bg-gradient-to-b from-white to-slate-50 rounded-2xl border-2 border-emerald-400/80 shadow-md p-4 flex flex-col justify-between relative overflow-hidden group hover:shadow-xl hover:border-emerald-500 hover:-translate-y-1 transition-all cursor-pointer"
+                  className="w-[260px] sm:w-[280px] md:w-[300px] shrink-0 snap-start bg-gradient-to-b from-white to-slate-50 rounded-2xl border-2 border-emerald-400/80 shadow-md p-4 sm:p-5 flex flex-col justify-between relative overflow-hidden group hover:shadow-xl hover:border-emerald-500 hover:-translate-y-1 transition-all cursor-pointer"
                 >
                   {/* Verified ribbon stamp */}
                   <div className="absolute top-2.5 right-2.5 bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border border-emerald-300 flex items-center gap-1 shadow-2xs">
@@ -463,18 +535,18 @@ export default function RegistrationPage() {
                   </div>
 
                   <div>
-                    {/* High-Contrast Emblem Showcase */}
-                    <div className="w-24 h-24 mx-auto mb-3 rounded-2xl bg-white border border-slate-200/80 p-2 shadow-inner flex items-center justify-center group-hover:scale-105 transition-transform">
+                    {/* Enlarged Emblem Showcase */}
+                    <div className="w-28 h-28 sm:w-32 sm:h-32 mx-auto mb-3.5 rounded-2xl bg-white border border-slate-200/90 p-3 shadow-inner flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
                       {logo ? (
                         <Image
                           src={logo}
                           alt={team.name}
-                          width={88}
-                          height={88}
-                          className="max-h-full max-w-full object-contain"
+                          width={120}
+                          height={120}
+                          className="max-h-full max-w-full object-contain drop-shadow-sm"
                         />
                       ) : (
-                        <Shield className="w-12 h-12 text-emerald-600" />
+                        <Shield className="w-16 h-16 text-emerald-600" />
                       )}
                     </div>
 
@@ -482,7 +554,7 @@ export default function RegistrationPage() {
                       <span className="inline-block text-[10px] font-black uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-0.5 rounded mb-1">
                         {team.division === 'girls' ? "Girls Division (8)" : "Boys Division (16)"}
                       </span>
-                      <h3 className="font-black text-base text-[#0b162c] group-hover:text-[#d8392f] uppercase italic tracking-tight line-clamp-1 transition-colors">
+                      <h3 className="font-black text-sm sm:text-base text-[#0b162c] group-hover:text-[#d8392f] uppercase italic tracking-tight line-clamp-1 transition-colors">
                         {team.name}
                       </h3>
                       <p className="text-[11px] font-bold text-emerald-700 mt-0.5 flex items-center justify-center gap-1">
@@ -492,11 +564,11 @@ export default function RegistrationPage() {
                     </div>
                   </div>
 
-                  <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                  <div className="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
                     <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
                       Sector 16 Stadium
                     </span>
-                    <span className="text-[11px] font-bold text-emerald-700 group-hover:text-emerald-900 flex items-center gap-0.5">
+                    <span className="text-[11px] font-bold text-emerald-700 group-hover:text-emerald-900 flex items-center gap-0.5 shrink-0">
                       View Squad <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                     </span>
                   </div>
@@ -505,16 +577,16 @@ export default function RegistrationPage() {
             })}
 
             {/* Prompt Card: Claim Open Slot */}
-            <div className="rounded-2xl border-2 border-dashed border-[#d8392f]/40 bg-gradient-to-b from-red-50/50 via-white to-red-50/30 p-4 flex flex-col justify-between text-center group hover:border-[#d8392f] transition-all">
+            <div className="w-[260px] sm:w-[280px] md:w-[300px] shrink-0 snap-start rounded-2xl border-2 border-dashed border-[#d8392f]/40 bg-gradient-to-b from-red-50/50 via-white to-red-50/30 p-4 sm:p-5 flex flex-col justify-between text-center group hover:border-[#d8392f] transition-all">
               <div className="py-2">
-                <div className="w-14 h-14 mx-auto mb-2 rounded-2xl bg-white border border-red-200 flex items-center justify-center text-[#d8392f] shadow-sm group-hover:scale-110 transition-transform">
-                  <Sparkles className="w-7 h-7" />
+                <div className="w-24 h-24 sm:w-28 sm:h-28 mx-auto mb-3.5 rounded-2xl bg-white border border-red-200 flex items-center justify-center text-[#d8392f] shadow-sm group-hover:scale-105 transition-transform">
+                  <Sparkles className="w-12 h-12" />
                 </div>
                 <h3 className="font-black text-sm uppercase italic text-[#0b162c]">
                   Your Team Identity
                 </h3>
-                <p className="text-xs text-slate-500 font-medium mt-1">
-                  Claim your desired river franchise before another collegiate team locks it!
+                <p className="text-xs text-slate-500 font-medium mt-1 line-clamp-2">
+                  Claim your desired river franchise before another team locks it!
                 </p>
               </div>
               <button
@@ -523,7 +595,7 @@ export default function RegistrationPage() {
                   const formEl = document.getElementById('registration-form');
                   formEl?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="w-full py-2 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white rounded-xl text-xs font-black uppercase italic tracking-wider shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-1.5"
+                className="w-full py-2.5 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white rounded-xl text-xs font-black uppercase italic tracking-wider shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <span>Claim Open Slot (₹4,999) ↓</span>
               </button>
