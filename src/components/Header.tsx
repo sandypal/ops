@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Menu, X, Phone, Trophy, ChevronRight } from 'lucide-react';
+import { Menu, X, Phone, Trophy, ChevronRight, Ticket } from 'lucide-react';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -53,22 +53,28 @@ export default function Header() {
             </Link>
             
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-3.5 xl:gap-5 font-bold text-xs xl:text-[13px] tracking-wider uppercase text-white/90 shrink-0">
+            <nav className="hidden lg:flex items-center gap-4 xl:gap-6 font-bold text-xs xl:text-[13px] tracking-wider uppercase text-white/90 shrink-0">
               <Link href="/#about" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">About</Link>
               <Link href="/gallery" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Gallery</Link>
-              <Link href="/#tribute" className="text-amber-300 hover:text-amber-200 transition-colors pb-0.5 border-b-2 border-transparent hover:border-amber-400">Tribute</Link>
-              <Link href="/#collaborations" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Collaborations</Link>
               <Link href="/#sponsorship" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Sponsorship</Link>
               <Link href="/#schedule" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Matches</Link>
               <Link href="/#teams" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Teams</Link>
               <Link href="/#organizers" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Organizers</Link>
             </nav>
 
-            {/* Desktop Register Button */}
-            <div className="hidden lg:flex items-center shrink-0">
+            {/* Desktop Actions */}
+            <div className="hidden lg:flex items-center gap-3 shrink-0">
+              {/* Highlighted Flat Free Match Pass Button */}
+              <Link 
+                href="/passes" 
+                className="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 active:bg-amber-500 text-slate-950 rounded-lg transition-colors font-black uppercase text-xs sm:text-[13px] tracking-wider inline-flex items-center gap-2 select-none border-b-2 border-amber-600"
+              >
+                <Ticket className="w-4 h-4 text-slate-950" />
+                <span>Free Match Pass</span>
+              </Link>
               <Link 
                 href="/registration" 
-                className="px-5 py-2.5 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white rounded-lg hover:from-[#b91c1c] hover:to-[#991b1b] transition-all font-black italic tracking-wider shadow-[0_0_15px_rgba(216,57,47,0.45)] hover:shadow-[0_0_20px_rgba(216,57,47,0.7)] border border-red-500/30 text-xs sm:text-sm uppercase whitespace-nowrap inline-flex items-center justify-center"
+                className="px-4 py-2.5 bg-[#d8392f] hover:bg-[#b91c1c] text-white rounded-lg transition-colors font-black uppercase text-xs sm:text-[13px] tracking-wider inline-flex items-center select-none border-b-2 border-red-900"
               >
                 Register Team
               </Link>
@@ -86,14 +92,21 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Bottom Row on Mobile: Register Team Button */}
-          <div className="lg:hidden mt-2 pt-2 border-t border-white/10">
+          {/* Bottom Row on Mobile: Action Buttons */}
+          <div className="lg:hidden mt-2 pt-2 border-t border-white/10 grid grid-cols-2 gap-2">
+            <Link 
+              href="/passes" 
+              className="w-full py-2.5 px-2 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-lg font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors border-b-2 border-amber-600"
+            >
+              <Ticket className="w-4 h-4 text-slate-950 shrink-0" />
+              <span>Free Match Pass</span>
+            </Link>
             <Link 
               href="/registration" 
-              className="w-full py-2 px-3 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white rounded-lg hover:from-[#b91c1c] hover:to-[#991b1b] transition-all font-black italic tracking-wider shadow-[0_0_12px_rgba(216,57,47,0.4)] border border-red-500/30 text-xs uppercase whitespace-nowrap flex items-center justify-center gap-1.5"
+              className="w-full py-2.5 px-2 bg-[#d8392f] hover:bg-[#b91c1c] text-white rounded-lg font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1 transition-colors border-b-2 border-red-900"
             >
               <span>Register Team</span>
-              <span className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded font-bold">₹4,999</span>
+              <span className="text-[10px] bg-black/25 px-1.5 py-0.5 rounded font-bold">₹4,999</span>
             </Link>
           </div>
         </div>
@@ -103,6 +116,20 @@ export default function Header() {
           <div className="lg:hidden bg-[#091122]/98 backdrop-blur-xl border-t border-white/10 shadow-2xl animate-fade-in">
             <div className="container mx-auto px-4 py-4 space-y-1 divide-y divide-white/5">
               <div className="space-y-1 pb-3">
+                {/* Flat Highlighted Mobile Pass Button */}
+                <Link 
+                  href="/passes" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center justify-between px-3.5 py-3 rounded-lg bg-amber-400 text-slate-950 hover:bg-amber-300 font-black text-sm uppercase tracking-wider transition-colors mb-2.5 border-b-2 border-amber-600"
+                >
+                  <span className="flex items-center gap-2">
+                    <Ticket className="w-4 h-4 text-slate-950" />
+                    Free Match Pass
+                  </span>
+                  <span className="text-[10px] bg-slate-950 text-amber-300 px-2 py-0.5 rounded font-black tracking-widest">
+                    100% FREE
+                  </span>
+                </Link>
                 <Link 
                   href="/#about" 
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -117,25 +144,6 @@ export default function Header() {
                   className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white/90 hover:text-white hover:bg-white/5 font-bold text-sm uppercase tracking-wider transition-colors"
                 >
                   <span>Gallery Highlights</span>
-                  <ChevronRight className="w-4 h-4 text-slate-500" />
-                </Link>
-                <Link 
-                  href="/#tribute" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center justify-between px-3 py-2.5 rounded-xl text-amber-300 hover:text-amber-200 hover:bg-white/5 font-bold text-sm uppercase tracking-wider transition-colors border border-amber-500/20 bg-amber-500/5"
-                >
-                  <span className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-amber-400" />
-                    Armed Forces Tribute
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-amber-400/60" />
-                </Link>
-                <Link 
-                  href="/#collaborations" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white/90 hover:text-white hover:bg-white/5 font-bold text-sm uppercase tracking-wider transition-colors"
-                >
-                  <span>Official Collaborations</span>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </Link>
                 <Link 

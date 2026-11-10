@@ -32,7 +32,8 @@ import {
   X,
   MessageCircle,
   ArrowRight,
-  Lock
+  Lock,
+  Ticket
 } from 'lucide-react';
 
 export default function Home() {
@@ -700,55 +701,105 @@ export default function Home() {
         <div className="container mx-auto px-4 py-10 sm:py-14 md:py-20 lg:py-24 relative z-10 flex flex-col md:flex-row items-center gap-8">
           <div className="md:w-3/5 text-left">
             <div className="flex flex-wrap items-center gap-2 mb-3 sm:mb-4">
-              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded border border-[#d8392f]/50 text-[#d8392f] text-[10px] sm:text-xs font-black uppercase tracking-widest bg-white/5 backdrop-blur-sm shadow-[0_0_10px_rgba(239,68,68,0.3)]">
-                <Shield className="w-3 h-3" />
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#d8392f]/20 border border-[#d8392f]/70 text-[#ff786e] text-[11px] font-bold uppercase tracking-wider">
+                <Shield className="w-3.5 h-3.5 text-[#ff786e]" />
                 Tribute to Armed Forces
               </div>
-              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded border border-blue-400/50 text-blue-300 text-[10px] sm:text-xs font-black uppercase tracking-widest bg-white/5 backdrop-blur-sm">
-                <Users className="w-3 h-3" />
-                Open for Colleges & Universities
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-blue-950/80 border border-blue-500/70 text-blue-300 text-[11px] font-bold uppercase tracking-wider">
+                <Users className="w-3.5 h-3.5 text-blue-300" />
+                Colleges & Universities
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-emerald-950/80 border border-emerald-500/70 text-emerald-300 text-[11px] font-bold uppercase tracking-wider">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                Boys Teams: 16/16 Full
               </div>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.2rem] font-black tracking-tighter mb-3 sm:mb-4 leading-[0.95] text-white uppercase italic drop-shadow-2xl">
-              T10 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#d8392f] to-[#fb923c]">GLORY</span><br />
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.2rem] font-black tracking-tighter mb-3 sm:mb-4 leading-[0.95] text-white uppercase italic">
+              T10 <span className="text-[#d8392f]">GLORY</span><br />
               AWAITS
               <span className="sr-only"> — Operation Sindoor Cricket Cup 2.0 Chandigarh</span>
             </h1>
 
-            <p className="text-sm sm:text-base md:text-lg text-slate-300 max-w-2xl mb-6 sm:mb-8 font-medium leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-slate-300 max-w-2xl mb-4 sm:mb-5 font-medium leading-relaxed">
               Open to <strong className="text-white">college &amp; university students</strong> across all States &amp; UTs. Join the battle at Sector 16 Stadium Chandigarh. 24 Teams. 5 Days. Ultimate T10 knockouts. Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-white font-bold hover:text-[#d8392f] underline underline-offset-2 transition-colors">Sarv Sewa Sashktikarn Sangthan (Regd)</a>.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mb-4 sm:mb-5">
-              <a href="/registration" className="px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white font-black italic text-base sm:text-lg md:text-xl uppercase tracking-wider rounded transition-all shadow-[0_10px_30px_rgba(220,38,38,0.6)] hover:shadow-[0_10px_40px_rgba(220,38,38,0.8)] hover:-translate-y-1 w-full sm:w-auto text-center border-b-4 border-[#7f1d1d] flex items-center justify-center gap-2">
-                <span>REGISTER TEAM</span>
-                <span className="bg-white/20 px-2 sm:px-2.5 py-0.5 rounded text-sm sm:text-base font-black">₹4,999</span>
+            {/* Boys Team Registration Completed - Flat Design */}
+            <div className="mb-5 sm:mb-6 max-w-2xl bg-[#0f1d38] border border-slate-700 rounded-lg p-3 sm:p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-white font-bold text-xs sm:text-sm uppercase tracking-wide">
+                      Boys Division Registrations Closed
+                    </span>
+                    <span className="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">
+                      16 / 16 Teams Full
+                    </span>
+                  </div>
+                  <p className="text-[11px] sm:text-xs text-slate-300 mt-0.5">
+                    All 16 Boys teams have officially registered! Limited slots remaining for <strong className="text-pink-400 font-bold">Girls Division</strong>.
+                  </p>
+                </div>
+              </div>
+              <a
+                href="#teams"
+                className="self-end sm:self-auto shrink-0 text-[11px] font-bold uppercase tracking-wider text-emerald-400 hover:text-emerald-300 flex items-center gap-1 hover:underline"
+              >
+                View 16 Teams <ChevronRight className="w-3.5 h-3.5" />
               </a>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 sm:gap-3.5 mb-5 sm:mb-6">
+              <a
+                href="/registration"
+                className="h-12 sm:h-13 px-6 sm:px-7 bg-[#d8392f] hover:bg-[#b91c1c] text-white font-bold text-sm sm:text-base uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2.5 w-full sm:w-auto"
+              >
+                <span>REGISTER TEAM</span>
+                <span className="bg-black/30 text-white px-2 py-0.5 rounded text-xs font-bold">
+                  ₹4,999
+                </span>
+              </a>
+
+              <a
+                href="/passes"
+                className="h-12 sm:h-13 px-6 sm:px-7 bg-[#f59e0b] hover:bg-[#d97706] text-slate-950 font-bold text-sm sm:text-base uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
+              >
+                <Ticket className="w-4 h-4 sm:w-5 sm:h-5 text-slate-950" />
+                <span>FREE MATCH PASS</span>
+                <span className="bg-slate-950/20 text-slate-950 px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider">
+                  FREE ENTRY
+                </span>
+              </a>
+
               <button
                 type="button"
                 onClick={() => setIsVideoModalOpen(true)}
-                className="group px-6 sm:px-8 py-3.5 sm:py-4 bg-white/10 hover:bg-white/20 border-2 border-white/40 hover:border-white text-white font-black italic text-base sm:text-lg md:text-xl uppercase tracking-wider rounded transition-all w-full sm:w-auto text-center flex items-center justify-center gap-3 backdrop-blur-sm cursor-pointer shadow-lg hover:shadow-red-500/20 hover:-translate-y-0.5"
+                className="h-12 sm:h-13 px-5 sm:px-6 bg-transparent hover:bg-white/10 border-2 border-white/60 hover:border-white text-white font-bold text-sm sm:text-base uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2.5 w-full sm:w-auto cursor-pointer"
               >
-                <div className="relative flex items-center justify-center">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-60"></span>
-                  <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6 text-red-500 fill-white group-hover:scale-110 transition-transform relative" />
-                </div>
+                <PlayCircle className="w-5 h-5 text-red-500 fill-white" />
                 <span>WATCH PROMO</span>
               </button>
             </div>
 
-            {/* Prominent Price Highlight Strip */}
-            <div className="inline-flex flex-wrap items-center gap-2 sm:gap-2.5 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-white/20 text-[11px] sm:text-xs text-slate-200 shadow-lg">
-              <div className="flex items-center gap-1.5 font-black text-amber-400 text-xs sm:text-sm italic">
+            {/* Flat Price Highlight Strip */}
+            <div className="inline-flex flex-wrap items-center gap-2.5 bg-[#0f1d38] px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-lg border border-slate-700 text-[11px] sm:text-xs text-slate-200">
+              <div className="flex items-center gap-1.5 font-bold text-amber-400 text-xs sm:text-sm">
                 <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
                 <span>₹4,999 / Team</span>
               </div>
-              <span className="text-white/40">•</span>
+              <span className="text-slate-600">•</span>
               <span className="font-semibold">Squad of 12 Players</span>
-              <span className="text-white/40">•</span>
-              <span className="text-emerald-400 font-bold bg-emerald-500/10 px-1.5 sm:px-2 py-0.5 rounded-md border border-emerald-500/20">
+              <span className="text-slate-600">•</span>
+              <span className="text-emerald-400 font-bold">
                 12x Official Jersey Kits Included
+              </span>
+              <span className="text-slate-600">•</span>
+              <span className="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded text-[11px]">
+                Boys Full (16/16)
               </span>
             </div>
           </div>
@@ -880,7 +931,7 @@ export default function Home() {
           {[
             { label: "Entry Fee", value: "₹4,999", sub: "12x Jersey Kits Included", highlight: true },
             { label: "Matches", value: "22", sub: "T10 Knockouts" },
-            { label: "Teams", value: "24", sub: "16 Boys • 8 Girls" },
+            { label: "Teams", value: "24", sub: "16 Boys (Full) • 8 Girls" },
             { label: "1st Prize", value: "₹51K", sub: "+ Official Trophy" }
           ].map((stat, i) => (
             <div key={i} className={`p-3.5 sm:p-5 md:p-6 text-center transition-colors cursor-pointer group ${stat.highlight ? 'bg-gradient-to-b from-amber-50/60 to-white' : 'hover:bg-slate-50'}`}>
@@ -1906,15 +1957,21 @@ export default function Home() {
           <div className="flex flex-wrap gap-2 md:gap-4 mb-8">
             <button
               onClick={() => setActiveTab('boys')}
-              className={`px-6 py-3 md:px-8 font-black italic uppercase tracking-wider md:text-lg rounded-xl transition-all border-b-4 ${activeTab === 'boys' ? 'bg-[#0b162c] text-white border-[#d8392f] shadow-lg scale-105' : 'bg-white text-slate-500 border-transparent hover:bg-slate-50 shadow-sm'}`}
+              className={`px-5 py-3 md:px-7 font-black italic uppercase tracking-wider md:text-lg rounded-xl transition-all border-b-4 flex items-center gap-2 ${activeTab === 'boys' ? 'bg-[#0b162c] text-white border-[#d8392f] shadow-lg scale-105' : 'bg-white text-slate-500 border-transparent hover:bg-slate-50 shadow-sm'}`}
             >
-              Boys Division (16)
+              <span>Boys Division (16)</span>
+              <span className="text-[10px] md:text-xs bg-emerald-500 text-white font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
+                Full
+              </span>
             </button>
             <button
               onClick={() => setActiveTab('girls')}
-              className={`px-6 py-3 md:px-8 font-black italic uppercase tracking-wider md:text-lg rounded-xl transition-all border-b-4 ${activeTab === 'girls' ? 'bg-[#0b162c] text-white border-[#d8392f] shadow-lg scale-105' : 'bg-white text-slate-500 border-transparent hover:bg-slate-50 shadow-sm'}`}
+              className={`px-5 py-3 md:px-7 font-black italic uppercase tracking-wider md:text-lg rounded-xl transition-all border-b-4 flex items-center gap-2 ${activeTab === 'girls' ? 'bg-[#0b162c] text-white border-[#d8392f] shadow-lg scale-105' : 'bg-white text-slate-500 border-transparent hover:bg-slate-50 shadow-sm'}`}
             >
-              Girls Division (8)
+              <span>Girls Division (8)</span>
+              <span className="text-[10px] md:text-xs bg-pink-500 text-white font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
+                Slots Open
+              </span>
             </button>
           </div>
 

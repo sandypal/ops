@@ -43,6 +43,17 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5 font-medium text-slate-400 text-sm">
               <li>
+                <Link href="/passes" className="text-amber-400 hover:text-amber-300 transition-colors font-bold flex items-center gap-1.5">
+                  <span>Free Match Passes</span>
+                  <span className="text-[9px] bg-amber-400/20 text-amber-300 px-1.5 py-0.2 rounded font-black uppercase">100% Free</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/verify-pass" className="text-slate-400 hover:text-slate-300 text-xs transition-colors">
+                  Gate Staff Verifier (PIN)
+                </Link>
+              </li>
+              <li>
                 <Link href="/#about" className="hover:text-[#d8392f] transition-colors">
                   About Tournament
                 </Link>
