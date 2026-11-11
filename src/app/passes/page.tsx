@@ -156,6 +156,18 @@ export default function PassesPage() {
       recordPassRegistrationLocally(passData, currentAttribution);
       refreshAdStats();
 
+      // Trigger Google Analytics 4 conversion event
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        try {
+          (window as any).gtag('event', 'pass_registration', {
+            event_category: 'Passes',
+            event_label: currentAttribution.source,
+            pass_code: passData.pass_code,
+            attendees: passData.quantity,
+          });
+        } catch {}
+      }
+
       // Trigger Meta Pixel conversion if available on page
       if (typeof window !== 'undefined' && (window as any).fbq) {
         try {
