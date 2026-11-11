@@ -272,6 +272,26 @@ export default function PassCard({ pass, onNewRegistration }: PassCardProps) {
               </div>
             </div>
           </div>
+
+          {/* Tournament Helpline & Support Contacts */}
+          <div className="bg-[#1a273e] border border-slate-700/80 rounded-lg p-3.5 mt-4 text-xs">
+            <span className="text-[10px] font-black uppercase text-amber-400 block mb-1 tracking-wider">
+              Tournament Helpline &amp; Inquiries:
+            </span>
+            <div className="text-slate-200 font-bold text-xs flex flex-wrap items-center gap-x-3 gap-y-1">
+              <a href="tel:+919056333759" className="hover:text-amber-400 transition-colors">+91 90563 33759 (Helpline)</a>
+              <span className="text-slate-500 hidden sm:inline">&bull;</span>
+              <a href="tel:+918437409211" className="hover:text-amber-400 transition-colors">+91 84374 09211 (Vishal)</a>
+              <span className="text-slate-500 hidden sm:inline">&bull;</span>
+              <a href="tel:+919855109159" className="hover:text-amber-400 transition-colors">+91 98551 09159 (Karan Sama)</a>
+            </div>
+            <div className="text-slate-400 text-[11px] mt-1.5 flex flex-wrap items-center gap-2">
+              <span>Email:</span>
+              <a href="mailto:helposcricketcup@gmail.com" className="text-slate-300 underline hover:text-white font-mono">
+                helposcricketcup@gmail.com
+              </a>
+            </div>
+          </div>
         </div>
 
         {/* Card Footer */}
