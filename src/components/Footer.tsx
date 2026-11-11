@@ -111,8 +111,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/registration" className="text-amber-400 hover:text-amber-300 font-bold transition-colors">
-                  Register Team (₹4,999)
+                <Link href="/registration" className="text-red-400 hover:text-red-300 font-bold transition-colors inline-flex items-center gap-1.5">
+                  <span>Registration Closed</span>
+                  <span className="text-[10px] bg-red-950/80 text-red-300 border border-red-500/40 px-1.5 py-0.2 rounded font-bold uppercase">Full</span>
                 </Link>
               </li>
             </ul>

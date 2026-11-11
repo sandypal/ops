@@ -709,9 +709,9 @@ export default function Home() {
                 <Users className="w-3.5 h-3.5 text-blue-300" />
                 Colleges & Universities
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-emerald-950/80 border border-emerald-500/70 text-emerald-300 text-[11px] font-bold uppercase tracking-wider">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                Boys Teams: 16/16 Full
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-red-950/80 border border-red-500/70 text-red-300 text-[11px] font-bold uppercase tracking-wider">
+                <Lock className="w-3.5 h-3.5 text-red-400" />
+                Registrations Closed • 24/24 Full
               </div>
             </div>
 
@@ -725,53 +725,54 @@ export default function Home() {
               Open to <strong className="text-white">college &amp; university students</strong> across all States &amp; UTs. Join the battle at Sector 16 Stadium Chandigarh. 24 Teams. 5 Days. Ultimate T10 knockouts. Organized by <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="text-white font-bold hover:text-[#d8392f] underline underline-offset-2 transition-colors">Sarv Sewa Sashktikarn Sangthan (Regd)</a>.
             </p>
 
-            {/* Boys Team Registration Completed - Flat Design */}
-            <div className="mb-5 sm:mb-6 max-w-2xl bg-[#0f1d38] border border-slate-700 rounded-lg p-3 sm:p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            {/* Team Registration Closed - Flat Design */}
+            <div className="mb-5 sm:mb-6 max-w-2xl bg-[#0f1d38] border border-red-900/60 rounded-lg p-3 sm:p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded bg-emerald-600 text-white flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="w-5 h-5" />
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded bg-red-600 text-white flex items-center justify-center shrink-0">
+                  <Lock className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-white font-bold text-xs sm:text-sm uppercase tracking-wide">
-                      Boys Division Registrations Closed
+                      Tournament Registrations Closed
                     </span>
-                    <span className="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">
-                      16 / 16 Teams Full
+                    <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">
+                      All 24 Teams Full
                     </span>
                   </div>
                   <p className="text-[11px] sm:text-xs text-slate-300 mt-0.5">
-                    All 16 Boys teams have officially registered! Limited slots remaining for <strong className="text-pink-400 font-bold">Girls Division</strong>.
+                    Official registrations are now closed for both Boys and Girls divisions. All 24 tournament team slots are filled.
                   </p>
                 </div>
               </div>
               <a
                 href="#teams"
-                className="self-end sm:self-auto shrink-0 text-[11px] font-bold uppercase tracking-wider text-emerald-400 hover:text-emerald-300 flex items-center gap-1 hover:underline"
+                className="self-end sm:self-auto shrink-0 text-[11px] font-bold uppercase tracking-wider text-amber-400 hover:text-amber-300 flex items-center gap-1 hover:underline"
               >
-                View 16 Teams <ChevronRight className="w-3.5 h-3.5" />
+                View 24 Teams <ChevronRight className="w-3.5 h-3.5" />
               </a>
             </div>
 
             <div className="flex flex-wrap items-center gap-3 sm:gap-3.5 mb-5 sm:mb-6">
               <a
-                href="/registration"
-                className="h-12 sm:h-13 px-6 sm:px-7 bg-[#d8392f] hover:bg-[#b91c1c] text-white font-bold text-sm sm:text-base uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2.5 w-full sm:w-auto"
-              >
-                <span>REGISTER TEAM</span>
-                <span className="bg-black/30 text-white px-2 py-0.5 rounded text-xs font-bold">
-                  ₹4,999
-                </span>
-              </a>
-
-              <a
                 href="/passes"
-                className="h-12 sm:h-13 px-6 sm:px-7 bg-[#f59e0b] hover:bg-[#d97706] text-slate-950 font-bold text-sm sm:text-base uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
+                className="h-12 sm:h-13 px-6 sm:px-7 bg-[#f59e0b] hover:bg-[#d97706] text-slate-950 font-black text-sm sm:text-base uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-amber-500/20"
               >
                 <Ticket className="w-4 h-4 sm:w-5 sm:h-5 text-slate-950" />
                 <span>FREE MATCH PASS</span>
                 <span className="bg-slate-950/20 text-slate-950 px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider">
                   FREE ENTRY
+                </span>
+              </a>
+
+              <a
+                href="/registration"
+                className="h-12 sm:h-13 px-5 sm:px-6 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-bold text-sm sm:text-base uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
+              >
+                <Lock className="w-4 h-4 text-red-400" />
+                <span>REGISTRATION CLOSED</span>
+                <span className="bg-red-950/80 text-red-300 border border-red-500/40 text-[10px] font-bold px-2 py-0.5 rounded uppercase">
+                  FULL
                 </span>
               </a>
 
@@ -798,8 +799,9 @@ export default function Home() {
                 12x Official Jersey Kits Included
               </span>
               <span className="text-slate-600">•</span>
-              <span className="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded text-[11px]">
-                Boys Full (16/16)
+              <span className="bg-red-600 text-white font-bold px-2 py-0.5 rounded text-[11px] inline-flex items-center gap-1">
+                <Lock className="w-3 h-3" />
+                Registrations Closed (24/24 Full)
               </span>
             </div>
           </div>
@@ -915,10 +917,11 @@ export default function Home() {
               );
             })}
             <a
-              href="/registration"
+              href="/#teams"
               className="text-[11px] sm:text-xs font-black text-amber-400 hover:text-amber-300 hover:underline uppercase tracking-wider shrink-0 flex items-center gap-1 ml-1 sm:ml-2"
             >
-              <span>+ Register Your Team (₹4,999)</span>
+              <Lock className="w-3 h-3 text-red-400" />
+              <span>Registrations Closed • View 24 Teams</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </a>
           </div>
@@ -931,7 +934,7 @@ export default function Home() {
           {[
             { label: "Entry Fee", value: "₹4,999", sub: "12x Jersey Kits Included", highlight: true },
             { label: "Matches", value: "22", sub: "T10 Knockouts" },
-            { label: "Teams", value: "24", sub: "16 Boys (Full) • 8 Girls" },
+            { label: "Teams", value: "24", sub: "All 24 Confirmed (Closed)" },
             { label: "1st Prize", value: "₹51K", sub: "+ Official Trophy" }
           ].map((stat, i) => (
             <div key={i} className={`p-3.5 sm:p-5 md:p-6 text-center transition-colors cursor-pointer group ${stat.highlight ? 'bg-gradient-to-b from-amber-50/60 to-white' : 'hover:bg-slate-50'}`}>
@@ -1889,23 +1892,24 @@ export default function Home() {
           </div>
 
           {/* Registration Price & Kit Inclusions Callout Card */}
-          <div className="mt-8 sm:mt-10 bg-gradient-to-r from-[#0b162c] via-[#152342] to-[#0b162c] text-white rounded-3xl p-5 sm:p-6 md:p-8 flex flex-col lg:flex-row items-center gap-6 justify-between shadow-2xl border-2 border-amber-400/80 relative overflow-hidden">
+          <div className="mt-8 sm:mt-10 bg-gradient-to-r from-[#0b162c] via-[#152342] to-[#0b162c] text-white rounded-3xl p-5 sm:p-6 md:p-8 flex flex-col lg:flex-row items-center gap-6 justify-between shadow-2xl border-2 border-red-500/50 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#d8392f]/20 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="relative z-10 text-left">
               <div className="flex items-center gap-2 mb-2">
-                <span className="bg-[#d8392f] text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2.5 sm:px-3 py-0.5 rounded-full">
-                  Official Squad Entry
+                <span className="bg-red-600 text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2.5 sm:px-3 py-0.5 rounded-full inline-flex items-center gap-1">
+                  <Lock className="w-3 h-3 text-white" />
+                  Registrations Closed
                 </span>
                 <span className="text-xs text-amber-400 font-bold flex items-center gap-1">
-                  <Trophy className="w-3.5 h-3.5" /> 24 Teams Only
+                  <Trophy className="w-3.5 h-3.5" /> All 24 Teams Locked
                 </span>
               </div>
               <h3 className="font-black text-2xl sm:text-3xl md:text-4xl uppercase italic tracking-tighter text-white">
-                Team Registration Fee: <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-200 to-[#fb923c]">₹4,999/-</span>
+                Tournament Registration: <span className="text-red-400">Closed</span>
               </h3>
               <p className="font-medium text-slate-300 text-xs sm:text-sm mt-1 max-w-xl">
-                Fixed squad of 12 players (11 Playing XI + 1 Extra) • Sector 16 Stadium, Chandigarh • 5-Day Event
+                All 24 team slots (16 Boys &amp; 8 Girls) are officially confirmed and locked. Sector 16 Stadium, Chandigarh • 5-Day Event
               </p>
 
               <div className="flex flex-wrap gap-x-4 sm:gap-x-5 gap-y-2 mt-3 sm:mt-4 pt-3 border-t border-white/10 text-xs text-slate-300 font-medium">
@@ -1927,13 +1931,13 @@ export default function Home() {
             <div className="relative z-10 w-full lg:w-auto shrink-0 flex flex-col sm:flex-row lg:flex-col gap-2.5 sm:gap-3">
               <a
                 href="/registration"
-                className="px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] hover:from-[#b91c1c] hover:to-[#991b1b] text-white font-black italic text-base sm:text-lg uppercase tracking-wider rounded-2xl transition-all shadow-[0_10px_25px_rgba(239,68,68,0.5)] hover:shadow-[0_10px_35px_rgba(239,68,68,0.7)] hover:-translate-y-0.5 text-center flex items-center justify-center gap-2 border-b-4 border-[#7f1d1d]"
+                className="px-6 sm:px-8 py-3.5 sm:py-4 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-black italic text-base sm:text-lg uppercase tracking-wider rounded-2xl transition-all shadow-md text-center flex items-center justify-center gap-2"
               >
-                <span>REGISTER TEAM NOW</span>
-                <ChevronRight className="w-5 h-5" />
+                <Lock className="w-5 h-5 text-red-400" />
+                <span>REGISTRATION CLOSED</span>
               </a>
               <span className="text-[10px] sm:text-[11px] text-center text-slate-400 font-medium">
-                Instant Online Easebuzz Checkout
+                All 24 Squad Slots Full
               </span>
             </div>
           </div>
@@ -1949,8 +1953,9 @@ export default function Home() {
                 TOURNAMENT <span className="text-[#d8392f]">TEAMS</span>
               </h2>
             </div>
-            <a href="/registration" className="hidden md:flex items-center gap-1 font-bold text-[#d8392f] hover:text-[#b91c1c] uppercase tracking-wider text-sm">
-              Register Yours <ChevronRight className="w-4 h-4" />
+            <a href="/registration" className="hidden md:flex items-center gap-1.5 font-bold text-slate-400 hover:text-slate-300 uppercase tracking-wider text-sm">
+              <Lock className="w-3.5 h-3.5 text-red-400" />
+              <span>Registrations Closed</span>
             </a>
           </div>
 
@@ -1969,8 +1974,8 @@ export default function Home() {
               className={`px-5 py-3 md:px-7 font-black italic uppercase tracking-wider md:text-lg rounded-xl transition-all border-b-4 flex items-center gap-2 ${activeTab === 'girls' ? 'bg-[#0b162c] text-white border-[#d8392f] shadow-lg scale-105' : 'bg-white text-slate-500 border-transparent hover:bg-slate-50 shadow-sm'}`}
             >
               <span>Girls Division (8)</span>
-              <span className="text-[10px] md:text-xs bg-pink-500 text-white font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
-                Slots Open
+              <span className="text-[10px] md:text-xs bg-emerald-500 text-white font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
+                Full
               </span>
             </button>
           </div>
@@ -2658,11 +2663,11 @@ export default function Home() {
               </span>
               <a
                 href="/registration"
-                className="text-amber-400 hover:text-amber-300 font-bold uppercase tracking-wider text-[11px] flex items-center gap-1"
+                className="text-slate-400 hover:text-slate-300 font-bold uppercase tracking-wider text-[11px] flex items-center gap-1"
                 onClick={() => setIsVideoModalOpen(false)}
               >
-                <span>Register Team (₹4,999)</span>
-                <ChevronRight className="w-3.5 h-3.5" />
+                <Lock className="w-3 h-3 text-red-400" />
+                <span>Registration Closed</span>
               </a>
             </div>
           </div>

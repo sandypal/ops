@@ -15,6 +15,8 @@ import {
   Shield,
   Maximize2,
   Layers,
+  Lock,
+  Ticket,
 } from "lucide-react";
 import { GALLERY_ITEMS } from "@/components/TournamentGallery";
 
@@ -408,25 +410,25 @@ export default function GalleryClient() {
                 Join the Action in 2026
               </span>
               <h3 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase italic text-white mb-4">
-                WANT TO BE PART OF THIS YEAR'S GLORY?
+                EXPERIENCE THE LIVE ACTION
               </h3>
-              <p className="text-slate-300 text-sm sm:text-base mb-8">
-                Registrations are currently open for 24 collegiate teams across
-                India. Compete for ₹2,00,000 cash prizes under stadium
-                floodlights.
+              <p className="text-slate-300 text-sm sm:text-base mb-8 max-w-2xl mx-auto">
+                Official team registrations are now closed (all 24 collegiate squad slots locked). Claim your Free Match Pass to watch the action live under Sector 16 Stadium floodlights!
               </p>
               <div className="flex flex-wrap items-center justify-center gap-4">
                 <Link
-                  href="/registration"
-                  className="px-8 py-3.5 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] hover:from-[#b91c1c] hover:to-[#991b1b] text-white rounded-xl font-black text-sm uppercase tracking-wider shadow-[0_0_20px_rgba(216,57,47,0.5)] transition-all"
+                  href="/passes"
+                  className="px-8 py-3.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl font-black text-sm uppercase tracking-wider shadow-[0_0_20px_rgba(245,158,11,0.4)] transition-all flex items-center gap-2"
                 >
-                  Register Team Now
+                  <Ticket className="w-4 h-4 text-slate-950" />
+                  <span>Claim Free Match Pass</span>
                 </Link>
                 <Link
-                  href="/"
-                  className="px-8 py-3.5 bg-white/10 hover:bg-white/15 text-white rounded-xl font-bold text-sm uppercase tracking-wider border border-white/15 transition-all"
+                  href="/#teams"
+                  className="px-8 py-3.5 bg-white/10 hover:bg-white/15 text-white rounded-xl font-bold text-sm uppercase tracking-wider border border-white/15 transition-all flex items-center gap-2"
                 >
-                  Back to Homepage
+                  <Lock className="w-4 h-4 text-red-400" />
+                  <span>View 24 Confirmed Teams</span>
                 </Link>
               </div>
             </div>

@@ -30,7 +30,8 @@ import {
   Mail,
   FileCheck,
   Lock,
-  BadgeCheck
+  BadgeCheck,
+  Ticket
 } from 'lucide-react';
 
 // Fallback teams if backend API is initializing
@@ -225,123 +226,7 @@ export default function RegistrationPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMessage("");
-
-    if (!selectedTeam) {
-      setErrorMessage("Please select your team.");
-      return;
-    }
-
-    const currentTeam = [...dbBoysTeams, ...dbGirlsTeams].find(t => t.name === selectedTeam);
-    if (currentTeam && (currentTeam.status === 'registered' || (currentTeam as any).is_registered)) {
-      setErrorMessage(`The team "${selectedTeam}" has already completed payment & registration. Please choose an available team.`);
-      return;
-    }
-
-    if (!agreed) {
-      setErrorMessage("Please accept the tournament playing conditions and fee terms.");
-      return;
-    }
-
-    // Validation: check players (Name, Jersey #, Mobile, Age, and Kit Sizes are required; Student ID is optional)
-    for (let i = 0; i < 12; i++) {
-      if (!players[i].name.trim()) {
-        setActivePlayer(i);
-        setErrorMessage(`Please enter Full Name for Player #${i + 1}`);
-        return;
-      }
-      if (!players[i].jerseyNumber || !players[i].jerseyNumber.trim()) {
-        setActivePlayer(i);
-        setErrorMessage(`Please enter Jersey Number for Player #${i + 1} (${players[i].name})`);
-        return;
-      }
-      if (!players[i].phone || !players[i].phone.trim()) {
-        setActivePlayer(i);
-        setErrorMessage(`Please enter Mobile Number for Player #${i + 1} (${players[i].name})`);
-        return;
-      }
-      if (!players[i].age || !players[i].age.trim()) {
-        setActivePlayer(i);
-        setErrorMessage(`Please enter Age for Player #${i + 1} (${players[i].name})`);
-        return;
-      }
-      if (!players[i].tshirtSize) {
-        setActivePlayer(i);
-        setErrorMessage(`Please select T-Shirt Kit Size for Player #${i + 1} (${players[i].name})`);
-        return;
-      }
-      if (!players[i].lowerSize) {
-        setActivePlayer(i);
-        setErrorMessage(`Please select Lower Kit Size for Player #${i + 1} (${players[i].name})`);
-        return;
-      }
-    }
-
-    const captain = players[captainIndex];
-
-    setIsSubmitting(true);
-
-    try {
-      // Determine division
-      let division = 'boys';
-      const foundInGirls = dbGirlsTeams.some(t => t.name === selectedTeam) || defaultGirlsTeams.includes(selectedTeam);
-      if (foundInGirls) division = 'girls';
-
-      const formData = new FormData();
-      if (selectedTeamId) formData.append('team_id', String(selectedTeamId));
-      formData.append('team_name', selectedTeam);
-      formData.append('division', division);
-      formData.append('captain_name', captain.name);
-      formData.append('captain_phone', captain.phone);
-      if (captainEmail) formData.append('captain_email', captainEmail);
-      formData.append('vice_captain_name', players[viceCaptainIndex]?.name || '');
-
-      // Format players data payload
-      const formattedPlayers = players.map((p, idx) => ({
-        name: p.name,
-        jersey_number: p.jerseyNumber,
-        phone: p.phone,
-        age: p.age,
-        blood_group: p.bloodGroup,
-        tshirt_size: p.tshirtSize,
-        lower_size: p.lowerSize,
-        is_captain: idx === captainIndex,
-        is_vice_captain: idx === viceCaptainIndex,
-      }));
-
-      formData.append('players', JSON.stringify(formattedPlayers));
-
-      // Append student ID files & optional profile photos
-      players.forEach((p, idx) => {
-        if (p.studentIdFile) {
-          formData.append(`player_file_${idx}`, p.studentIdFile);
-        }
-        if (p.profileImageFile) {
-          formData.append(`player_photo_${idx}`, p.profileImageFile);
-        }
-      });
-
-      const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://sarvsewabharat.org/api/api/';
-      const baseApiUrl = rawApiUrl.replace(/\/+$/, '');
-      const response = await fetch(`${baseApiUrl}/tournament/register`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (data.status === 'success' && data.payment_url) {
-        // Redirect to Easebuzz checkout
-        window.location.href = data.payment_url;
-      } else {
-        setIsSubmitting(false);
-        setErrorMessage(data.message || data.details?.error_desc || 'Payment initiation failed. Please try again.');
-      }
-    } catch (err: any) {
-      console.error(err);
-      setIsSubmitting(false);
-      setErrorMessage(err.message || 'Could not connect to registration server. Please check your internet connection.');
-    }
+    setErrorMessage("Team registrations for Operation Sindoor Cricket Cup 2.0 are officially closed. All 24 tournament team slots are locked.");
   };
 
   const isSelectedGirls = dbGirlsTeams.some(t => t.name === selectedTeam) || defaultGirlsTeams.includes(selectedTeam);
@@ -408,6 +293,10 @@ export default function RegistrationPage() {
           </div>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-800 border border-red-300 text-xs font-bold uppercase tracking-wider mb-2">
+                <Lock className="w-3.5 h-3.5 text-red-600" />
+                Registrations Closed • 24/24 Teams Locked
+              </div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-tighter italic text-[#0b162c] leading-tight">
                 Official Team <span className="text-[#d8392f]">Registration</span>
               </h1>
@@ -416,15 +305,61 @@ export default function RegistrationPage() {
               </p>
             </div>
 
-            {/* Quick Fee Badge */}
-            <div className="bg-[#0b162c] text-white px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-2xl border-l-4 border-[#d8392f] shadow-md flex items-center gap-3 sm:gap-4 self-start md:self-auto">
+            {/* Status Closed Badge */}
+            <div className="bg-[#0b162c] text-white px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-2xl border-l-4 border-red-500 shadow-md flex items-center gap-3 sm:gap-4 self-start md:self-auto">
               <div>
-                <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-400 font-bold block">Entry Fee</span>
-                <span className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-[#fb923c] italic leading-none">
-                  ₹4,999/-
+                <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-400 font-bold block">Status</span>
+                <span className="text-xl sm:text-2xl font-black text-red-400 italic leading-none uppercase">
+                  Closed
                 </span>
               </div>
-              <span className="text-[11px] sm:text-xs bg-white/10 px-2 sm:px-2.5 py-1 rounded text-slate-300 font-semibold">12 Players • Jersey Kit Included</span>
+              <span className="text-[11px] sm:text-xs bg-red-950/80 border border-red-500/40 text-red-300 px-2 sm:px-2.5 py-1 rounded font-semibold">
+                All 24 Squads Confirmed
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Prominent Registration Closed Notice */}
+        <div className="mb-8 bg-gradient-to-r from-red-950 via-[#1f0b0b] to-[#0b162c] text-white p-5 sm:p-6 rounded-3xl border-2 border-red-500/80 shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-red-600/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-red-600 text-white flex items-center justify-center shrink-0 shadow-lg mt-0.5">
+                <Lock className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <span className="text-red-300 font-black text-[11px] uppercase tracking-widest bg-red-900/60 px-2.5 py-0.5 rounded-full border border-red-700">
+                    Official Notice
+                  </span>
+                  <span className="bg-red-600 text-white text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
+                    24 / 24 Teams Full
+                  </span>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-black uppercase italic tracking-tight text-white">
+                  Team Registrations Are Officially Closed
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-300 font-medium mt-1 max-w-2xl leading-relaxed">
+                  All 24 collegiate cricket squad slots (16 Boys &amp; 8 Girls divisions) for Operation Sindoor Cricket Cup 2.0 at Sector 16 Stadium, Chandigarh have officially been locked. No further team entries are being accepted. Free match passes are still available for spectators!
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0 self-stretch md:self-auto">
+              <Link
+                href="/passes"
+                className="w-full sm:w-auto px-5 py-3 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+              >
+                <Ticket className="w-4 h-4 text-slate-950" />
+                <span>Claim Free Match Pass</span>
+              </Link>
+              <a
+                href="tel:+919056333759"
+                className="w-full sm:w-auto px-4 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2"
+              >
+                <Phone className="w-4 h-4 text-amber-400" />
+                <span>Helpdesk</span>
+              </a>
             </div>
           </div>
         </div>
@@ -461,17 +396,17 @@ export default function RegistrationPage() {
               <div className="shrink-0 bg-slate-50 border border-slate-200 rounded-2xl p-3 sm:p-4 min-w-[220px] sm:min-w-[240px]">
                 <div className="flex items-center justify-between text-xs font-bold text-slate-700 mb-1.5">
                   <span>Slots Confirmed</span>
-                  <span className="text-emerald-700 font-black">{confirmedTeams.length} / 24 Teams</span>
+                  <span className="text-emerald-700 font-black">24 / 24 Teams Full</span>
                 </div>
                 <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
                   <div
                     className="bg-gradient-to-r from-emerald-500 to-teal-600 h-full rounded-full transition-all duration-500"
-                    style={{ width: `${Math.max(4, (confirmedTeams.length / 24) * 100)}%` }}
+                    style={{ width: '100%' }}
                   />
                 </div>
                 <div className="flex items-center justify-between text-[10px] text-slate-500 font-semibold mt-1.5">
-                  <span className="text-amber-600 font-bold">⚡ {24 - confirmedTeams.length} Slots Open</span>
-                  <span>Knockout Bracket</span>
+                  <span className="text-red-600 font-bold">🔒 Registrations Closed</span>
+                  <span>Knockout Bracket Locked</span>
                 </div>
               </div>
 
@@ -576,29 +511,26 @@ export default function RegistrationPage() {
               );
             })}
 
-            {/* Prompt Card: Claim Open Slot */}
-            <div className="w-[260px] sm:w-[280px] md:w-[300px] shrink-0 snap-start rounded-2xl border-2 border-dashed border-[#d8392f]/40 bg-gradient-to-b from-red-50/50 via-white to-red-50/30 p-4 sm:p-5 flex flex-col justify-between text-center group hover:border-[#d8392f] transition-all">
+            {/* Prompt Card: Bracket Full */}
+            <div className="w-[260px] sm:w-[280px] md:w-[300px] shrink-0 snap-start rounded-2xl border-2 border-red-200 bg-gradient-to-b from-red-50/50 via-white to-red-50/30 p-4 sm:p-5 flex flex-col justify-between text-center group">
               <div className="py-2">
-                <div className="w-24 h-24 sm:w-28 sm:h-28 mx-auto mb-3.5 rounded-2xl bg-white border border-red-200 flex items-center justify-center text-[#d8392f] shadow-sm group-hover:scale-105 transition-transform">
-                  <Sparkles className="w-12 h-12" />
+                <div className="w-24 h-24 sm:w-28 sm:h-28 mx-auto mb-3.5 rounded-2xl bg-white border border-red-200 flex items-center justify-center text-red-600 shadow-sm">
+                  <Lock className="w-12 h-12" />
                 </div>
                 <h3 className="font-black text-sm uppercase italic text-[#0b162c]">
-                  Your Team Identity
+                  All 24 Slots Locked
                 </h3>
                 <p className="text-xs text-slate-500 font-medium mt-1 line-clamp-2">
-                  Claim your desired river franchise before another team locks it!
+                  Official team registration is closed. Spectator passes are free to claim!
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  const formEl = document.getElementById('registration-form');
-                  formEl?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="w-full py-2.5 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white rounded-xl text-xs font-black uppercase italic tracking-wider shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+              <Link
+                href="/passes"
+                className="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black uppercase italic tracking-wider shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <span>Claim Open Slot (₹4,999) ↓</span>
-              </button>
+                <Ticket className="w-3.5 h-3.5" />
+                <span>Claim Free Pass →</span>
+              </Link>
             </div>
           </div>
         </section>
@@ -817,6 +749,28 @@ export default function RegistrationPage() {
           <div className="lg:col-span-7 xl:col-span-8 space-y-6 order-1 lg:order-2">
 
             <form onSubmit={handleSubmit} className="space-y-6">
+
+              {/* Registration Closed Alert Box */}
+              <div className="bg-red-50 border-2 border-red-400 p-4 sm:p-5 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-red-950 shadow-sm">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-red-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                    <Lock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <strong className="font-black block uppercase text-sm tracking-wider text-red-800">Team Registrations Officially Closed</strong>
+                    <p className="text-xs text-red-700 mt-0.5 leading-relaxed">
+                      All 24 team slots have been locked. New squad submissions are inactive. If your squad has already registered and you need assistance regarding jersey sizes or match reporting, please call our helpline below.
+                    </p>
+                  </div>
+                </div>
+                <Link
+                  href="/passes"
+                  className="shrink-0 px-4 py-2.5 bg-[#0b162c] text-white hover:bg-slate-900 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-colors self-end sm:self-auto"
+                >
+                  <Ticket className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Free Match Pass</span>
+                </Link>
+              </div>
 
               {/* Error Banner */}
               {errorMessage && (
@@ -1464,22 +1418,12 @@ export default function RegistrationPage() {
                   </div>
 
                   <button
-                    type="submit"
-                    disabled={!agreed || isSubmitting}
-                    className={`w-full sm:w-auto px-8 py-3.5 font-black italic text-base uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 ${agreed && !isSubmitting
-                      ? 'bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white shadow-[0_5px_20px_rgba(239,68,68,0.5)] hover:shadow-[0_5px_25px_rgba(239,68,68,0.7)] hover:-translate-y-0.5'
-                      : 'bg-slate-700 text-slate-400 opacity-60 cursor-not-allowed'
-                      }`}
+                    type="button"
+                    disabled
+                    className="w-full sm:w-auto px-8 py-3.5 font-black italic text-base uppercase tracking-wider rounded-xl bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-700 flex items-center justify-center gap-2"
                   >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" /> Redirecting to Easebuzz Payment...
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle2 className="w-5 h-5" /> Pay ₹4,999 & Confirm Team
-                      </>
-                    )}
+                    <Lock className="w-5 h-5 text-red-400" />
+                    <span>Registration Closed (Full)</span>
                   </button>
                 </div>
 

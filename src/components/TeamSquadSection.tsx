@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Shirt, Clock, Sparkles, CheckCircle2, ShieldCheck, UserCheck, Shield } from 'lucide-react';
+import { Shirt, Clock, Sparkles, CheckCircle2, ShieldCheck, UserCheck, Shield, Lock } from 'lucide-react';
 import { teamsData, SquadPlayer } from '@/data/teamsData';
 
 export interface RegisteredPlayer {
@@ -578,30 +578,29 @@ export default function TeamSquadSection({
               href="/registration"
               className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-colors shadow-2xs text-center"
             >
-              Register Another
+              All 24 Squads
             </Link>
           </div>
         </div>
       ) : (
         <div className="p-5 bg-slate-50 border-t border-slate-200 space-y-3">
           <div className="flex items-baseline justify-between">
-            <span className="text-[11px] font-bold text-slate-500 uppercase">Registration Fee</span>
+            <span className="text-[11px] font-bold text-slate-500 uppercase">Registration Status</span>
             <div className="text-right">
-              <span className="text-xl font-black text-[#0b162c]">₹4,999/-</span>
-              <span className="text-[10px] text-emerald-600 font-bold block">Includes 12 Custom Kits</span>
+              <span className="text-base font-black text-red-600 uppercase">Closed</span>
+              <span className="text-[10px] text-slate-500 font-bold block">All 24 Slots Filled</span>
             </div>
           </div>
 
-          <Link
-            href={`/registration?team=${encodeURIComponent(teamName)}`}
-            className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#d8392f] hover:bg-[#b91c1c] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-sm transition-colors"
+          <div
+            className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 bg-slate-800 text-slate-300 font-bold text-xs uppercase tracking-wider rounded-xl shadow-sm border border-slate-700"
           >
-            <Sparkles className="w-3.5 h-3.5" />
-            Register This Team Now
-          </Link>
+            <Lock className="w-3.5 h-3.5 text-red-400" />
+            Registration Closed
+          </div>
 
           <p className="text-[10px] text-slate-400 text-center">
-            Auto-locked once payment succeeds.
+            Tournament squad registrations are officially closed.
           </p>
         </div>
       )}

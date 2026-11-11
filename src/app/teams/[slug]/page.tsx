@@ -20,7 +20,8 @@ import {
   Phone,
   CheckCircle2,
   Calendar,
-  Award
+  Award,
+  Lock
 } from 'lucide-react';
 
 interface Props {
@@ -218,13 +219,12 @@ export default async function TeamDetailPage({ params }: Props) {
                     View Official Squad
                   </a>
                 ) : (
-                  <Link
-                    href={`/registration?team=${encodeURIComponent(team.name)}`}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#d8392f] hover:bg-[#b91c1c] text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl shadow-sm transition-colors"
+                  <span
+                    className="inline-flex items-center gap-2 px-5 py-3 bg-slate-800 text-slate-300 font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl border border-slate-700 shadow-sm"
                   >
-                    <Sparkles className="w-4 h-4" />
-                    Register This Team
-                  </Link>
+                    <Lock className="w-4 h-4 text-red-400" />
+                    Registration Closed
+                  </span>
                 )}
                 <Link
                   href="/#teams"

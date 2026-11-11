@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Menu, X, Phone, Trophy, ChevronRight, Ticket } from 'lucide-react';
+import { Menu, X, Phone, Trophy, ChevronRight, Ticket, Lock } from 'lucide-react';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -17,6 +17,11 @@ export default function Header() {
             <a href="https://sarvsewabharat.org/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
               SARV SEWA SASHKTIKARN SANGTHAN (REGD)
             </a>
+            <span className="text-white/20">|</span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-red-400 bg-red-950/80 px-2 py-0.5 rounded border border-red-800/50">
+              <Lock className="w-3 h-3 text-red-400" />
+              Team Registration Closed • 24/24 Full
+            </span>
           </div>
           <div className="flex items-center gap-4 font-semibold tracking-wider text-slate-300">
             <span>INDIAN ARMED FORCES TRIBUTE</span>
@@ -74,9 +79,10 @@ export default function Header() {
               </Link>
               <Link 
                 href="/registration" 
-                className="px-4 py-2.5 bg-[#d8392f] hover:bg-[#b91c1c] text-white rounded-lg transition-colors font-black uppercase text-xs sm:text-[13px] tracking-wider inline-flex items-center select-none border-b-2 border-red-900"
+                className="px-3.5 py-2.5 bg-slate-800/90 hover:bg-slate-800 text-slate-200 hover:text-white rounded-lg transition-colors font-bold uppercase text-xs sm:text-[13px] tracking-wider inline-flex items-center gap-1.5 select-none border border-slate-700 border-b-2 border-b-red-600"
               >
-                Register Team
+                <Lock className="w-3.5 h-3.5 text-red-400" />
+                <span>Registration Closed</span>
               </Link>
             </div>
 
@@ -103,10 +109,10 @@ export default function Header() {
             </Link>
             <Link 
               href="/registration" 
-              className="w-full py-2.5 px-2 bg-[#d8392f] hover:bg-[#b91c1c] text-white rounded-lg font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1 transition-colors border-b-2 border-red-900"
+              className="w-full py-2.5 px-2 bg-slate-800 hover:bg-slate-750 text-slate-200 rounded-lg font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1 transition-colors border border-slate-700 border-b-2 border-b-red-600"
             >
-              <span>Register Team</span>
-              <span className="text-[10px] bg-black/25 px-1.5 py-0.5 rounded font-bold">₹4,999</span>
+              <Lock className="w-3.5 h-3.5 text-red-400 shrink-0" />
+              <span>Registration Closed</span>
             </Link>
           </div>
         </div>
@@ -215,10 +221,10 @@ export default function Header() {
                 <Link 
                   href="/registration" 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full py-3 bg-gradient-to-r from-[#d8392f] to-[#b91c1c] text-white rounded-xl font-black italic tracking-wider text-center uppercase shadow-lg text-sm flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-slate-800 hover:bg-slate-750 text-slate-200 rounded-xl font-bold tracking-wider text-center uppercase shadow-lg text-sm flex items-center justify-center gap-2 border border-slate-700"
                 >
-                  <Trophy className="w-4 h-4 text-amber-300" />
-                  <span>Register Squad • ₹4,999</span>
+                  <Lock className="w-4 h-4 text-red-400" />
+                  <span>Team Registration Closed (24/24 Full)</span>
                 </Link>
               </div>
             </div>

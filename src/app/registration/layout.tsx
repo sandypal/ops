@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Team Registration | Operation Sindoor Cricket Cup 2.0",
+  title: "Team Registration (Closed) | Operation Sindoor Cricket Cup 2.0",
   description:
-    "Register your 12-player collegiate cricket squad for Operation Sindoor Cricket Cup 2.0 at Sector 16 Stadium, Chandigarh. ₹4,999 entry fee includes 12 official custom player jersey kits. Limited tournament slots available!",
+    "Official team registrations are now closed. All 24 collegiate cricket squads for Operation Sindoor Cricket Cup 2.0 at Sector 16 Stadium, Chandigarh have been locked. Free match passes are available for spectators.",
   keywords: [
-    "Cricket Tournament Registration",
+    "Cricket Tournament Registration Closed",
     "Chandigarh Cricket Registration 2026",
     "Operation Sindoor Registration",
     "Sector 16 Stadium Cricket Cup",
@@ -16,9 +16,9 @@ export const metadata: Metadata = {
     canonical: "/registration",
   },
   openGraph: {
-    title: "Team Registration | Operation Sindoor Cricket Cup 2.0",
+    title: "Team Registration (Closed) | Operation Sindoor Cricket Cup 2.0",
     description:
-      "Register your 12-player collegiate cricket squad for Operation Sindoor Cricket Cup 2.0 at Sector 16 Stadium, Chandigarh. ₹4,999 entry fee includes 12 official custom kits.",
+      "Official team registrations are now closed. All 24 collegiate cricket squads for Operation Sindoor Cricket Cup 2.0 at Sector 16 Stadium, Chandigarh have been locked.",
     url: "https://operationsindoorcricketcup.com/registration",
     siteName: "Operation Sindoor Cricket Cup 2.0",
     images: [
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Team Registration | Operation Sindoor Cricket Cup 2.0",
+    title: "Team Registration (Closed) | Operation Sindoor Cricket Cup 2.0",
     description:
-      "Register your 12-player collegiate squad for Operation Sindoor Cricket Cup 2.0 at Sector 16 Stadium, Chandigarh. ₹4,999 fee includes 12 kits.",
+      "Official team registrations are now closed. All 24 collegiate squad slots for Operation Sindoor Cricket Cup 2.0 at Sector 16 Stadium, Chandigarh have been locked.",
     images: ["/logo.png"],
   },
 };
