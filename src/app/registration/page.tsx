@@ -159,22 +159,33 @@ export default function RegistrationPage() {
       });
   }, []);
 
-  // Compute normalized teams list
-  const fullBoysList: TeamItem[] = dbBoysTeams.length > 0
-    ? dbBoysTeams
-    : defaultBoysTeams.map((name, idx) => ({ id: idx + 1, name, slug: name.toLowerCase().replace(/\s+/g, '-'), division: 'boys', status: 'available' }));
+  // Compute normalized teams list - All 24 teams are officially confirmed
+  const fullBoysList: TeamItem[] = defaultBoysTeams.map((name, idx) => {
+    const fromDb = dbBoysTeams.find(t => t.name.toLowerCase() === name.toLowerCase());
+    return {
+      id: fromDb?.id || (idx + 1),
+      name,
+      slug: fromDb?.slug || name.toLowerCase().replace(/\s+/g, '-'),
+      division: 'boys',
+      status: 'registered'
+    };
+  });
 
-  const fullGirlsList: TeamItem[] = dbGirlsTeams.length > 0
-    ? dbGirlsTeams
-    : defaultGirlsTeams.map((name, idx) => ({ id: idx + 17, name, slug: name.toLowerCase().replace(/\s+/g, '-'), division: 'girls', status: name === 'Kaveri Queens' ? 'registered' : 'available' }));
+  const fullGirlsList: TeamItem[] = defaultGirlsTeams.map((name, idx) => {
+    const fromDb = dbGirlsTeams.find(t => t.name.toLowerCase() === name.toLowerCase());
+    return {
+      id: fromDb?.id || (idx + 17),
+      name,
+      slug: fromDb?.slug || name.toLowerCase().replace(/\s+/g, '-'),
+      division: 'girls',
+      status: 'registered'
+    };
+  });
 
   const allTeamsCombined = [...fullBoysList, ...fullGirlsList];
 
-  // Verified & Confirmed Registered Teams
-  const registeredFromDB = allTeamsCombined.filter(t => t.status === 'registered' || (t as any).is_registered);
-  const confirmedTeams: TeamItem[] = registeredFromDB.length > 0
-    ? registeredFromDB
-    : [{ id: 22, name: 'Kaveri Queens', slug: 'kaveri-queens', division: 'girls', status: 'registered' }];
+  // All 24 Verified & Confirmed Registered Teams
+  const confirmedTeams: TeamItem[] = allTeamsCombined;
 
   const updatePlayer = (index: number, field: keyof PlayerData, value: any) => {
     setPlayers(prev => {
@@ -745,10 +756,94 @@ export default function RegistrationPage() {
           </div>
 
 
-          {/* ================= RIGHT COLUMN: Interactive Form (Compact) ================= */}
+          {/* ================= RIGHT COLUMN: Registration Closed Status & Hidden Form ================= */}
           <div className="lg:col-span-7 xl:col-span-8 space-y-6 order-1 lg:order-2">
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Official Registration Closed Notice Card */}
+            <div className="bg-white p-6 sm:p-8 rounded-3xl border-2 border-red-200 shadow-md space-y-6">
+              <div className="flex items-center gap-3.5 pb-5 border-b border-slate-100">
+                <div className="w-12 h-12 rounded-2xl bg-red-600 text-white flex items-center justify-center shrink-0 shadow-md">
+                  <Lock className="w-6 h-6" />
+                </div>
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-50 text-red-700 text-[11px] font-black uppercase tracking-wider mb-1">
+                    <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                    Registrations Closed
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 uppercase italic">
+                    All 24 Team Slots Officially Confirmed
+                  </h2>
+                </div>
+              </div>
+
+              <div className="space-y-4 text-sm text-slate-600">
+                <p className="leading-relaxed">
+                  Official team registrations for the <strong>Operation Sindoor Cricket Cup 2.0</strong> at <strong>Sector 16 Cricket Stadium, Chandigarh</strong> have now closed. All 16 Boys division teams and 8 Girls division teams have locked their rosters and confirmed their entries.
+                </p>
+
+                <div className="grid sm:grid-cols-2 gap-3 pt-2">
+                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+                    <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 block mb-1">Boys Division</span>
+                    <span className="text-lg font-black text-slate-900 block">16 / 16 Teams Full</span>
+                    <span className="text-xs text-emerald-600 font-bold flex items-center gap-1 mt-1">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> All Slots Confirmed
+                    </span>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+                    <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 block mb-1">Girls Division</span>
+                    <span className="text-lg font-black text-slate-900 block">8 / 8 Teams Full</span>
+                    <span className="text-xs text-emerald-600 font-bold flex items-center gap-1 mt-1">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> All Slots Confirmed
+                    </span>
+                  </div>
+                </div>
+
+                <div className="bg-amber-50 rounded-2xl p-4 border border-amber-200/80">
+                  <h4 className="font-bold text-amber-950 text-xs uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                    <Ticket className="w-4 h-4 text-amber-600" /> Free Match Passes for Spectators
+                  </h4>
+                  <p className="text-xs text-amber-900 leading-relaxed">
+                    Students, cricket fans, and visitors can claim free digital match entry passes to watch all games live at Sector 16 Stadium under floodlights.
+                  </p>
+                  <div className="mt-3">
+                    <Link
+                      href="/passes"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-colors shadow-sm"
+                    >
+                      <Ticket className="w-4 h-4" />
+                      <span>Claim Free Match Pass</span>
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-900 text-white space-y-2">
+                  <h4 className="font-bold text-xs uppercase tracking-wider text-slate-300">
+                    Already Registered Teams Helpdesk
+                  </h4>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    If your team is registered and you need assistance regarding custom jersey sizing, official fixtures, or stadium reporting:
+                  </p>
+                  <div className="pt-2 flex flex-wrap items-center gap-3 text-xs">
+                    <a href="tel:+919056333759" className="font-bold text-white hover:text-[#d8392f] transition-colors flex items-center gap-1">
+                      <Phone className="w-3.5 h-3.5 text-[#d8392f]" /> +91 90563 33759
+                    </a>
+                    <span className="text-slate-600">•</span>
+                    <a href="tel:+918437409211" className="font-bold text-amber-400 hover:underline flex items-center gap-1">
+                      <Phone className="w-3.5 h-3.5" /> +91 84374 09211 (Vishal)
+                    </a>
+                    <span className="text-slate-600">•</span>
+                    <a href="tel:+919855109159" className="font-bold text-amber-400 hover:underline flex items-center gap-1">
+                      <Phone className="w-3.5 h-3.5 text-amber-400" /> +91 98551 09159 (Karan)
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Registration Form (Hidden for now as requested - DO NOT REMOVE) */}
+            <div className="hidden" aria-hidden="true">
+              <form onSubmit={handleSubmit} className="space-y-6">
 
               {/* Registration Closed Alert Box */}
               <div className="bg-red-50 border-2 border-red-400 p-4 sm:p-5 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-red-950 shadow-sm">
@@ -1446,6 +1541,7 @@ export default function RegistrationPage() {
               </div>
 
             </form>
+            </div>
 
           </div>
 

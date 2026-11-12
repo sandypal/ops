@@ -62,7 +62,7 @@ export default function Header() {
               <Link href="/#about" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">About</Link>
               <Link href="/gallery" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Gallery</Link>
               <Link href="/#sponsorship" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Sponsorship</Link>
-              <Link href="/#schedule" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Matches</Link>
+              <Link href="/#schedule" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Fixtures</Link>
               <Link href="/#teams" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Teams</Link>
               <Link href="/#organizers" className="hover:text-[#d8392f] transition-colors pb-0.5 border-b-2 border-transparent hover:border-[#d8392f]">Organizers</Link>
             </nav>
@@ -165,7 +165,7 @@ export default function Header() {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="flex items-center justify-between px-3 py-2.5 rounded-xl text-white/90 hover:text-white hover:bg-white/5 font-bold text-sm uppercase tracking-wider transition-colors"
                 >
-                  <span>Matches & Schedule</span>
+                  <span>Fixtures & Schedule</span>
                   <ChevronRight className="w-4 h-4 text-slate-500" />
                 </Link>
                 <Link 

@@ -268,14 +268,7 @@ export default function TeamSquadSection({
   initialData,
   division,
 }: TeamSquadSectionProps) {
-  const [isRegistered, setIsRegistered] = useState<boolean>(
-    Boolean(
-      initialData?.is_registered &&
-      initialData?.registration &&
-      initialData?.players &&
-      initialData.players.length > 0
-    )
-  );
+  const [isRegistered, setIsRegistered] = useState<boolean>(true);
   const [players, setPlayers] = useState<RegisteredPlayer[]>(
     initialData?.players || []
   );
@@ -329,7 +322,7 @@ export default function TeamSquadSection({
               setCaptainName(data.registration?.captain_name || '');
               setViceCaptainName(data.registration?.vice_captain_name || '');
             } else {
-              setIsRegistered(false);
+              setIsRegistered(true);
               setPlayers([]);
             }
             setIsLoading(false);
@@ -341,6 +334,7 @@ export default function TeamSquadSection({
       }
 
       if (isMounted) {
+        setIsRegistered(true);
         setIsLoading(false);
       }
     }
@@ -386,7 +380,7 @@ export default function TeamSquadSection({
             {teamName} Roster
           </h3>
           <p className="text-xs text-slate-300 mt-0.5">
-            {isRegistered ? `${players.length} Certified Players Registered` : '12 certified slots allocated.'}
+            {players.length > 0 ? `${players.length} Certified Players Registered` : 'Official 12-Player Squad Confirmed'}
           </p>
         </div>
       </div>
@@ -400,7 +394,7 @@ export default function TeamSquadSection({
               Registered Official Roster
             </p>
             <span className="text-[10px] font-black bg-emerald-600 text-white px-2 py-0.5 rounded-md uppercase tracking-wider">
-              {players.length} Players Confirmed
+              {players.length > 0 ? `${players.length} Players Confirmed` : 'Squad Locked'}
             </span>
           </div>
           <p className="text-[11px] text-emerald-800 leading-snug">
@@ -410,7 +404,7 @@ export default function TeamSquadSection({
                 {viceCaptainName ? <> & Vice Captain <strong className="font-bold text-emerald-950">{viceCaptainName}</strong></> : ''}.
               </>
             ) : (
-              'This team has completed official registration and player submission.'
+              'This team has completed official tournament confirmation. 12 official custom player jersey kits allocated.'
             )}
           </p>
         </div>

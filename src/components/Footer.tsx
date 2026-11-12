@@ -97,7 +97,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/#schedule" className="hover:text-[#d8392f] transition-colors">
-                  Matches & Schedule
+                  Fixtures & Schedule
                 </Link>
               </li>
               <li>

@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import TeamSquadSection from '@/components/TeamSquadSection';
-import { teamsData, allTeamSlugs, TeamDetail } from '@/data/teamsData';
+import { teamsData, allTeamSlugs, TeamDetail, teamLogos } from '@/data/teamsData';
 import {
   Shield,
   MapPin,
@@ -21,8 +21,169 @@ import {
   CheckCircle2,
   Calendar,
   Award,
-  Lock
+  Lock,
+  Ticket
 } from 'lucide-react';
+
+interface TeamMatchSchedule {
+  matchNo: number;
+  dayText: string;
+  dateText: string;
+  time: string;
+  stage: string;
+  opponentSlug: string;
+  opponentName: string;
+}
+
+const BOYS_SCHEDULE_LOOKUP: Record<string, TeamMatchSchedule> = {
+  // Day 1: Sunday, 15 Nov 2026
+  "jhelum-jaguars": {
+    matchNo: 1,
+    dayText: "Day 1",
+    dateText: "Sunday, 15 Nov 2026",
+    time: "09:00 AM",
+    stage: "Round of 16 • Match 1",
+    opponentSlug: "ghaggar-champions",
+    opponentName: "Ghaggar Champions",
+  },
+  "ghaggar-champions": {
+    matchNo: 1,
+    dayText: "Day 1",
+    dateText: "Sunday, 15 Nov 2026",
+    time: "09:00 AM",
+    stage: "Round of 16 • Match 1",
+    opponentSlug: "jhelum-jaguars",
+    opponentName: "Jhelum Jaguars",
+  },
+  "sindhu-spartans": {
+    matchNo: 2,
+    dayText: "Day 1",
+    dateText: "Sunday, 15 Nov 2026",
+    time: "11:00 AM",
+    stage: "Round of 16 • Match 2",
+    opponentSlug: "tapti-tigers",
+    opponentName: "Tapti Tigers",
+  },
+  "tapti-tigers": {
+    matchNo: 2,
+    dayText: "Day 1",
+    dateText: "Sunday, 15 Nov 2026",
+    time: "11:00 AM",
+    stage: "Round of 16 • Match 2",
+    opponentSlug: "sindhu-spartans",
+    opponentName: "Sindhu Spartans",
+  },
+  "beas-blasters": {
+    matchNo: 3,
+    dayText: "Day 1",
+    dateText: "Sunday, 15 Nov 2026",
+    time: "01:00 PM",
+    stage: "Round of 16 • Match 3",
+    opponentSlug: "kaveri-warriors",
+    opponentName: "Kaveri Warriors",
+  },
+  "kaveri-warriors": {
+    matchNo: 3,
+    dayText: "Day 1",
+    dateText: "Sunday, 15 Nov 2026",
+    time: "01:00 PM",
+    stage: "Round of 16 • Match 3",
+    opponentSlug: "beas-blasters",
+    opponentName: "Beas Blasters",
+  },
+  "krishna-kings": {
+    matchNo: 4,
+    dayText: "Day 1",
+    dateText: "Sunday, 15 Nov 2026",
+    time: "03:00 PM",
+    stage: "Round of 16 • Match 4",
+    opponentSlug: "satluj-soorme",
+    opponentName: "Satluj Soorme",
+  },
+  "satluj-soorme": {
+    matchNo: 4,
+    dayText: "Day 1",
+    dateText: "Sunday, 15 Nov 2026",
+    time: "03:00 PM",
+    stage: "Round of 16 • Match 4",
+    opponentSlug: "krishna-kings",
+    opponentName: "Krishna Kings",
+  },
+
+  // Day 2: Monday, 16 Nov 2026
+  "brahmaputra-bulls": {
+    matchNo: 5,
+    dayText: "Day 2",
+    dateText: "Monday, 16 Nov 2026",
+    time: "09:00 AM",
+    stage: "Round of 16 • Match 5",
+    opponentSlug: "ganga-giants",
+    opponentName: "Ganga Giants",
+  },
+  "ganga-giants": {
+    matchNo: 5,
+    dayText: "Day 2",
+    dateText: "Monday, 16 Nov 2026",
+    time: "09:00 AM",
+    stage: "Round of 16 • Match 5",
+    opponentSlug: "brahmaputra-bulls",
+    opponentName: "Brahmaputra Bulls",
+  },
+  "narmada-titans": {
+    matchNo: 6,
+    dayText: "Day 2",
+    dateText: "Monday, 16 Nov 2026",
+    time: "11:00 AM",
+    stage: "Round of 16 • Match 6",
+    opponentSlug: "yamuna-yodhas",
+    opponentName: "Yamuna Yodhas",
+  },
+  "yamuna-yodhas": {
+    matchNo: 6,
+    dayText: "Day 2",
+    dateText: "Monday, 16 Nov 2026",
+    time: "11:00 AM",
+    stage: "Round of 16 • Match 6",
+    opponentSlug: "narmada-titans",
+    opponentName: "Narmada Titans",
+  },
+  "godavari-knights": {
+    matchNo: 7,
+    dayText: "Day 2",
+    dateText: "Monday, 16 Nov 2026",
+    time: "01:00 PM",
+    stage: "Round of 16 • Match 7",
+    opponentSlug: "ravi-rangers",
+    opponentName: "Ravi Rangers",
+  },
+  "ravi-rangers": {
+    matchNo: 7,
+    dayText: "Day 2",
+    dateText: "Monday, 16 Nov 2026",
+    time: "01:00 PM",
+    stage: "Round of 16 • Match 7",
+    opponentSlug: "godavari-knights",
+    opponentName: "Godavari Knights",
+  },
+  "mahanadi-masters": {
+    matchNo: 8,
+    dayText: "Day 2",
+    dateText: "Monday, 16 Nov 2026",
+    time: "03:00 PM",
+    stage: "Round of 16 • Match 8",
+    opponentSlug: "chenab-challengers",
+    opponentName: "Chenab Challengers",
+  },
+  "chenab-challengers": {
+    matchNo: 8,
+    dayText: "Day 2",
+    dateText: "Monday, 16 Nov 2026",
+    time: "03:00 PM",
+    stage: "Round of 16 • Match 8",
+    opponentSlug: "mahanadi-masters",
+    opponentName: "Mahanadi Masters",
+  },
+};
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -79,12 +240,9 @@ export default async function TeamDetailPage({ params }: Props) {
   }
 
   const squadData = await getTeamSquad(slug);
-  const isRegistered = Boolean(
-    squadData?.is_registered &&
-    squadData?.registration &&
-    squadData?.players &&
-    squadData.players.length > 0
-  );
+  const isRegistered = true; // All 24 tournament teams are officially confirmed
+  const teamSchedule = BOYS_SCHEDULE_LOOKUP[slug] || null;
+  const opponentLogo = teamSchedule ? teamLogos[teamSchedule.opponentSlug] : null;
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col font-sans selection:bg-[#d8392f] selection:text-white">
@@ -176,8 +334,8 @@ export default async function TeamDetailPage({ params }: Props) {
                   {/* Division & River Badges */}
                   <div className="flex flex-wrap items-center gap-2.5 mb-3">
                     <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${team.division === 'boys'
-                        ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                        : 'bg-rose-50 text-rose-700 border border-rose-200'
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                      : 'bg-rose-50 text-rose-700 border border-rose-200'
                       }`}>
                       <Shield className="w-3.5 h-3.5" />
                       {team.division === 'boys' ? 'Boys Division (16 Teams)' : 'Girls Division (8 Teams)'}
@@ -210,22 +368,13 @@ export default async function TeamDetailPage({ params }: Props) {
 
               {/* Quick Hero CTA */}
               <div className="flex flex-wrap items-center gap-3 shrink-0">
-                {isRegistered ? (
-                  <a
-                    href="#squad-roster"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl shadow-sm transition-colors"
-                  >
-                    <CheckCircle2 className="w-4 h-4" />
-                    View Official Squad
-                  </a>
-                ) : (
-                  <span
-                    className="inline-flex items-center gap-2 px-5 py-3 bg-slate-800 text-slate-300 font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl border border-slate-700 shadow-sm"
-                  >
-                    <Lock className="w-4 h-4 text-red-400" />
-                    Registration Closed
-                  </span>
-                )}
+                <a
+                  href="#team-schedule"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl shadow-md transition-all"
+                >
+                  <Calendar className="w-4 h-4" />
+                  View Match Schedule
+                </a>
                 <Link
                   href="/#teams"
                   className="inline-flex items-center gap-2 px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs sm:text-sm uppercase tracking-wider rounded-xl border border-slate-200 transition-colors"
@@ -304,9 +453,7 @@ export default async function TeamDetailPage({ params }: Props) {
                             </h3>
                           </div>
                         </div>
-                        <span className="text-[11px] font-bold text-amber-900 bg-amber-100 border border-amber-300 px-2.5 py-0.5 rounded-full">
-                          हिंदी विवरण
-                        </span>
+
                       </div>
 
                       {team.riverHindi.taglineHindi && (
@@ -416,18 +563,209 @@ export default async function TeamDetailPage({ params }: Props) {
 
               </div>
 
-              {/* ================= RIGHT COLUMN: SQUAD SIDEBAR WIDGET (4 COLS) ================= */}
-              <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-6">
+              {/* ================= RIGHT COLUMN: TEAM SCHEDULE WIDGET (4 COLS) ================= */}
+              <div id="team-schedule" className="lg:col-span-4 lg:sticky lg:top-24 space-y-6 scroll-mt-24">
 
-                {/* Dynamic Squad Section from API */}
-                <TeamSquadSection
-                  slug={team.slug}
-                  teamName={team.name}
-                  teamLogo={team.logo}
-                  fallbackSquad={team.squad}
-                  initialData={squadData}
-                  division={team.division}
-                />
+                {/* Team Match Schedule Card */}
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300">
+                  {/* Card Header */}
+                  <div className="bg-gradient-to-r from-[#0b162c] via-[#112240] to-[#0b162c] text-white p-5 border-b-2 border-sky-400 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center shrink-0 text-sky-300">
+                        <Calendar className="w-5 h-5 text-sky-400" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] font-black tracking-widest uppercase text-sky-400 block">
+                          Match Schedule
+                        </span>
+                        <h3 className="text-base sm:text-lg font-black uppercase tracking-tight text-white truncate">
+                          {team.name}
+                        </h3>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-wider bg-sky-500/20 text-sky-300 border border-sky-400/30 px-2 py-0.5 rounded">
+                      T10 Knockout
+                    </span>
+                  </div>
+
+                  {/* Scheduled Match Body */}
+                  <div className="p-5 space-y-4">
+                    {teamSchedule ? (
+                      /* Boys Team Scheduled Fixture */
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-3 pb-3 border-b border-slate-100">
+                          <div>
+                            <span className="inline-block bg-[#d8392f] text-white text-[10px] font-black uppercase px-2 py-0.5 rounded shadow-2xs">
+                              Match {teamSchedule.matchNo}
+                            </span>
+                            <span className="text-xs font-bold text-slate-800 ml-2">
+                              {teamSchedule.stage}
+                            </span>
+                          </div>
+                          <span className="text-xs font-black text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-lg flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5 text-amber-600" />
+                            {teamSchedule.time} IST
+                          </span>
+                        </div>
+
+                        {/* Date Banner */}
+                        <div className="bg-slate-50 rounded-xl p-3 border border-slate-200/80 mb-4 flex items-center justify-between">
+                          <span className="text-xs font-bold text-slate-700">
+                            {teamSchedule.dateText}
+                          </span>
+                          <span className="text-[11px] font-black text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
+                            {teamSchedule.dayText}
+                          </span>
+                        </div>
+
+                        {/* Head-to-Head Clash Card */}
+                        <div className="bg-gradient-to-br from-[#0c1830] via-[#132546] to-[#091122] rounded-2xl p-4 text-white border border-sky-500/30 shadow-md">
+                          <div className="grid grid-cols-11 items-center gap-2">
+                            {/* This Team */}
+                            <div className="col-span-5 flex flex-col items-center text-center">
+                              <div className="w-14 h-14 rounded-2xl bg-white p-1.5 shadow-md border border-white/40 flex items-center justify-center mb-1.5">
+                                {team.logo ? (
+                                  <Image
+                                    src={team.logo}
+                                    alt={team.name}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                              <span className="font-black text-xs uppercase italic tracking-tight text-white leading-tight line-clamp-1">
+                                {team.name}
+                              </span>
+                              <span className="text-[10px] text-sky-300 font-semibold truncate mt-0.5">
+                                {team.river}
+                              </span>
+                            </div>
+
+                            {/* Center VS */}
+                            <div className="col-span-1 flex flex-col items-center justify-center">
+                              <span className="w-7 h-7 rounded-full bg-gradient-to-br from-[#d8392f] to-[#b91c1c] text-white font-black italic text-xs flex items-center justify-center shadow-md border border-red-400">
+                                VS
+                              </span>
+                              <span className="text-[8px] uppercase font-bold text-sky-400 mt-1">
+                                T10
+                              </span>
+                            </div>
+
+                            {/* Opponent Team */}
+                            <Link
+                              href={`/teams/${teamSchedule.opponentSlug}`}
+                              className="col-span-5 flex flex-col items-center text-center group hover:opacity-90 transition-opacity"
+                            >
+                              <div className="w-14 h-14 rounded-2xl bg-white p-1.5 shadow-md border border-white/40 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
+                                {opponentLogo ? (
+                                  <Image
+                                    src={opponentLogo}
+                                    alt={teamSchedule.opponentName}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                              <span className="font-black text-xs uppercase italic tracking-tight text-white group-hover:text-sky-300 transition-colors leading-tight line-clamp-1">
+                                {teamSchedule.opponentName}
+                              </span>
+                              <span className="text-[10px] text-slate-400 group-hover:text-slate-300 font-semibold truncate mt-0.5">
+                                Opponent Squad &rarr;
+                              </span>
+                            </Link>
+                          </div>
+                        </div>
+
+                        {/* Venue & Details */}
+                        <div className="mt-4 space-y-2 text-xs text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                          <div className="flex items-center gap-2">
+                            <MapPin className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+                            <span className="font-semibold text-slate-800">
+                              Sector 16 Cricket Stadium, Chandigarh
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                            <span>
+                              Match starts at <strong className="text-slate-900 font-bold">{teamSchedule.time} IST</strong> (Gate entry 1 hr prior)
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Girls Division / TBD Fixture */
+                      <div className="space-y-4">
+                        <div className="bg-gradient-to-br from-[#1c0c14] to-[#2e101f] text-white p-4 rounded-2xl border border-rose-500/30">
+                          <div className="flex items-center justify-between gap-2 mb-2">
+                            <span className="bg-[#d8392f] text-white text-[10px] font-black uppercase px-2 py-0.5 rounded">
+                              Girls Division
+                            </span>
+                            <span className="text-xs font-bold text-rose-300">
+                              Quarter-Finals
+                            </span>
+                          </div>
+                          <h4 className="font-black text-base text-white uppercase italic">
+                            Women&apos;s Championship Bracket
+                          </h4>
+                          <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                            Official match timings and draw fixtures for the Girls Division will be announced following the tournament technical briefing at Sector 16 Stadium, Chandigarh.
+                          </p>
+                        </div>
+
+                        <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-1.5">
+                          <div className="flex items-center gap-2 font-semibold text-slate-800">
+                            <MapPin className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                            <span>Sector 16 Cricket Stadium, Chandigarh</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-slate-600">
+                            <Calendar className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                            <span>8 Teams • 7 Knockout Matches</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Spectator Match Pass Action */}
+                    <div className="pt-2">
+                      <Link
+                        href="/passes"
+                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl shadow-md transition-all"
+                      >
+                        <Ticket className="w-4 h-4 text-slate-950" />
+                        <span>Claim Free Match Pass for this Match</span>
+                      </Link>
+                    </div>
+
+                    {/* View Full Tournament Schedule Link */}
+                    <div className="text-center pt-1">
+                      <Link
+                        href="/#schedule"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-700 hover:text-sky-900 transition-colors uppercase tracking-wider"
+                      >
+                        <span>View All Tournament Fixtures</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hidden Official Squad Section - DO NOT REMOVE */}
+                <div className="hidden" aria-hidden="true">
+                  <TeamSquadSection
+                    slug={team.slug}
+                    teamName={team.name}
+                    teamLogo={team.logo}
+                    fallbackSquad={team.squad}
+                    initialData={squadData}
+                    division={team.division}
+                  />
+                </div>
 
                 {/* Tournament Coordinator Helpdesk Card */}
                 <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs text-xs space-y-2">

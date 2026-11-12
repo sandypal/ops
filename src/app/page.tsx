@@ -38,6 +38,7 @@ import {
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'boys' | 'girls'>('boys');
+  const [scheduleDayTab, setScheduleDayTab] = useState<'all' | 'day1' | 'day2'>('all');
   const [isSponsorModalOpen, setIsSponsorModalOpen] = useState(false);
   const [selectedSponsorTier, setSelectedSponsorTier] = useState<string>('Platinum Partner');
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -60,29 +61,6 @@ export default function Home() {
     };
   }, [isVideoModalOpen]);
 
-  // Confirmed teams from API with default fallback
-  const [registeredTeamsList, setRegisteredTeamsList] = useState<Array<{ name: string; slug: string; division: string }>>([
-    { name: "Kaveri Queens", slug: "kaveri-queens", division: "girls" }
-  ]);
-
-  useEffect(() => {
-    const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://sarvsewabharat.org/api/api/';
-    const baseApiUrl = rawApiUrl.replace(/\/+$/, '');
-    fetch(`${baseApiUrl}/tournament/teams`)
-      .then(res => res.json())
-      .then(res => {
-        if (res.status === 'success' && res.data && res.data.all) {
-          const registered = res.data.all.filter((t: any) => t.status === 'registered' || t.is_registered);
-          if (registered.length > 0) {
-            setRegisteredTeamsList(registered);
-          }
-        }
-      })
-      .catch(err => {
-        console.warn('Could not fetch teams from API:', err);
-      });
-  }, []);
-
   const boysTeams = [
     "Sindhu Spartans", "Satluj Soorme", "Beas Blasters", "Brahmaputra Bulls",
     "Mahanadi Masters", "Ravi Rangers", "Chenab Challengers", "Jhelum Jaguars",
@@ -93,6 +71,112 @@ export default function Home() {
   const girlsTeams = [
     "Sindhu Sherniyan", "Saraswati Strikers", "Satluj Sena", "Yamuna Panthers",
     "Sabarmati Sunrisers", "Kaveri Queens", "Ravi Royals", "Ganga Glory"
+  ];
+
+  // All 24 tournament teams are confirmed
+  const allTournamentConfirmedTeams = [
+    ...boysTeams.map(name => ({
+      name,
+      slug: name.toLowerCase().replace(/\s+/g, '-'),
+      division: 'boys'
+    })),
+    ...girlsTeams.map(name => ({
+      name,
+      slug: name.toLowerCase().replace(/\s+/g, '-'),
+      division: 'girls'
+    }))
+  ];
+
+  // Confirmed teams from API with all 24 teams confirmed by default
+  const [registeredTeamsList, setRegisteredTeamsList] = useState<Array<{ name: string; slug: string; division: string }>>(allTournamentConfirmedTeams);
+
+  useEffect(() => {
+    const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://sarvsewabharat.org/api/api/';
+    const baseApiUrl = rawApiUrl.replace(/\/+$/, '');
+    fetch(`${baseApiUrl}/tournament/teams`)
+      .then(res => res.json())
+      .then(res => {
+        if (res.status === 'success' && res.data && res.data.all) {
+          const registeredMap = new Map<string, { name: string; slug: string; division: string }>();
+          allTournamentConfirmedTeams.forEach(t => registeredMap.set(t.name.toLowerCase(), t));
+          res.data.all.forEach((t: any) => {
+            if (t.name) {
+              registeredMap.set(t.name.toLowerCase(), {
+                name: t.name,
+                slug: t.slug || t.name.toLowerCase().replace(/\s+/g, '-'),
+                division: t.division || 'boys'
+              });
+            }
+          });
+          setRegisteredTeamsList(Array.from(registeredMap.values()));
+        }
+      })
+      .catch(err => {
+        console.warn('Could not fetch teams from API:', err);
+      });
+  }, []);
+
+  // Official Boys Division Fixtures (Round of 16)
+  const boysFixturesDay1 = [
+    {
+      matchNo: 1,
+      time: "09:00 AM",
+      stage: "Round of 16 • Match 1",
+      team1: { name: "Jhelum Jaguars", slug: "jhelum-jaguars" },
+      team2: { name: "Ghaggar Champions", slug: "ghaggar-champions" },
+    },
+    {
+      matchNo: 2,
+      time: "11:00 AM",
+      stage: "Round of 16 • Match 2",
+      team1: { name: "Sindhu Spartans", slug: "sindhu-spartans" },
+      team2: { name: "Tapti Tigers", slug: "tapti-tigers" },
+    },
+    {
+      matchNo: 3,
+      time: "01:00 PM",
+      stage: "Round of 16 • Match 3",
+      team1: { name: "Beas Blasters", slug: "beas-blasters" },
+      team2: { name: "Kaveri Warriors", slug: "kaveri-warriors" },
+    },
+    {
+      matchNo: 4,
+      time: "03:00 PM",
+      stage: "Round of 16 • Match 4",
+      team1: { name: "Krishna Kings", slug: "krishna-kings" },
+      team2: { name: "Satluj Soorme", slug: "satluj-soorme" },
+    },
+  ];
+
+  const boysFixturesDay2 = [
+    {
+      matchNo: 5,
+      time: "09:00 AM",
+      stage: "Round of 16 • Match 5",
+      team1: { name: "Brahmaputra Bulls", slug: "brahmaputra-bulls" },
+      team2: { name: "Ganga Giants", slug: "ganga-giants" },
+    },
+    {
+      matchNo: 6,
+      time: "11:00 AM",
+      stage: "Round of 16 • Match 6",
+      team1: { name: "Narmada Titans", slug: "narmada-titans" },
+      team2: { name: "Yamuna Yodhas", slug: "yamuna-yodhas" },
+    },
+    {
+      matchNo: 7,
+      time: "01:00 PM",
+      stage: "Round of 16 • Match 7",
+      team1: { name: "Godavari Knights", slug: "godavari-knights" },
+      team2: { name: "Ravi Rangers", slug: "ravi-rangers" },
+    },
+    {
+      matchNo: 8,
+      time: "03:00 PM",
+      stage: "Round of 16 • Match 8",
+      team1: { name: "Mahanadi Masters", slug: "mahanadi-masters" },
+      team2: { name: "Chenab Challengers", slug: "chenab-challengers" },
+    },
   ];
 
   // 1. Sacred Armed Forces Tributes (Army, Air Force, Navy)
@@ -1814,15 +1898,373 @@ export default function Home() {
                 Tournament Match Center &amp; Brackets
               </div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase italic text-white tracking-tighter">
-                TOURNAMENT <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-300 to-white">SCHEDULE</span>
+                TOURNAMENT <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-300 to-white">SCHEDULE</span> &amp; FIXTURES
               </h2>
               <p className="text-slate-300 text-xs sm:text-sm md:text-base mt-2 font-medium max-w-2xl leading-relaxed">
-                Official 5-day T10 knockout roadmaps hosted under floodlights at Sector 16 Stadium, Chandigarh.
+                Official 5-day T10 knockout roadmaps &amp; match fixtures hosted under floodlights at Sector 16 Stadium, Chandigarh.
               </p>
             </div>
             <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-bold text-sky-300 uppercase tracking-wider bg-blue-950/60 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border border-blue-400/30 self-start md:self-auto">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               22 Knockout Matches • 5 Days
+            </div>
+          </div>
+
+          {/* ================= OFFICIAL BOYS DIVISION MATCH FIXTURES ================= */}
+          <div className="mb-12 sm:mb-16">
+            {/* Day Selector Navigation Bar */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-6 sm:mb-8 bg-[#091122]/90 backdrop-blur-md p-2 sm:p-2.5 rounded-2xl border border-blue-500/20 shadow-lg">
+              <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto [scrollbar-width:none]">
+                <button
+                  type="button"
+                  onClick={() => setScheduleDayTab('all')}
+                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                    scheduleDayTab === 'all'
+                      ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-md'
+                      : 'bg-white/5 hover:bg-white/10 text-slate-300'
+                  }`}
+                >
+                  All Fixtures (8 Matches)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScheduleDayTab('day1')}
+                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                    scheduleDayTab === 'day1'
+                      ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-md'
+                      : 'bg-white/5 hover:bg-white/10 text-slate-300'
+                  }`}
+                >
+                  <span>Day 1 • 15 Nov</span>
+                  <span className="text-[10px] bg-black/30 px-1.5 py-0.5 rounded font-bold">4 Matches</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScheduleDayTab('day2')}
+                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                    scheduleDayTab === 'day2'
+                      ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-md'
+                      : 'bg-white/5 hover:bg-white/10 text-slate-300'
+                  }`}
+                >
+                  <span>Day 2 • 16 Nov</span>
+                  <span className="text-[10px] bg-black/30 px-1.5 py-0.5 rounded font-bold">4 Matches</span>
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs text-slate-300 font-semibold px-2 py-1 bg-white/5 rounded-xl border border-white/10 self-start sm:self-auto">
+                <MapPin className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                <span className="truncate">Sector 16 Stadium, Chandigarh</span>
+              </div>
+            </div>
+
+            {/* Fixtures Matches Grid */}
+            <div className="grid lg:grid-cols-2 gap-6 sm:gap-8">
+              {/* Day 1: Sunday, 15 November 2026 */}
+              {(scheduleDayTab === 'all' || scheduleDayTab === 'day1') && (
+                <div className={`space-y-4 ${scheduleDayTab === 'day1' ? 'lg:col-span-2' : ''}`}>
+                  <div className="bg-gradient-to-r from-[#12244a] via-[#0e1d3c] to-[#091122] p-4 sm:p-5 rounded-2xl border-2 border-sky-400/40 shadow-xl flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 sm:gap-3.5">
+                      <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 text-white font-black text-sm flex flex-col items-center justify-center shadow-md shrink-0 border border-sky-300/30">
+                        <span className="text-[9px] uppercase leading-none opacity-80 font-bold">DAY</span>
+                        <span className="text-base sm:text-lg leading-none mt-0.5">01</span>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-black text-base sm:text-lg text-white uppercase italic tracking-wide">
+                            Sunday, 15 November 2026
+                          </h3>
+                          <span className="bg-sky-500/20 text-sky-300 border border-sky-400/30 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
+                            Round of 16
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mt-0.5 font-medium">
+                          Boys Division • Matches 1 to 4 • T10 Knockout Format
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-bold text-sky-300 bg-sky-950/80 px-2.5 py-1 rounded-lg border border-sky-800/60 hidden sm:inline-block shrink-0">
+                      4 Matches
+                    </span>
+                  </div>
+
+                  <div className={`space-y-3.5 ${scheduleDayTab === 'day1' ? 'grid md:grid-cols-2 gap-4 space-y-0' : ''}`}>
+                    {boysFixturesDay1.map((match) => {
+                      const team1Logo = teamLogos[match.team1.slug];
+                      const team2Logo = teamLogos[match.team2.slug];
+                      const team1Detail = teamsData[match.team1.slug];
+                      const team2Detail = teamsData[match.team2.slug];
+
+                      return (
+                        <div
+                          key={match.matchNo}
+                          className="bg-gradient-to-br from-[#0c1830] via-[#112344] to-[#0a1326] rounded-2xl border-2 border-sky-400/20 hover:border-sky-400/60 transition-all p-3.5 sm:p-4.5 shadow-lg hover:shadow-[0_10px_25px_rgba(56,189,248,0.15)] group relative overflow-hidden"
+                        >
+                          <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 rounded-full blur-2xl pointer-events-none" />
+
+                          {/* Card Header: Match No & Time */}
+                          <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/10 relative z-10 text-xs">
+                            <div className="flex items-center gap-2">
+                              <span className="bg-[#d8392f] text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow-xs">
+                                Match {match.matchNo}
+                              </span>
+                              <span className="text-slate-300 font-bold text-[11px]">
+                                Round of 16
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-1.5 text-amber-400 font-black text-xs sm:text-[13px] bg-amber-400/10 px-2.5 py-0.5 rounded-lg border border-amber-400/30">
+                              <Clock className="w-3.5 h-3.5 text-amber-400" />
+                              <span>{match.time} IST</span>
+                            </div>
+                          </div>
+
+                          {/* Teams Face-Off Row */}
+                          <div className="grid grid-cols-11 items-center gap-2 py-1 relative z-10">
+                            {/* Team 1 */}
+                            <Link
+                              href={`/teams/${match.team1.slug}`}
+                              className="col-span-5 flex items-center gap-2 sm:gap-2.5 group/team hover:opacity-90 transition-opacity"
+                            >
+                              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center shadow-md border border-white/40 group-hover/team:scale-105 transition-transform">
+                                {team1Logo ? (
+                                  <Image
+                                    src={team1Logo}
+                                    alt={match.team1.name}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                              <div className="min-w-0">
+                                <h4 className="font-black text-xs sm:text-sm text-white uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight">
+                                  {match.team1.name}
+                                </h4>
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate mt-0.5">
+                                  {team1Detail?.river || 'Vedic River Squad'}
+                                </span>
+                              </div>
+                            </Link>
+
+                            {/* Center VS Badge */}
+                            <div className="col-span-1 flex flex-col items-center justify-center">
+                              <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#d8392f] to-[#b91c1c] text-white font-black italic text-[11px] sm:text-xs flex items-center justify-center shadow-md border border-red-400/50">
+                                VS
+                              </span>
+                              <span className="text-[8px] sm:text-[9px] uppercase font-bold text-sky-400 mt-1 tracking-wider whitespace-nowrap">
+                                T10
+                              </span>
+                            </div>
+
+                            {/* Team 2 */}
+                            <Link
+                              href={`/teams/${match.team2.slug}`}
+                              className="col-span-5 flex items-center justify-end gap-2 sm:gap-2.5 text-right group/team hover:opacity-90 transition-opacity"
+                            >
+                              <div className="min-w-0">
+                                <h4 className="font-black text-xs sm:text-sm text-white uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight">
+                                  {match.team2.name}
+                                </h4>
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate mt-0.5">
+                                  {team2Detail?.river || 'Vedic River Squad'}
+                                </span>
+                              </div>
+                              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center shadow-md border border-white/40 group-hover/team:scale-105 transition-transform">
+                                {team2Logo ? (
+                                  <Image
+                                    src={team2Logo}
+                                    alt={match.team2.name}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                            </Link>
+                          </div>
+
+                          {/* Card Footer: Stadium Venue & Free Match Pass */}
+                          <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 relative z-10">
+                            <span className="flex items-center gap-1 text-slate-300">
+                              <MapPin className="w-3 h-3 text-sky-400 shrink-0" />
+                              <span className="truncate">Sector 16 Cricket Stadium</span>
+                            </span>
+                            <Link
+                              href="/passes"
+                              className="text-amber-400 hover:text-amber-300 font-bold uppercase tracking-wider flex items-center gap-1 text-[10px] sm:text-[11px] shrink-0"
+                            >
+                              <Ticket className="w-3 h-3" />
+                              <span>Free Pass &rarr;</span>
+                            </Link>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Day 2: Monday, 16 November 2026 */}
+              {(scheduleDayTab === 'all' || scheduleDayTab === 'day2') && (
+                <div className={`space-y-4 ${scheduleDayTab === 'day2' ? 'lg:col-span-2' : ''}`}>
+                  <div className="bg-gradient-to-r from-[#12244a] via-[#0e1d3c] to-[#091122] p-4 sm:p-5 rounded-2xl border-2 border-indigo-400/40 shadow-xl flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 sm:gap-3.5">
+                      <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-700 text-white font-black text-sm flex flex-col items-center justify-center shadow-md shrink-0 border border-indigo-300/30">
+                        <span className="text-[9px] uppercase leading-none opacity-80 font-bold">DAY</span>
+                        <span className="text-base sm:text-lg leading-none mt-0.5">02</span>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-black text-base sm:text-lg text-white uppercase italic tracking-wide">
+                            Monday, 16 November 2026
+                          </h3>
+                          <span className="bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
+                            Round of 16
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mt-0.5 font-medium">
+                          Boys Division • Matches 5 to 8 • T10 Knockout Format
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-bold text-indigo-300 bg-indigo-950/80 px-2.5 py-1 rounded-lg border border-indigo-800/60 hidden sm:inline-block shrink-0">
+                      4 Matches
+                    </span>
+                  </div>
+
+                  <div className={`space-y-3.5 ${scheduleDayTab === 'day2' ? 'grid md:grid-cols-2 gap-4 space-y-0' : ''}`}>
+                    {boysFixturesDay2.map((match) => {
+                      const team1Logo = teamLogos[match.team1.slug];
+                      const team2Logo = teamLogos[match.team2.slug];
+                      const team1Detail = teamsData[match.team1.slug];
+                      const team2Detail = teamsData[match.team2.slug];
+
+                      return (
+                        <div
+                          key={match.matchNo}
+                          className="bg-gradient-to-br from-[#0c1830] via-[#112344] to-[#0a1326] rounded-2xl border-2 border-indigo-400/20 hover:border-indigo-400/60 transition-all p-3.5 sm:p-4.5 shadow-lg hover:shadow-[0_10px_25px_rgba(99,102,241,0.15)] group relative overflow-hidden"
+                        >
+                          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
+
+                          {/* Card Header: Match No & Time */}
+                          <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/10 relative z-10 text-xs">
+                            <div className="flex items-center gap-2">
+                              <span className="bg-[#d8392f] text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow-xs">
+                                Match {match.matchNo}
+                              </span>
+                              <span className="text-slate-300 font-bold text-[11px]">
+                                Round of 16
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-1.5 text-amber-400 font-black text-xs sm:text-[13px] bg-amber-400/10 px-2.5 py-0.5 rounded-lg border border-amber-400/30">
+                              <Clock className="w-3.5 h-3.5 text-amber-400" />
+                              <span>{match.time} IST</span>
+                            </div>
+                          </div>
+
+                          {/* Teams Face-Off Row */}
+                          <div className="grid grid-cols-11 items-center gap-2 py-1 relative z-10">
+                            {/* Team 1 */}
+                            <Link
+                              href={`/teams/${match.team1.slug}`}
+                              className="col-span-5 flex items-center gap-2 sm:gap-2.5 group/team hover:opacity-90 transition-opacity"
+                            >
+                              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center shadow-md border border-white/40 group-hover/team:scale-105 transition-transform">
+                                {team1Logo ? (
+                                  <Image
+                                    src={team1Logo}
+                                    alt={match.team1.name}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                              <div className="min-w-0">
+                                <h4 className="font-black text-xs sm:text-sm text-white uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight">
+                                  {match.team1.name}
+                                </h4>
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate mt-0.5">
+                                  {team1Detail?.river || 'Vedic River Squad'}
+                                </span>
+                              </div>
+                            </Link>
+
+                            {/* Center VS Badge */}
+                            <div className="col-span-1 flex flex-col items-center justify-center">
+                              <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#d8392f] to-[#b91c1c] text-white font-black italic text-[11px] sm:text-xs flex items-center justify-center shadow-md border border-red-400/50">
+                                VS
+                              </span>
+                              <span className="text-[8px] sm:text-[9px] uppercase font-bold text-sky-400 mt-1 tracking-wider whitespace-nowrap">
+                                T10
+                              </span>
+                            </div>
+
+                            {/* Team 2 */}
+                            <Link
+                              href={`/teams/${match.team2.slug}`}
+                              className="col-span-5 flex items-center justify-end gap-2 sm:gap-2.5 text-right group/team hover:opacity-90 transition-opacity"
+                            >
+                              <div className="min-w-0">
+                                <h4 className="font-black text-xs sm:text-sm text-white uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight">
+                                  {match.team2.name}
+                                </h4>
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate mt-0.5">
+                                  {team2Detail?.river || 'Vedic River Squad'}
+                                </span>
+                              </div>
+                              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center shadow-md border border-white/40 group-hover/team:scale-105 transition-transform">
+                                {team2Logo ? (
+                                  <Image
+                                    src={team2Logo}
+                                    alt={match.team2.name}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                            </Link>
+                          </div>
+
+                          {/* Card Footer: Stadium Venue & Free Match Pass */}
+                          <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 relative z-10">
+                            <span className="flex items-center gap-1 text-slate-300">
+                              <MapPin className="w-3 h-3 text-sky-400 shrink-0" />
+                              <span className="truncate">Sector 16 Cricket Stadium</span>
+                            </span>
+                            <Link
+                              href="/passes"
+                              className="text-amber-400 hover:text-amber-300 font-bold uppercase tracking-wider flex items-center gap-1 text-[10px] sm:text-[11px] shrink-0"
+                            >
+                              <Ticket className="w-3 h-3" />
+                              <span>Free Pass &rarr;</span>
+                            </Link>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ================= TOURNAMENT PROGRESSION ROADMAPS ================= */}
+          <div className="flex items-center justify-between mb-6 pt-4 border-t border-white/10">
+            <div>
+              <span className="text-xs font-bold text-sky-400 uppercase tracking-widest block">Championship Progression</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase italic text-white">Knockout Tournament Roadmaps</h3>
             </div>
           </div>
 
@@ -1892,55 +2334,7 @@ export default function Home() {
           </div>
 
           {/* Registration Price & Kit Inclusions Callout Card */}
-          <div className="mt-8 sm:mt-10 bg-gradient-to-r from-[#0b162c] via-[#152342] to-[#0b162c] text-white rounded-3xl p-5 sm:p-6 md:p-8 flex flex-col lg:flex-row items-center gap-6 justify-between shadow-2xl border-2 border-red-500/50 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#d8392f]/20 rounded-full blur-3xl pointer-events-none"></div>
-
-            <div className="relative z-10 text-left">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="bg-red-600 text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2.5 sm:px-3 py-0.5 rounded-full inline-flex items-center gap-1">
-                  <Lock className="w-3 h-3 text-white" />
-                  Registrations Closed
-                </span>
-                <span className="text-xs text-amber-400 font-bold flex items-center gap-1">
-                  <Trophy className="w-3.5 h-3.5" /> All 24 Teams Locked
-                </span>
-              </div>
-              <h3 className="font-black text-2xl sm:text-3xl md:text-4xl uppercase italic tracking-tighter text-white">
-                Tournament Registration: <span className="text-red-400">Closed</span>
-              </h3>
-              <p className="font-medium text-slate-300 text-xs sm:text-sm mt-1 max-w-xl">
-                All 24 team slots (16 Boys &amp; 8 Girls) are officially confirmed and locked. Sector 16 Stadium, Chandigarh • 5-Day Event
-              </p>
-
-              <div className="flex flex-wrap gap-x-4 sm:gap-x-5 gap-y-2 mt-3 sm:mt-4 pt-3 border-t border-white/10 text-xs text-slate-300 font-medium">
-                <div className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
-                  <span>12x Official Custom Jersey Kits (Jersey + Trouser)</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
-                  <span>Regulation White Leather Match Balls</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
-                  <span>Match Refreshments &amp; BCCI Grade Umpires</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative z-10 w-full lg:w-auto shrink-0 flex flex-col sm:flex-row lg:flex-col gap-2.5 sm:gap-3">
-              <a
-                href="/registration"
-                className="px-6 sm:px-8 py-3.5 sm:py-4 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-black italic text-base sm:text-lg uppercase tracking-wider rounded-2xl transition-all shadow-md text-center flex items-center justify-center gap-2"
-              >
-                <Lock className="w-5 h-5 text-red-400" />
-                <span>REGISTRATION CLOSED</span>
-              </a>
-              <span className="text-[10px] sm:text-[11px] text-center text-slate-400 font-medium">
-                All 24 Squad Slots Full
-              </span>
-            </div>
-          </div>
+          
         </div>
       </section>
 
@@ -1992,7 +2386,7 @@ export default function Home() {
               const accentColor = detail?.accentColor || '#f59e0b';
               const logoPlate = detail?.logoPlate || '';
               const riverText = detail?.river?.replace(/^River\s+/, '') || 'Vedic Division';
-              const isTeamRegistered = registeredTeamsList.some(r => r.name.toLowerCase() === team.toLowerCase());
+              const isTeamRegistered = true; // All 24 tournament teams are officially confirmed
 
               return (
                 <Link
