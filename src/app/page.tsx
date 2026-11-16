@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import TournamentGallery from '@/components/TournamentGallery';
+import DignitaryMessagesSection from '@/components/DignitaryMessagesSection';
 import { teamLogos, teamsData } from '@/data/teamsData';
 import {
   Calendar,
@@ -116,66 +117,158 @@ export default function Home() {
       });
   }, []);
 
-  // Official Boys Division Fixtures (Round of 16)
-  const boysFixturesDay1 = [
+  interface FixtureMatch {
+    matchNo: number;
+    time: string;
+    stage: string;
+    status?: 'past' | 'upcoming';
+    result?: string;
+    team1: {
+      name: string;
+      slug: string;
+      score?: string;
+      overs?: string;
+      isWinner?: boolean;
+    };
+    team2: {
+      name: string;
+      slug: string;
+      score?: string;
+      overs?: string;
+      isWinner?: boolean;
+    };
+  }
+
+  // Official Boys Division Fixtures (Super Knockout)
+  const boysFixturesDay1: FixtureMatch[] = [
     {
       matchNo: 1,
       time: "09:00 AM",
-      stage: "Round of 16 • Match 1",
-      team1: { name: "Jhelum Jaguars", slug: "jhelum-jaguars" },
-      team2: { name: "Ghaggar Champions", slug: "ghaggar-champions" },
+      stage: "Super Knockout • Match 1",
+      status: "past",
+      result: "Ghaggar Champions won by 56 runs",
+      team1: {
+        name: "Ghaggar Champions",
+        slug: "ghaggar-champions",
+        score: "105/4",
+        overs: "10.0",
+        isWinner: true,
+      },
+      team2: {
+        name: "Jhelum Jaguars",
+        slug: "jhelum-jaguars",
+        score: "49/10",
+        overs: "8.5",
+        isWinner: false,
+      },
     },
     {
       matchNo: 2,
       time: "11:00 AM",
-      stage: "Round of 16 • Match 2",
-      team1: { name: "Sindhu Spartans", slug: "sindhu-spartans" },
-      team2: { name: "Tapti Tigers", slug: "tapti-tigers" },
+      stage: "Super Knockout • Match 2",
+      status: "past",
+      result: "Tapti Tigers won by 8 runs",
+      team1: {
+        name: "Tapti Tigers",
+        slug: "tapti-tigers",
+        score: "114/3",
+        overs: "10.0",
+        isWinner: true,
+      },
+      team2: {
+        name: "Krishna Kings",
+        slug: "krishna-kings",
+        score: "106/3",
+        overs: "10.0",
+        isWinner: false,
+      },
     },
     {
       matchNo: 3,
       time: "01:00 PM",
-      stage: "Round of 16 • Match 3",
-      team1: { name: "Beas Blasters", slug: "beas-blasters" },
-      team2: { name: "Kaveri Warriors", slug: "kaveri-warriors" },
-    },
-    {
-      matchNo: 4,
-      time: "03:00 PM",
-      stage: "Round of 16 • Match 4",
-      team1: { name: "Krishna Kings", slug: "krishna-kings" },
-      team2: { name: "Satluj Soorme", slug: "satluj-soorme" },
+      stage: "Super Knockout • Match 3",
+      status: "past",
+      result: "Beas Blasters won by 8 wickets",
+      team1: {
+        name: "Satluj Soorme",
+        slug: "satluj-soorme",
+        score: "90/3",
+        overs: "10.0",
+        isWinner: false,
+      },
+      team2: {
+        name: "Beas Blasters",
+        slug: "beas-blasters",
+        score: "91/2",
+        overs: "6.1",
+        isWinner: true,
+      },
     },
   ];
 
-  const boysFixturesDay2 = [
+  const boysFixturesDay2: FixtureMatch[] = [
+    {
+      matchNo: 4,
+      time: "09:30 AM",
+      stage: "Super Knockout • Match 4",
+      status: "past",
+      result: "Mahanadi Masters won by 75 runs",
+      team1: {
+        name: "Mahanadi Masters",
+        slug: "mahanadi-masters",
+        score: "140/3",
+        overs: "10.0",
+        isWinner: true,
+      },
+      team2: {
+        name: "Godavari Knights",
+        slug: "godavari-knights",
+        score: "65/5",
+        overs: "10.0",
+        isWinner: false,
+      },
+    },
     {
       matchNo: 5,
-      time: "09:00 AM",
-      stage: "Round of 16 • Match 5",
-      team1: { name: "Brahmaputra Bulls", slug: "brahmaputra-bulls" },
-      team2: { name: "Ganga Giants", slug: "ganga-giants" },
+      time: "11:30 AM",
+      stage: "Super Knockout • Match 5",
+      status: "past",
+      result: "Kaveri Warriors won by 10 wickets",
+      team1: {
+        name: "Sindhu Spartans",
+        slug: "sindhu-spartans",
+        score: "63/4",
+        overs: "10.0",
+        isWinner: false,
+      },
+      team2: {
+        name: "Kaveri Warriors",
+        slug: "kaveri-warriors",
+        score: "67/0",
+        overs: "4.0",
+        isWinner: true,
+      },
     },
     {
       matchNo: 6,
-      time: "11:00 AM",
-      stage: "Round of 16 • Match 6",
-      team1: { name: "Narmada Titans", slug: "narmada-titans" },
-      team2: { name: "Yamuna Yodhas", slug: "yamuna-yodhas" },
-    },
-    {
-      matchNo: 7,
-      time: "01:00 PM",
-      stage: "Round of 16 • Match 7",
-      team1: { name: "Godavari Knights", slug: "godavari-knights" },
-      team2: { name: "Ravi Rangers", slug: "ravi-rangers" },
-    },
-    {
-      matchNo: 8,
-      time: "03:00 PM",
-      stage: "Round of 16 • Match 8",
-      team1: { name: "Mahanadi Masters", slug: "mahanadi-masters" },
-      team2: { name: "Chenab Challengers", slug: "chenab-challengers" },
+      time: "01:30 PM",
+      stage: "Super Knockout • Match 6",
+      status: "past",
+      result: "Narmada Titans won by 72 runs",
+      team1: {
+        name: "Narmada Titans",
+        slug: "narmada-titans",
+        score: "119/5",
+        overs: "10.0",
+        isWinner: true,
+      },
+      team2: {
+        name: "Chenab Challengers",
+        slug: "chenab-challengers",
+        score: "47/9",
+        overs: "7.2",
+        isWinner: false,
+      },
     },
   ];
 
@@ -1494,6 +1587,11 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════════
+          OFFICIAL DIGNITARY MESSAGES & PATRON BLESSINGS SECTION
+          ═══════════════════════════════════════════════════════════════════════ */}
+      <DignitaryMessagesSection />
+
+      {/* ═══════════════════════════════════════════════════════════════════════
           OFFICIAL INSTITUTIONAL COLLABORATIONS SECTION (Partners & Associations)
           ═══════════════════════════════════════════════════════════════════════ */}
       <section id="collaborations" className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white via-slate-50/80 to-white border-b border-slate-200 relative overflow-hidden">
@@ -1879,6 +1977,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ================= TOURNAMENT SCHEDULE / FIXTURES ================= */}
       {/* Tournament Transition Ribbon between Media Partners & Schedule */}
       <div className="h-2 w-full bg-gradient-to-r from-amber-400 via-[#d8392f] to-blue-500 shadow-md relative z-20" />
 
@@ -1924,7 +2023,7 @@ export default function Home() {
                       : 'bg-white/5 hover:bg-white/10 text-slate-300'
                   }`}
                 >
-                  All Fixtures (8 Matches)
+                  All Fixtures (6 Matches)
                 </button>
                 <button
                   type="button"
@@ -1935,8 +2034,8 @@ export default function Home() {
                       : 'bg-white/5 hover:bg-white/10 text-slate-300'
                   }`}
                 >
-                  <span>Day 1 • 15 Nov</span>
-                  <span className="text-[10px] bg-black/30 px-1.5 py-0.5 rounded font-bold">4 Matches</span>
+                  <span>Day 1 (Results) • 15 Nov</span>
+                  <span className="text-[10px] bg-black/30 px-1.5 py-0.5 rounded font-bold">3 Matches</span>
                 </button>
                 <button
                   type="button"
@@ -1947,8 +2046,9 @@ export default function Home() {
                       : 'bg-white/5 hover:bg-white/10 text-slate-300'
                   }`}
                 >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   <span>Day 2 • 16 Nov</span>
-                  <span className="text-[10px] bg-black/30 px-1.5 py-0.5 rounded font-bold">4 Matches</span>
+                  <span className="text-[10px] bg-emerald-500/30 text-emerald-200 px-1.5 py-0.5 rounded font-bold">3 Results</span>
                 </button>
               </div>
 
@@ -1959,7 +2059,7 @@ export default function Home() {
             </div>
 
             {/* Fixtures Matches Grid */}
-            <div className="grid lg:grid-cols-2 gap-6 sm:gap-8">
+            <div className={`grid gap-6 sm:gap-8 ${scheduleDayTab === 'all' ? 'lg:grid-cols-2' : 'grid-cols-1'}`}>
               {/* Day 1: Sunday, 15 November 2026 */}
               {(scheduleDayTab === 'all' || scheduleDayTab === 'day1') && (
                 <div className={`space-y-4 ${scheduleDayTab === 'day1' ? 'lg:col-span-2' : ''}`}>
@@ -1974,21 +2074,21 @@ export default function Home() {
                           <h3 className="font-black text-base sm:text-lg text-white uppercase italic tracking-wide">
                             Sunday, 15 November 2026
                           </h3>
-                          <span className="bg-sky-500/20 text-sky-300 border border-sky-400/30 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
-                            Round of 16
+                          <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
+                            Official Results
                           </span>
                         </div>
                         <p className="text-[11px] text-slate-300 mt-0.5 font-medium">
-                          Boys Division • Matches 1 to 4 • T10 Knockout Format
+                          Boys Division • Super Knockout • 3 Matches Completed
                         </p>
                       </div>
                     </div>
-                    <span className="text-xs font-bold text-sky-300 bg-sky-950/80 px-2.5 py-1 rounded-lg border border-sky-800/60 hidden sm:inline-block shrink-0">
-                      4 Matches
+                    <span className="text-xs font-bold text-emerald-300 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-800/60 hidden sm:inline-block shrink-0">
+                      3 Results
                     </span>
                   </div>
 
-                  <div className={`space-y-3.5 ${scheduleDayTab === 'day1' ? 'grid md:grid-cols-2 gap-4 space-y-0' : ''}`}>
+                  <div className={`space-y-3.5 ${scheduleDayTab === 'day1' ? 'grid md:grid-cols-2 lg:grid-cols-3 gap-4 space-y-0' : ''}`}>
                     {boysFixturesDay1.map((match) => {
                       const team1Logo = teamLogos[match.team1.slug];
                       const team2Logo = teamLogos[match.team2.slug];
@@ -2002,24 +2102,24 @@ export default function Home() {
                         >
                           <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 rounded-full blur-2xl pointer-events-none" />
 
-                          {/* Card Header: Match No & Time */}
+                          {/* Card Header: Match No & Status */}
                           <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/10 relative z-10 text-xs">
                             <div className="flex items-center gap-2">
                               <span className="bg-[#d8392f] text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow-xs">
                                 Match {match.matchNo}
                               </span>
                               <span className="text-slate-300 font-bold text-[11px]">
-                                Round of 16
+                                {match.stage}
                               </span>
                             </div>
 
-                            <div className="flex items-center gap-1.5 text-amber-400 font-black text-xs sm:text-[13px] bg-amber-400/10 px-2.5 py-0.5 rounded-lg border border-amber-400/30">
-                              <Clock className="w-3.5 h-3.5 text-amber-400" />
-                              <span>{match.time} IST</span>
-                            </div>
+                            <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-black/80 text-white px-2.5 py-0.5 rounded-md border border-slate-700 shadow-2xs">
+                              <span className="text-[9px] text-emerald-400">▶</span>
+                              <span>Past</span>
+                            </span>
                           </div>
 
-                          {/* Teams Face-Off Row */}
+                          {/* Teams Face-Off Row with Scores */}
                           <div className="grid grid-cols-11 items-center gap-2 py-1 relative z-10">
                             {/* Team 1 */}
                             <Link
@@ -2040,10 +2140,22 @@ export default function Home() {
                                 )}
                               </div>
                               <div className="min-w-0">
-                                <h4 className="font-black text-xs sm:text-sm text-white uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight">
+                                <h4 className={`font-black text-xs sm:text-sm uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight ${match.team1.isWinner ? 'text-white font-extrabold' : 'text-slate-300 font-semibold'}`}>
                                   {match.team1.name}
                                 </h4>
-                                <span className="text-[10px] text-slate-400 font-semibold block truncate mt-0.5">
+                                {match.team1.score && (
+                                  <div className="mt-0.5 flex items-baseline gap-1">
+                                    <span className="font-black text-sm text-white tracking-tight">
+                                      {match.team1.score}
+                                    </span>
+                                    {match.team1.overs && (
+                                      <span className="text-[10px] text-slate-400 font-medium">
+                                        ({match.team1.overs})
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate">
                                   {team1Detail?.river || 'Vedic River Squad'}
                                 </span>
                               </div>
@@ -2065,10 +2177,22 @@ export default function Home() {
                               className="col-span-5 flex items-center justify-end gap-2 sm:gap-2.5 text-right group/team hover:opacity-90 transition-opacity"
                             >
                               <div className="min-w-0">
-                                <h4 className="font-black text-xs sm:text-sm text-white uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight">
+                                <h4 className={`font-black text-xs sm:text-sm uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight ${match.team2.isWinner ? 'text-white font-extrabold' : 'text-slate-300 font-semibold'}`}>
                                   {match.team2.name}
                                 </h4>
-                                <span className="text-[10px] text-slate-400 font-semibold block truncate mt-0.5">
+                                {match.team2.score && (
+                                  <div className="mt-0.5 flex items-baseline justify-end gap-1">
+                                    <span className="font-black text-sm text-white tracking-tight">
+                                      {match.team2.score}
+                                    </span>
+                                    {match.team2.overs && (
+                                      <span className="text-[10px] text-slate-400 font-medium">
+                                        ({match.team2.overs})
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate">
                                   {team2Detail?.river || 'Vedic River Squad'}
                                 </span>
                               </div>
@@ -2088,19 +2212,26 @@ export default function Home() {
                             </Link>
                           </div>
 
-                          {/* Card Footer: Stadium Venue & Free Match Pass */}
-                          <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 relative z-10">
+                          {/* Match Result Banner */}
+                          {match.result && (
+                            <div className="mt-2.5 py-1.5 px-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 text-xs flex items-center justify-between">
+                              <span className="font-extrabold text-white flex items-center gap-1.5">
+                                <Trophy className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                                {match.result}
+                              </span>
+                              <span className="text-[10px] uppercase font-black tracking-wider text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded shrink-0">
+                                Result
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Card Footer: Stadium Venue */}
+                          <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 relative z-10">
                             <span className="flex items-center gap-1 text-slate-300">
                               <MapPin className="w-3 h-3 text-sky-400 shrink-0" />
-                              <span className="truncate">Sector 16 Cricket Stadium</span>
+                              <span className="truncate">Sector 16 Cricket Stadium, Chandigarh</span>
                             </span>
-                            <Link
-                              href="/passes"
-                              className="text-amber-400 hover:text-amber-300 font-bold uppercase tracking-wider flex items-center gap-1 text-[10px] sm:text-[11px] shrink-0"
-                            >
-                              <Ticket className="w-3 h-3" />
-                              <span>Free Pass &rarr;</span>
-                            </Link>
+                            <span className="text-[10px] text-slate-400 font-medium">10 Ov. Knockout</span>
                           </div>
                         </div>
                       );
@@ -2110,7 +2241,7 @@ export default function Home() {
               )}
 
               {/* Day 2: Monday, 16 November 2026 */}
-              {(scheduleDayTab === 'all' || scheduleDayTab === 'day2') && (
+              {(scheduleDayTab === 'day2' || scheduleDayTab === 'all') && (
                 <div className={`space-y-4 ${scheduleDayTab === 'day2' ? 'lg:col-span-2' : ''}`}>
                   <div className="bg-gradient-to-r from-[#12244a] via-[#0e1d3c] to-[#091122] p-4 sm:p-5 rounded-2xl border-2 border-indigo-400/40 shadow-xl flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3 sm:gap-3.5">
@@ -2123,21 +2254,21 @@ export default function Home() {
                           <h3 className="font-black text-base sm:text-lg text-white uppercase italic tracking-wide">
                             Monday, 16 November 2026
                           </h3>
-                          <span className="bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
-                            Round of 16
+                          <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
+                            Official Results
                           </span>
                         </div>
                         <p className="text-[11px] text-slate-300 mt-0.5 font-medium">
-                          Boys Division • Matches 5 to 8 • T10 Knockout Format
+                          Boys Division • Super Knockout • 3 Matches Completed
                         </p>
                       </div>
                     </div>
-                    <span className="text-xs font-bold text-indigo-300 bg-indigo-950/80 px-2.5 py-1 rounded-lg border border-indigo-800/60 hidden sm:inline-block shrink-0">
-                      4 Matches
+                    <span className="text-xs font-bold text-emerald-300 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-800/60 hidden sm:inline-block shrink-0">
+                      3 Results
                     </span>
                   </div>
 
-                  <div className={`space-y-3.5 ${scheduleDayTab === 'day2' ? 'grid md:grid-cols-2 gap-4 space-y-0' : ''}`}>
+                  <div className={`space-y-3.5 ${scheduleDayTab === 'day2' ? 'grid md:grid-cols-2 lg:grid-cols-3 gap-4 space-y-0' : ''}`}>
                     {boysFixturesDay2.map((match) => {
                       const team1Logo = teamLogos[match.team1.slug];
                       const team2Logo = teamLogos[match.team2.slug];
@@ -2151,24 +2282,31 @@ export default function Home() {
                         >
                           <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
 
-                          {/* Card Header: Match No & Time */}
+                          {/* Card Header: Match No & Status */}
                           <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/10 relative z-10 text-xs">
                             <div className="flex items-center gap-2">
                               <span className="bg-[#d8392f] text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow-xs">
                                 Match {match.matchNo}
                               </span>
                               <span className="text-slate-300 font-bold text-[11px]">
-                                Round of 16
+                                {match.stage}
                               </span>
                             </div>
 
-                            <div className="flex items-center gap-1.5 text-amber-400 font-black text-xs sm:text-[13px] bg-amber-400/10 px-2.5 py-0.5 rounded-lg border border-amber-400/30">
-                              <Clock className="w-3.5 h-3.5 text-amber-400" />
-                              <span>{match.time} IST</span>
-                            </div>
+                            {match.status === 'past' ? (
+                              <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-black/80 text-white px-2.5 py-0.5 rounded-md border border-slate-700 shadow-2xs">
+                                <span className="text-[9px] text-emerald-400">▶</span>
+                                <span>Past</span>
+                              </span>
+                            ) : (
+                              <div className="flex items-center gap-1.5 text-amber-400 font-black text-xs sm:text-[13px] bg-amber-400/10 px-2.5 py-0.5 rounded-lg border border-amber-400/30">
+                                <Clock className="w-3.5 h-3.5 text-amber-400" />
+                                <span>{match.time} IST</span>
+                              </div>
+                            )}
                           </div>
 
-                          {/* Teams Face-Off Row */}
+                          {/* Teams Face-Off Row with Scores */}
                           <div className="grid grid-cols-11 items-center gap-2 py-1 relative z-10">
                             {/* Team 1 */}
                             <Link
@@ -2189,10 +2327,22 @@ export default function Home() {
                                 )}
                               </div>
                               <div className="min-w-0">
-                                <h4 className="font-black text-xs sm:text-sm text-white uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight">
+                                <h4 className={`font-black text-xs sm:text-sm uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight ${match.team1.isWinner ? 'text-white font-extrabold' : 'text-slate-300 font-semibold'}`}>
                                   {match.team1.name}
                                 </h4>
-                                <span className="text-[10px] text-slate-400 font-semibold block truncate mt-0.5">
+                                {match.team1.score && (
+                                  <div className="mt-0.5 flex items-baseline gap-1">
+                                    <span className="font-black text-sm text-white tracking-tight">
+                                      {match.team1.score}
+                                    </span>
+                                    {match.team1.overs && (
+                                      <span className="text-[10px] text-slate-400 font-medium">
+                                        ({match.team1.overs})
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate">
                                   {team1Detail?.river || 'Vedic River Squad'}
                                 </span>
                               </div>
@@ -2214,10 +2364,22 @@ export default function Home() {
                               className="col-span-5 flex items-center justify-end gap-2 sm:gap-2.5 text-right group/team hover:opacity-90 transition-opacity"
                             >
                               <div className="min-w-0">
-                                <h4 className="font-black text-xs sm:text-sm text-white uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight">
+                                <h4 className={`font-black text-xs sm:text-sm uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight ${match.team2.isWinner ? 'text-white font-extrabold' : 'text-slate-300 font-semibold'}`}>
                                   {match.team2.name}
                                 </h4>
-                                <span className="text-[10px] text-slate-400 font-semibold block truncate mt-0.5">
+                                {match.team2.score && (
+                                  <div className="mt-0.5 flex items-baseline justify-end gap-1">
+                                    <span className="font-black text-sm text-white tracking-tight">
+                                      {match.team2.score}
+                                    </span>
+                                    {match.team2.overs && (
+                                      <span className="text-[10px] text-slate-400 font-medium">
+                                        ({match.team2.overs})
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate">
                                   {team2Detail?.river || 'Vedic River Squad'}
                                 </span>
                               </div>
@@ -2237,19 +2399,26 @@ export default function Home() {
                             </Link>
                           </div>
 
-                          {/* Card Footer: Stadium Venue & Free Match Pass */}
-                          <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 relative z-10">
+                          {/* Match Result Banner */}
+                          {match.result && (
+                            <div className="mt-2.5 py-1.5 px-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 text-xs flex items-center justify-between">
+                              <span className="font-extrabold text-white flex items-center gap-1.5">
+                                <Trophy className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                                {match.result}
+                              </span>
+                              <span className="text-[10px] uppercase font-black tracking-wider text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded shrink-0">
+                                Result
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Card Footer: Stadium Venue */}
+                          <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 relative z-10">
                             <span className="flex items-center gap-1 text-slate-300">
                               <MapPin className="w-3 h-3 text-sky-400 shrink-0" />
-                              <span className="truncate">Sector 16 Cricket Stadium</span>
+                              <span className="truncate">Sector 16 Cricket Stadium, Chandigarh</span>
                             </span>
-                            <Link
-                              href="/passes"
-                              className="text-amber-400 hover:text-amber-300 font-bold uppercase tracking-wider flex items-center gap-1 text-[10px] sm:text-[11px] shrink-0"
-                            >
-                              <Ticket className="w-3 h-3" />
-                              <span>Free Pass &rarr;</span>
-                            </Link>
+                            <span className="text-[10px] text-slate-400 font-medium">10 Ov. Knockout</span>
                           </div>
                         </div>
                       );

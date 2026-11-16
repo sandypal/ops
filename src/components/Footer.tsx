@@ -81,6 +81,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/#messages" className="text-amber-300 hover:text-amber-200 transition-colors font-semibold flex items-center gap-1">
+                  <span>Dignitary Messages</span>
+                  <span className="text-[10px] bg-red-600/80 text-white px-1.5 py-0.2 rounded font-bold">New</span>
+                </Link>
+              </li>
+              <li>
                 <Link href="/#collaborations" className="hover:text-[#d8392f] transition-colors">
                   Official Collaborations
                 </Link>
