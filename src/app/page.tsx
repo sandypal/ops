@@ -39,7 +39,7 @@ import {
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'boys' | 'girls'>('boys');
-  const [scheduleDayTab, setScheduleDayTab] = useState<'all' | 'day1' | 'day2'>('all');
+  const [scheduleDayTab, setScheduleDayTab] = useState<'all' | 'finals' | 'day5' | 'day4' | 'day3' | 'day2' | 'day1'>('all');
   const [isSponsorModalOpen, setIsSponsorModalOpen] = useState(false);
   const [selectedSponsorTier, setSelectedSponsorTier] = useState<string>('Platinum Partner');
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -123,6 +123,7 @@ export default function Home() {
     stage: string;
     status?: 'past' | 'upcoming';
     result?: string;
+    division?: 'boys' | 'girls';
     team1: {
       name: string;
       slug: string;
@@ -268,6 +269,275 @@ export default function Home() {
         score: "47/9",
         overs: "7.2",
         isWinner: false,
+      },
+    },
+  ];
+
+  const boysFixturesDay3: FixtureMatch[] = [
+    {
+      matchNo: 7,
+      time: "09:30 AM",
+      stage: "Super Knockout • Match 7",
+      status: "past",
+      result: "Ganga Giants won by 3 runs",
+      team1: {
+        name: "Ganga Giants",
+        slug: "ganga-giants",
+        score: "110/7",
+        overs: "10.0",
+        isWinner: true,
+      },
+      team2: {
+        name: "Brahmaputra Bulls",
+        slug: "brahmaputra-bulls",
+        score: "107/6",
+        overs: "10.0",
+        isWinner: false,
+      },
+    },
+    {
+      matchNo: 8,
+      time: "11:30 AM",
+      stage: "Super Knockout • Match 8",
+      status: "past",
+      result: "Yamuna Yodhas won by 5 wickets",
+      team1: {
+        name: "Ravi Rangers",
+        slug: "ravi-rangers",
+        score: "94/10",
+        overs: "9.5",
+        isWinner: false,
+      },
+      team2: {
+        name: "Yamuna Yodhas",
+        slug: "yamuna-yodhas",
+        score: "95/5",
+        overs: "9.3",
+        isWinner: true,
+      },
+    },
+    {
+      matchNo: 9,
+      time: "01:30 PM",
+      stage: "Quarter Final • Match 9",
+      status: "past",
+      result: "Beas Blasters won by 18 runs",
+      team1: {
+        name: "Beas Blasters",
+        slug: "beas-blasters",
+        score: "133/3",
+        overs: "10.0",
+        isWinner: true,
+      },
+      team2: {
+        name: "Kaveri Warriors",
+        slug: "kaveri-warriors",
+        score: "115/8",
+        overs: "10.0",
+        isWinner: false,
+      },
+    },
+    {
+      matchNo: 10,
+      time: "03:30 PM",
+      stage: "Quarter Final • Match 10",
+      status: "past",
+      result: "Narmada Titans won by 45 runs",
+      team1: {
+        name: "Narmada Titans",
+        slug: "narmada-titans",
+        score: "139/6",
+        overs: "10.0",
+        isWinner: true,
+      },
+      team2: {
+        name: "Tapti Tigers",
+        slug: "tapti-tigers",
+        score: "94/4",
+        overs: "10.0",
+        isWinner: false,
+      },
+    },
+  ];
+
+  const boysFixturesDay4: FixtureMatch[] = [
+    {
+      matchNo: 11,
+      time: "09:30 AM",
+      stage: "Quarter Final • Match 11",
+      status: "past",
+      result: "Mahanadi Masters won by 6 runs",
+      team1: {
+        name: "Mahanadi Masters",
+        slug: "mahanadi-masters",
+        score: "80/7",
+        overs: "10.0",
+        isWinner: true,
+      },
+      team2: {
+        name: "Ghaggar Champions",
+        slug: "ghaggar-champions",
+        score: "74/8",
+        overs: "10.0",
+        isWinner: false,
+      },
+    },
+    {
+      matchNo: 12,
+      time: "11:30 AM",
+      stage: "Quarter Final • Match 12",
+      status: "past",
+      result: "Yamuna Yodhas won by 8 wickets",
+      team1: {
+        name: "Ganga Giants",
+        slug: "ganga-giants",
+        score: "61/7",
+        overs: "10.0",
+        isWinner: false,
+      },
+      team2: {
+        name: "Yamuna Yodhas",
+        slug: "yamuna-yodhas",
+        score: "66/2",
+        overs: "6.1",
+        isWinner: true,
+      },
+    },
+    {
+      matchNo: 13,
+      time: "02:00 PM",
+      stage: "Semi Final 1 • Match 13",
+      status: "past",
+      result: "Narmada Titans won by 7 wickets",
+      team1: {
+        name: "Beas Blasters",
+        slug: "beas-blasters",
+        score: "95/4",
+        overs: "10.0",
+        isWinner: false,
+      },
+      team2: {
+        name: "Narmada Titans",
+        slug: "narmada-titans",
+        score: "99/3",
+        overs: "9.1",
+        isWinner: true,
+      },
+    },
+  ];
+
+  const fixturesDay5: FixtureMatch[] = [
+    {
+      matchNo: 14,
+      time: "09:30 AM",
+      stage: "Semi-Final (Boys) • Match 14",
+      status: "past",
+      result: "Yamuna Yodhas won by 6 wickets",
+      division: "boys",
+      team1: {
+        name: "Mahanadi Masters",
+        slug: "mahanadi-masters",
+        score: "129/6",
+        overs: "10.0",
+        isWinner: false,
+      },
+      team2: {
+        name: "Yamuna Yodhas",
+        slug: "yamuna-yodhas",
+        score: "130/4",
+        overs: "10.0",
+        isWinner: true,
+      },
+    },
+    {
+      matchNo: 15,
+      time: "11:30 AM",
+      stage: "Semi-Final (Girls) • Match 15",
+      status: "past",
+      result: "Sabarmati Sunrisers won by 8 runs",
+      division: "girls",
+      team1: {
+        name: "Sabarmati Sunrisers",
+        slug: "sabarmati-sunrisers",
+        score: "98/4",
+        overs: "10.0",
+        isWinner: true,
+      },
+      team2: {
+        name: "Kaveri Queens",
+        slug: "kaveri-queens",
+        score: "90/4",
+        overs: "10.0",
+        isWinner: false,
+      },
+    },
+    {
+      matchNo: 16,
+      time: "01:30 PM",
+      stage: "Semi-Final (Girls) • Match 16",
+      status: "past",
+      result: "Saraswati Strikers won by 10 wickets",
+      division: "girls",
+      team1: {
+        name: "Sindhu Sherniyan",
+        slug: "sindhu-sherniyan",
+        score: "55/6",
+        overs: "10.0",
+        isWinner: false,
+      },
+      team2: {
+        name: "Saraswati Strikers",
+        slug: "saraswati-strikers",
+        score: "58/0",
+        overs: "5.4",
+        isWinner: true,
+      },
+    },
+  ];
+
+  const fixturesGrandFinals: FixtureMatch[] = [
+    {
+      matchNo: 17,
+      time: "11:30 AM",
+      stage: "Women's Championship • Grand Final",
+      status: "past",
+      result: "Sabarmati Sunrisers won by 9 wickets",
+      division: "girls",
+      team1: {
+        name: "Saraswati Strikers",
+        slug: "saraswati-strikers",
+        score: "77/3",
+        overs: "10.0",
+        isWinner: false,
+      },
+      team2: {
+        name: "Sabarmati Sunrisers",
+        slug: "sabarmati-sunrisers",
+        score: "81/1",
+        overs: "9.3",
+        isWinner: true,
+      },
+    },
+    {
+      matchNo: 18,
+      time: "02:00 PM",
+      stage: "Men's Championship • Grand Final",
+      status: "past",
+      result: "Yamuna Yodhas won by 8 wickets",
+      division: "boys",
+      team1: {
+        name: "Narmada Titans",
+        slug: "narmada-titans",
+        score: "104/8",
+        overs: "10.0",
+        isWinner: false,
+      },
+      team2: {
+        name: "Yamuna Yodhas",
+        slug: "yamuna-yodhas",
+        score: "109/2",
+        overs: "9.2",
+        isWinner: true,
       },
     },
   ];
@@ -2023,19 +2293,55 @@ export default function Home() {
                       : 'bg-white/5 hover:bg-white/10 text-slate-300'
                   }`}
                 >
-                  All Fixtures (6 Matches)
+                  All Fixtures (18 Matches)
                 </button>
                 <button
                   type="button"
-                  onClick={() => setScheduleDayTab('day1')}
+                  onClick={() => setScheduleDayTab('finals')}
                   className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
-                    scheduleDayTab === 'day1'
+                    scheduleDayTab === 'finals'
+                      ? 'bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 text-slate-950 shadow-md font-black'
+                      : 'bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/50'
+                  }`}
+                >
+                  <Trophy className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Grand Finals • Champions 🏆</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScheduleDayTab('day5')}
+                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                    scheduleDayTab === 'day5'
                       ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-md'
                       : 'bg-white/5 hover:bg-white/10 text-slate-300'
                   }`}
                 >
-                  <span>Day 1 (Results) • 15 Nov</span>
-                  <span className="text-[10px] bg-black/30 px-1.5 py-0.5 rounded font-bold">3 Matches</span>
+                  <span>Day 5 • 19 Nov</span>
+                  <span className="text-[10px] bg-black/30 px-1.5 py-0.5 rounded font-bold">3 Semi-Finals</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScheduleDayTab('day4')}
+                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                    scheduleDayTab === 'day4'
+                      ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-md'
+                      : 'bg-white/5 hover:bg-white/10 text-slate-300'
+                  }`}
+                >
+                  <span>Day 4 • 18 Nov</span>
+                  <span className="text-[10px] bg-black/30 px-1.5 py-0.5 rounded font-bold">3 Results</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScheduleDayTab('day3')}
+                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                    scheduleDayTab === 'day3'
+                      ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-md'
+                      : 'bg-white/5 hover:bg-white/10 text-slate-300'
+                  }`}
+                >
+                  <span>Day 3 • 17 Nov</span>
+                  <span className="text-[10px] bg-black/30 px-1.5 py-0.5 rounded font-bold">4 Results</span>
                 </button>
                 <button
                   type="button"
@@ -2046,9 +2352,20 @@ export default function Home() {
                       : 'bg-white/5 hover:bg-white/10 text-slate-300'
                   }`}
                 >
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   <span>Day 2 • 16 Nov</span>
-                  <span className="text-[10px] bg-emerald-500/30 text-emerald-200 px-1.5 py-0.5 rounded font-bold">3 Results</span>
+                  <span className="text-[10px] bg-black/30 px-1.5 py-0.5 rounded font-bold">3 Results</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScheduleDayTab('day1')}
+                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                    scheduleDayTab === 'day1'
+                      ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-md'
+                      : 'bg-white/5 hover:bg-white/10 text-slate-300'
+                  }`}
+                >
+                  <span>Day 1 • 15 Nov</span>
+                  <span className="text-[10px] bg-black/30 px-1.5 py-0.5 rounded font-bold">3 Results</span>
                 </button>
               </div>
 
@@ -2060,6 +2377,372 @@ export default function Home() {
 
             {/* Fixtures Matches Grid */}
             <div className={`grid gap-6 sm:gap-8 ${scheduleDayTab === 'all' ? 'lg:grid-cols-2' : 'grid-cols-1'}`}>
+              {/* GRAND FINALS • 20 NOVEMBER 2026 (CHAMPIONS CROWNED) */}
+              {(scheduleDayTab === 'all' || scheduleDayTab === 'finals') && (
+                <div className="space-y-4 lg:col-span-2">
+                  <div className="bg-gradient-to-r from-[#2a1705] via-[#3a2007] to-[#1a0c02] p-4 sm:p-5 rounded-2xl border-2 border-amber-400/80 shadow-2xl flex items-center justify-between gap-3 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
+                    <div className="flex items-center gap-3 sm:gap-3.5 relative z-10">
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 text-slate-950 font-black text-sm flex flex-col items-center justify-center shadow-lg shrink-0 border-2 border-amber-200">
+                        <Trophy className="w-5 h-5 text-slate-950" />
+                        <span className="text-[9px] uppercase leading-none font-black mt-0.5">FINAL</span>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-black text-base sm:text-xl text-white uppercase italic tracking-wide">
+                            GRAND FINALS • Friday, 20 November 2026
+                          </h3>
+                          <span className="bg-amber-400 text-slate-950 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs flex items-center gap-1">
+                            <Trophy className="w-3 h-3 text-slate-950" />
+                            <span>Champions Decided</span>
+                          </span>
+                        </div>
+                        <p className="text-[11px] sm:text-xs text-amber-200/90 mt-0.5 font-medium">
+                          🏆 Men&apos;s Champions: <strong className="text-white font-extrabold">Yamuna Yodhas</strong> • Women&apos;s Champions: <strong className="text-white font-extrabold">Sabarmati Sunrisers</strong>
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-black text-amber-300 bg-amber-950/90 px-3 py-1.5 rounded-xl border border-amber-500/50 hidden sm:inline-flex items-center gap-1.5 shrink-0 shadow-sm relative z-10">
+                      <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                      <span>2 Title Clashes</span>
+                    </span>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {fixturesGrandFinals.map((match) => {
+                      const team1Logo = teamLogos[match.team1.slug];
+                      const team2Logo = teamLogos[match.team2.slug];
+                      const team1Detail = teamsData[match.team1.slug];
+                      const team2Detail = teamsData[match.team2.slug];
+                      const isGirls = match.division === 'girls' || team1Detail?.division === 'girls';
+
+                      return (
+                        <div
+                          key={match.matchNo}
+                          className="bg-gradient-to-br from-[#1c1206] via-[#112344] to-[#0a1326] rounded-2xl border-2 border-amber-400/50 hover:border-amber-400 transition-all p-3.5 sm:p-4.5 shadow-xl hover:shadow-[0_10px_30px_rgba(245,158,11,0.25)] group relative overflow-hidden"
+                        >
+                          <div className="absolute top-0 right-0 w-36 h-36 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
+
+                          {/* Card Header: Match No & Status */}
+                          <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/10 relative z-10 text-xs">
+                            <div className="flex items-center gap-2">
+                              <span className="bg-amber-400 text-slate-950 text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow-xs flex items-center gap-1">
+                                <Trophy className="w-3 h-3 text-slate-950" />
+                                <span>Grand Final</span>
+                              </span>
+                              <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded border ${isGirls ? 'bg-rose-500/20 text-rose-300 border-rose-400/30' : 'bg-blue-500/20 text-blue-300 border-blue-400/30'}`}>
+                                {isGirls ? "Women's Championship" : "Men's Championship"}
+                              </span>
+                            </div>
+
+                            <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-black/80 text-white px-2.5 py-0.5 rounded-md border border-slate-700 shadow-2xs">
+                              <span className="text-[9px] text-emerald-400">▶</span>
+                              <span>Past</span>
+                            </span>
+                          </div>
+
+                          {/* Teams Face-Off Row with Scores */}
+                          <div className="grid grid-cols-11 items-center gap-2 py-1 relative z-10">
+                            {/* Team 1 */}
+                            <Link
+                              href={`/teams/${match.team1.slug}`}
+                              className="col-span-5 flex items-center gap-2 sm:gap-2.5 group/team hover:opacity-90 transition-opacity"
+                            >
+                              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center shadow-md border border-white/40 group-hover/team:scale-105 transition-transform">
+                                {team1Logo ? (
+                                  <Image
+                                    src={team1Logo}
+                                    alt={match.team1.name}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                              <div className="min-w-0">
+                                <h4 className={`font-black text-xs sm:text-sm uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight ${match.team1.isWinner ? 'text-white font-extrabold' : 'text-slate-300 font-semibold'}`}>
+                                  {match.team1.name}
+                                </h4>
+                                {match.team1.score && (
+                                  <div className="mt-0.5 flex items-baseline gap-1">
+                                    <span className="font-black text-sm text-white tracking-tight">
+                                      {match.team1.score}
+                                    </span>
+                                    {match.team1.overs && (
+                                      <span className="text-[10px] text-slate-400 font-medium">
+                                        ({match.team1.overs})
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate">
+                                  {team1Detail?.river || 'Vedic River Squad'}
+                                </span>
+                              </div>
+                            </Link>
+
+                            {/* Center VS Badge */}
+                            <div className="col-span-1 flex flex-col items-center justify-center">
+                              <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#d8392f] to-[#b91c1c] text-white font-black italic text-[11px] sm:text-xs flex items-center justify-center shadow-md border border-red-400/50">
+                                VS
+                              </span>
+                              <span className="text-[8px] sm:text-[9px] uppercase font-bold text-amber-400 mt-1 tracking-wider whitespace-nowrap">
+                                FINAL
+                              </span>
+                            </div>
+
+                            {/* Team 2 */}
+                            <Link
+                              href={`/teams/${match.team2.slug}`}
+                              className="col-span-5 flex items-center justify-end gap-2 sm:gap-2.5 text-right group/team hover:opacity-90 transition-opacity"
+                            >
+                              <div className="min-w-0">
+                                <h4 className={`font-black text-xs sm:text-sm uppercase italic tracking-tight truncate group-hover/team:text-amber-300 transition-colors leading-tight ${match.team2.isWinner ? 'text-amber-300 font-black' : 'text-slate-300 font-semibold'}`}>
+                                  {match.team2.name}
+                                </h4>
+                                {match.team2.score && (
+                                  <div className="mt-0.5 flex items-baseline justify-end gap-1">
+                                    <span className="font-black text-sm text-amber-300 tracking-tight">
+                                      {match.team2.score}
+                                    </span>
+                                    {match.team2.overs && (
+                                      <span className="text-[10px] text-slate-400 font-medium">
+                                        ({match.team2.overs})
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate">
+                                  {team2Detail?.river || 'Vedic River Squad'}
+                                </span>
+                              </div>
+                              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center shadow-md border-2 border-amber-400/80 group-hover/team:scale-105 transition-transform">
+                                {team2Logo ? (
+                                  <Image
+                                    src={team2Logo}
+                                    alt={match.team2.name}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                            </Link>
+                          </div>
+
+                          {/* Match Result Banner */}
+                          {match.result && (
+                            <div className="mt-2.5 py-1.5 px-3 rounded-xl bg-gradient-to-r from-amber-950 via-yellow-950 to-amber-950 border border-amber-500/60 text-amber-200 text-xs flex items-center justify-between shadow-xs">
+                              <span className="font-black text-amber-300 flex items-center gap-1.5">
+                                <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
+                                <span>{match.result}</span>
+                              </span>
+                              <span className="text-[10px] uppercase font-black tracking-wider text-slate-950 bg-amber-400 px-2 py-0.5 rounded shrink-0">
+                                Champions 🏆
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Card Footer: Stadium Venue */}
+                          <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 relative z-10">
+                            <span className="flex items-center gap-1 text-slate-300">
+                              <MapPin className="w-3 h-3 text-sky-400 shrink-0" />
+                              <span className="truncate">Sector 16 Cricket Stadium, Chandigarh</span>
+                            </span>
+                            <span className="text-[10px] text-amber-400 font-black">Title Championship</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Day 5: Thursday, 19 November 2026 (SEMI-FINALS RESULTS) */}
+              {(scheduleDayTab === 'all' || scheduleDayTab === 'day5') && (
+                <div className={`space-y-4 ${scheduleDayTab === 'day5' ? 'lg:col-span-2' : ''}`}>
+                  <div className="bg-gradient-to-r from-[#2c130b] via-[#3a1a0d] to-[#1a0904] p-4 sm:p-5 rounded-2xl border-2 border-amber-400/60 shadow-xl flex items-center justify-between gap-3 relative overflow-hidden">
+                    <div className="flex items-center gap-3 sm:gap-3.5 relative z-10">
+                      <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-amber-500 via-orange-500 to-red-600 text-white font-black text-sm flex flex-col items-center justify-center shadow-lg shrink-0 border border-amber-300/40">
+                        <span className="text-[9px] uppercase leading-none opacity-85 font-bold">DAY</span>
+                        <span className="text-base sm:text-lg leading-none mt-0.5">05</span>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-black text-base sm:text-lg text-white uppercase italic tracking-wide">
+                            Thursday, 19 November 2026
+                          </h3>
+                          <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
+                            Official Results
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mt-0.5 font-medium">
+                          Boys &amp; Girls Semi-Finals • 3 Matches Completed
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-bold text-amber-300 bg-amber-950/80 px-2.5 py-1 rounded-lg border border-amber-800/60 hidden sm:inline-block shrink-0">
+                      3 Results
+                    </span>
+                  </div>
+
+                  <div className={`space-y-3.5 ${scheduleDayTab === 'day5' ? 'grid md:grid-cols-2 lg:grid-cols-3 gap-4 space-y-0' : ''}`}>
+                    {fixturesDay5.map((match) => {
+                      const team1Logo = teamLogos[match.team1.slug];
+                      const team2Logo = teamLogos[match.team2.slug];
+                      const team1Detail = teamsData[match.team1.slug];
+                      const team2Detail = teamsData[match.team2.slug];
+                      const isGirls = match.division === 'girls' || team1Detail?.division === 'girls';
+
+                      return (
+                        <div
+                          key={match.matchNo}
+                          className="bg-gradient-to-br from-[#0c1830] via-[#112344] to-[#0a1326] rounded-2xl border-2 border-amber-400/20 hover:border-amber-400/60 transition-all p-3.5 sm:p-4.5 shadow-lg hover:shadow-[0_10px_25px_rgba(245,158,11,0.15)] group relative overflow-hidden"
+                        >
+                          <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
+
+                          {/* Card Header: Match No & Status */}
+                          <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/10 relative z-10 text-xs">
+                            <div className="flex items-center gap-2">
+                              <span className="bg-[#d8392f] text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow-xs">
+                                Match {match.matchNo}
+                              </span>
+                              <span className="text-slate-300 font-bold text-[11px]">
+                                {match.stage}
+                              </span>
+                            </div>
+
+                            <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-black/80 text-white px-2.5 py-0.5 rounded-md border border-slate-700 shadow-2xs">
+                              <span className="text-[9px] text-emerald-400">▶</span>
+                              <span>Past</span>
+                            </span>
+                          </div>
+
+                          {/* Teams Face-Off Row with Scores */}
+                          <div className="grid grid-cols-11 items-center gap-2 py-1 relative z-10">
+                            {/* Team 1 */}
+                            <Link
+                              href={`/teams/${match.team1.slug}`}
+                              className="col-span-5 flex items-center gap-2 sm:gap-2.5 group/team hover:opacity-90 transition-opacity"
+                            >
+                              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center shadow-md border border-white/40 group-hover/team:scale-105 transition-transform">
+                                {team1Logo ? (
+                                  <Image
+                                    src={team1Logo}
+                                    alt={match.team1.name}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                              <div className="min-w-0">
+                                <h4 className={`font-black text-xs sm:text-sm uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight ${match.team1.isWinner ? 'text-white font-extrabold' : 'text-slate-300 font-semibold'}`}>
+                                  {match.team1.name}
+                                </h4>
+                                {match.team1.score && (
+                                  <div className="mt-0.5 flex items-baseline gap-1">
+                                    <span className="font-black text-sm text-white tracking-tight">
+                                      {match.team1.score}
+                                    </span>
+                                    {match.team1.overs && (
+                                      <span className="text-[10px] text-slate-400 font-medium">
+                                        ({match.team1.overs})
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate">
+                                  {team1Detail?.river || 'Vedic River Squad'}
+                                </span>
+                              </div>
+                            </Link>
+
+                            {/* Center VS Badge */}
+                            <div className="col-span-1 flex flex-col items-center justify-center">
+                              <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#d8392f] to-[#b91c1c] text-white font-black italic text-[11px] sm:text-xs flex items-center justify-center shadow-md border border-red-400/50">
+                                VS
+                              </span>
+                              <span className="text-[8px] sm:text-[9px] uppercase font-bold text-sky-400 mt-1 tracking-wider whitespace-nowrap">
+                                T10
+                              </span>
+                            </div>
+
+                            {/* Team 2 */}
+                            <Link
+                              href={`/teams/${match.team2.slug}`}
+                              className="col-span-5 flex items-center justify-end gap-2 sm:gap-2.5 text-right group/team hover:opacity-90 transition-opacity"
+                            >
+                              <div className="min-w-0">
+                                <h4 className={`font-black text-xs sm:text-sm uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight ${match.team2.isWinner ? 'text-white font-extrabold' : 'text-slate-300 font-semibold'}`}>
+                                  {match.team2.name}
+                                </h4>
+                                {match.team2.score && (
+                                  <div className="mt-0.5 flex items-baseline justify-end gap-1">
+                                    <span className="font-black text-sm text-white tracking-tight">
+                                      {match.team2.score}
+                                    </span>
+                                    {match.team2.overs && (
+                                      <span className="text-[10px] text-slate-400 font-medium">
+                                        ({match.team2.overs})
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate">
+                                  {team2Detail?.river || 'Vedic River Squad'}
+                                </span>
+                              </div>
+                              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center shadow-md border border-white/40 group-hover/team:scale-105 transition-transform">
+                                {team2Logo ? (
+                                  <Image
+                                    src={team2Logo}
+                                    alt={match.team2.name}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                            </Link>
+                          </div>
+
+                          {/* Match Result Banner */}
+                          {match.result && (
+                            <div className="mt-2.5 py-1.5 px-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 text-xs flex items-center justify-between">
+                              <span className="font-extrabold text-white flex items-center gap-1.5">
+                                <Trophy className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                                {match.result}
+                              </span>
+                              <span className="text-[10px] uppercase font-black tracking-wider text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded shrink-0">
+                                Result
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Card Footer: Stadium Venue */}
+                          <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 relative z-10">
+                            <span className="flex items-center gap-1 text-slate-300">
+                              <MapPin className="w-3 h-3 text-sky-400 shrink-0" />
+                              <span className="truncate">Sector 16 Cricket Stadium, Chandigarh</span>
+                            </span>
+                            <span className="text-[10px] text-slate-400 font-medium">10 Ov. Knockout</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               {/* Day 1: Sunday, 15 November 2026 */}
               {(scheduleDayTab === 'all' || scheduleDayTab === 'day1') && (
                 <div className={`space-y-4 ${scheduleDayTab === 'day1' ? 'lg:col-span-2' : ''}`}>
@@ -2240,6 +2923,7 @@ export default function Home() {
                 </div>
               )}
 
+
               {/* Day 2: Monday, 16 November 2026 */}
               {(scheduleDayTab === 'day2' || scheduleDayTab === 'all') && (
                 <div className={`space-y-4 ${scheduleDayTab === 'day2' ? 'lg:col-span-2' : ''}`}>
@@ -2281,6 +2965,380 @@ export default function Home() {
                           className="bg-gradient-to-br from-[#0c1830] via-[#112344] to-[#0a1326] rounded-2xl border-2 border-indigo-400/20 hover:border-indigo-400/60 transition-all p-3.5 sm:p-4.5 shadow-lg hover:shadow-[0_10px_25px_rgba(99,102,241,0.15)] group relative overflow-hidden"
                         >
                           <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
+
+                          {/* Card Header: Match No & Status */}
+                          <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/10 relative z-10 text-xs">
+                            <div className="flex items-center gap-2">
+                              <span className="bg-[#d8392f] text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow-xs">
+                                Match {match.matchNo}
+                              </span>
+                              <span className="text-slate-300 font-bold text-[11px]">
+                                {match.stage}
+                              </span>
+                            </div>
+
+                            {match.status === 'past' ? (
+                              <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-black/80 text-white px-2.5 py-0.5 rounded-md border border-slate-700 shadow-2xs">
+                                <span className="text-[9px] text-emerald-400">▶</span>
+                                <span>Past</span>
+                              </span>
+                            ) : (
+                              <div className="flex items-center gap-1.5 text-amber-400 font-black text-xs sm:text-[13px] bg-amber-400/10 px-2.5 py-0.5 rounded-lg border border-amber-400/30">
+                                <Clock className="w-3.5 h-3.5 text-amber-400" />
+                                <span>{match.time} IST</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Teams Face-Off Row with Scores */}
+                          <div className="grid grid-cols-11 items-center gap-2 py-1 relative z-10">
+                            {/* Team 1 */}
+                            <Link
+                              href={`/teams/${match.team1.slug}`}
+                              className="col-span-5 flex items-center gap-2 sm:gap-2.5 group/team hover:opacity-90 transition-opacity"
+                            >
+                              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center shadow-md border border-white/40 group-hover/team:scale-105 transition-transform">
+                                {team1Logo ? (
+                                  <Image
+                                    src={team1Logo}
+                                    alt={match.team1.name}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                              <div className="min-w-0">
+                                <h4 className={`font-black text-xs sm:text-sm uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight ${match.team1.isWinner ? 'text-white font-extrabold' : 'text-slate-300 font-semibold'}`}>
+                                  {match.team1.name}
+                                </h4>
+                                {match.team1.score && (
+                                  <div className="mt-0.5 flex items-baseline gap-1">
+                                    <span className="font-black text-sm text-white tracking-tight">
+                                      {match.team1.score}
+                                    </span>
+                                    {match.team1.overs && (
+                                      <span className="text-[10px] text-slate-400 font-medium">
+                                        ({match.team1.overs})
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate">
+                                  {team1Detail?.river || 'Vedic River Squad'}
+                                </span>
+                              </div>
+                            </Link>
+
+                            {/* Center VS Badge */}
+                            <div className="col-span-1 flex flex-col items-center justify-center">
+                              <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#d8392f] to-[#b91c1c] text-white font-black italic text-[11px] sm:text-xs flex items-center justify-center shadow-md border border-red-400/50">
+                                VS
+                              </span>
+                              <span className="text-[8px] sm:text-[9px] uppercase font-bold text-sky-400 mt-1 tracking-wider whitespace-nowrap">
+                                T10
+                              </span>
+                            </div>
+
+                            {/* Team 2 */}
+                            <Link
+                              href={`/teams/${match.team2.slug}`}
+                              className="col-span-5 flex items-center justify-end gap-2 sm:gap-2.5 text-right group/team hover:opacity-90 transition-opacity"
+                            >
+                              <div className="min-w-0">
+                                <h4 className={`font-black text-xs sm:text-sm uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight ${match.team2.isWinner ? 'text-white font-extrabold' : 'text-slate-300 font-semibold'}`}>
+                                  {match.team2.name}
+                                </h4>
+                                {match.team2.score && (
+                                  <div className="mt-0.5 flex items-baseline justify-end gap-1">
+                                    <span className="font-black text-sm text-white tracking-tight">
+                                      {match.team2.score}
+                                    </span>
+                                    {match.team2.overs && (
+                                      <span className="text-[10px] text-slate-400 font-medium">
+                                        ({match.team2.overs})
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate">
+                                  {team2Detail?.river || 'Vedic River Squad'}
+                                </span>
+                              </div>
+                              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center shadow-md border border-white/40 group-hover/team:scale-105 transition-transform">
+                                {team2Logo ? (
+                                  <Image
+                                    src={team2Logo}
+                                    alt={match.team2.name}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                            </Link>
+                          </div>
+
+                          {/* Match Result Banner */}
+                          {match.result && (
+                            <div className="mt-2.5 py-1.5 px-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 text-xs flex items-center justify-between">
+                              <span className="font-extrabold text-white flex items-center gap-1.5">
+                                <Trophy className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                                {match.result}
+                              </span>
+                              <span className="text-[10px] uppercase font-black tracking-wider text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded shrink-0">
+                                Result
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Card Footer: Stadium Venue */}
+                          <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 relative z-10">
+                            <span className="flex items-center gap-1 text-slate-300">
+                              <MapPin className="w-3 h-3 text-sky-400 shrink-0" />
+                              <span className="truncate">Sector 16 Cricket Stadium, Chandigarh</span>
+                            </span>
+                            <span className="text-[10px] text-slate-400 font-medium">10 Ov. Knockout</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Day 3: Tuesday, 17 November 2026 */}
+              {(scheduleDayTab === 'all' || scheduleDayTab === 'day3') && (
+                <div className={`space-y-4 ${scheduleDayTab === 'day3' ? 'lg:col-span-2' : ''}`}>
+                  <div className="bg-gradient-to-r from-[#1f1938] via-[#16122c] to-[#0a0818] p-4 sm:p-5 rounded-2xl border-2 border-amber-400/40 shadow-xl flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 sm:gap-3.5">
+                      <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white font-black text-sm flex flex-col items-center justify-center shadow-md shrink-0 border border-amber-300/30">
+                        <span className="text-[9px] uppercase leading-none opacity-80 font-bold">DAY</span>
+                        <span className="text-base sm:text-lg leading-none mt-0.5">03</span>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-black text-base sm:text-lg text-white uppercase italic tracking-wide">
+                            Tuesday, 17 November 2026
+                          </h3>
+                          <span className="bg-amber-500/20 text-amber-300 border border-amber-400/30 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
+                            Official Results
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mt-0.5 font-medium">
+                          Boys Division • Super Knockout &amp; Quarter-Finals • 4 Matches Completed
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-bold text-amber-300 bg-amber-950/80 px-2.5 py-1 rounded-lg border border-amber-800/60 hidden sm:inline-block shrink-0">
+                      4 Results
+                    </span>
+                  </div>
+
+                  <div className={`space-y-3.5 ${scheduleDayTab === 'day3' ? 'grid md:grid-cols-2 lg:grid-cols-3 gap-4 space-y-0' : ''}`}>
+                    {boysFixturesDay3.map((match) => {
+                      const team1Logo = teamLogos[match.team1.slug];
+                      const team2Logo = teamLogos[match.team2.slug];
+                      const team1Detail = teamsData[match.team1.slug];
+                      const team2Detail = teamsData[match.team2.slug];
+
+                      return (
+                        <div
+                          key={match.matchNo}
+                          className="bg-gradient-to-br from-[#0c1830] via-[#112344] to-[#0a1326] rounded-2xl border-2 border-amber-400/20 hover:border-amber-400/60 transition-all p-3.5 sm:p-4.5 shadow-lg hover:shadow-[0_10px_25px_rgba(245,158,11,0.15)] group relative overflow-hidden"
+                        >
+                          <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
+
+                          {/* Card Header: Match No & Status */}
+                          <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/10 relative z-10 text-xs">
+                            <div className="flex items-center gap-2">
+                              <span className="bg-[#d8392f] text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow-xs">
+                                Match {match.matchNo}
+                              </span>
+                              <span className="text-slate-300 font-bold text-[11px]">
+                                {match.stage}
+                              </span>
+                            </div>
+
+                            {match.status === 'past' ? (
+                              <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-black/80 text-white px-2.5 py-0.5 rounded-md border border-slate-700 shadow-2xs">
+                                <span className="text-[9px] text-emerald-400">▶</span>
+                                <span>Past</span>
+                              </span>
+                            ) : (
+                              <div className="flex items-center gap-1.5 text-amber-400 font-black text-xs sm:text-[13px] bg-amber-400/10 px-2.5 py-0.5 rounded-lg border border-amber-400/30">
+                                <Clock className="w-3.5 h-3.5 text-amber-400" />
+                                <span>{match.time} IST</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Teams Face-Off Row with Scores */}
+                          <div className="grid grid-cols-11 items-center gap-2 py-1 relative z-10">
+                            {/* Team 1 */}
+                            <Link
+                              href={`/teams/${match.team1.slug}`}
+                              className="col-span-5 flex items-center gap-2 sm:gap-2.5 group/team hover:opacity-90 transition-opacity"
+                            >
+                              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center shadow-md border border-white/40 group-hover/team:scale-105 transition-transform">
+                                {team1Logo ? (
+                                  <Image
+                                    src={team1Logo}
+                                    alt={match.team1.name}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                              <div className="min-w-0">
+                                <h4 className={`font-black text-xs sm:text-sm uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight ${match.team1.isWinner ? 'text-white font-extrabold' : 'text-slate-300 font-semibold'}`}>
+                                  {match.team1.name}
+                                </h4>
+                                {match.team1.score && (
+                                  <div className="mt-0.5 flex items-baseline gap-1">
+                                    <span className="font-black text-sm text-white tracking-tight">
+                                      {match.team1.score}
+                                    </span>
+                                    {match.team1.overs && (
+                                      <span className="text-[10px] text-slate-400 font-medium">
+                                        ({match.team1.overs})
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate">
+                                  {team1Detail?.river || 'Vedic River Squad'}
+                                </span>
+                              </div>
+                            </Link>
+
+                            {/* Center VS Badge */}
+                            <div className="col-span-1 flex flex-col items-center justify-center">
+                              <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#d8392f] to-[#b91c1c] text-white font-black italic text-[11px] sm:text-xs flex items-center justify-center shadow-md border border-red-400/50">
+                                VS
+                              </span>
+                              <span className="text-[8px] sm:text-[9px] uppercase font-bold text-sky-400 mt-1 tracking-wider whitespace-nowrap">
+                                T10
+                              </span>
+                            </div>
+
+                            {/* Team 2 */}
+                            <Link
+                              href={`/teams/${match.team2.slug}`}
+                              className="col-span-5 flex items-center justify-end gap-2 sm:gap-2.5 text-right group/team hover:opacity-90 transition-opacity"
+                            >
+                              <div className="min-w-0">
+                                <h4 className={`font-black text-xs sm:text-sm uppercase italic tracking-tight truncate group-hover/team:text-sky-300 transition-colors leading-tight ${match.team2.isWinner ? 'text-white font-extrabold' : 'text-slate-300 font-semibold'}`}>
+                                  {match.team2.name}
+                                </h4>
+                                {match.team2.score && (
+                                  <div className="mt-0.5 flex items-baseline justify-end gap-1">
+                                    <span className="font-black text-sm text-white tracking-tight">
+                                      {match.team2.score}
+                                    </span>
+                                    {match.team2.overs && (
+                                      <span className="text-[10px] text-slate-400 font-medium">
+                                        ({match.team2.overs})
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                                <span className="text-[10px] text-slate-400 font-semibold block truncate">
+                                  {team2Detail?.river || 'Vedic River Squad'}
+                                </span>
+                              </div>
+                              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-xl bg-white p-1 shrink-0 flex items-center justify-center shadow-md border border-white/40 group-hover/team:scale-105 transition-transform">
+                                {team2Logo ? (
+                                  <Image
+                                    src={team2Logo}
+                                    alt={match.team2.name}
+                                    width={48}
+                                    height={48}
+                                    className="max-h-full max-w-full object-contain"
+                                  />
+                                ) : (
+                                  <Shield className="w-6 h-6 text-slate-500" />
+                                )}
+                              </div>
+                            </Link>
+                          </div>
+
+                          {/* Match Result Banner */}
+                          {match.result && (
+                            <div className="mt-2.5 py-1.5 px-3 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 text-xs flex items-center justify-between">
+                              <span className="font-extrabold text-white flex items-center gap-1.5">
+                                <Trophy className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                                {match.result}
+                              </span>
+                              <span className="text-[10px] uppercase font-black tracking-wider text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded shrink-0">
+                                Result
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Card Footer: Stadium Venue */}
+                          <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 relative z-10">
+                            <span className="flex items-center gap-1 text-slate-300">
+                              <MapPin className="w-3 h-3 text-sky-400 shrink-0" />
+                              <span className="truncate">Sector 16 Cricket Stadium, Chandigarh</span>
+                            </span>
+                            <span className="text-[10px] text-slate-400 font-medium">10 Ov. Knockout</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Day 4: Wednesday, 18 November 2026 */}
+              {(scheduleDayTab === 'all' || scheduleDayTab === 'day4') && (
+                <div className={`space-y-4 ${scheduleDayTab === 'day4' ? 'lg:col-span-2' : ''}`}>
+                  <div className="bg-gradient-to-r from-[#2a1325] via-[#1a0e1c] to-[#0c050d] p-4 sm:p-5 rounded-2xl border-2 border-rose-400/40 shadow-xl flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 sm:gap-3.5">
+                      <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-rose-500 to-red-600 text-white font-black text-sm flex flex-col items-center justify-center shadow-md shrink-0 border border-rose-300/30">
+                        <span className="text-[9px] uppercase leading-none opacity-80 font-bold">DAY</span>
+                        <span className="text-base sm:text-lg leading-none mt-0.5">04</span>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-black text-base sm:text-lg text-white uppercase italic tracking-wide">
+                            Wednesday, 18 November 2026
+                          </h3>
+                          <span className="bg-rose-500/20 text-rose-300 border border-rose-400/30 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
+                            Quarter-Finals &amp; Semi-Final 1
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mt-0.5 font-medium">
+                          Boys Division • Semi-Finalist Decided: Narmada Titans into Grand Final!
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-bold text-rose-300 bg-rose-950/80 px-2.5 py-1 rounded-lg border border-rose-800/60 hidden sm:inline-block shrink-0">
+                      3 Results
+                    </span>
+                  </div>
+
+                  <div className={`space-y-3.5 ${scheduleDayTab === 'day4' ? 'grid md:grid-cols-2 lg:grid-cols-3 gap-4 space-y-0' : ''}`}>
+                    {boysFixturesDay4.map((match) => {
+                      const team1Logo = teamLogos[match.team1.slug];
+                      const team2Logo = teamLogos[match.team2.slug];
+                      const team1Detail = teamsData[match.team1.slug];
+                      const team2Detail = teamsData[match.team2.slug];
+
+                      return (
+                        <div
+                          key={match.matchNo}
+                          className="bg-gradient-to-br from-[#0c1830] via-[#112344] to-[#0a1326] rounded-2xl border-2 border-rose-400/20 hover:border-rose-400/60 transition-all p-3.5 sm:p-4.5 shadow-lg hover:shadow-[0_10px_25px_rgba(244,63,94,0.15)] group relative overflow-hidden"
+                        >
+                          <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
 
                           {/* Card Header: Match No & Status */}
                           <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/10 relative z-10 text-xs">

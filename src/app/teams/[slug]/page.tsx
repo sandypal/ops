@@ -36,16 +36,7 @@ interface TeamMatchSchedule {
 }
 
 const BOYS_SCHEDULE_LOOKUP: Record<string, TeamMatchSchedule> = {
-  // Day 1: Sunday, 15 Nov 2026 (Super Knockout Results)
-  "ghaggar-champions": {
-    matchNo: 1,
-    dayText: "Day 1",
-    dateText: "Sunday, 15 Nov 2026",
-    time: "09:00 AM",
-    stage: "Super Knockout • Match 1",
-    opponentSlug: "jhelum-jaguars",
-    opponentName: "Jhelum Jaguars",
-  },
+  // Super Knockout (Matches 1 to 8)
   "jhelum-jaguars": {
     matchNo: 1,
     dayText: "Day 1",
@@ -54,15 +45,6 @@ const BOYS_SCHEDULE_LOOKUP: Record<string, TeamMatchSchedule> = {
     stage: "Super Knockout • Match 1",
     opponentSlug: "ghaggar-champions",
     opponentName: "Ghaggar Champions",
-  },
-  "tapti-tigers": {
-    matchNo: 2,
-    dayText: "Day 1",
-    dateText: "Sunday, 15 Nov 2026",
-    time: "11:00 AM",
-    stage: "Super Knockout • Match 2",
-    opponentSlug: "krishna-kings",
-    opponentName: "Krishna Kings",
   },
   "krishna-kings": {
     matchNo: 2,
@@ -82,17 +64,6 @@ const BOYS_SCHEDULE_LOOKUP: Record<string, TeamMatchSchedule> = {
     opponentSlug: "beas-blasters",
     opponentName: "Beas Blasters",
   },
-  "beas-blasters": {
-    matchNo: 3,
-    dayText: "Day 1",
-    dateText: "Sunday, 15 Nov 2026",
-    time: "01:00 PM",
-    stage: "Super Knockout • Match 3",
-    opponentSlug: "satluj-soorme",
-    opponentName: "Satluj Soorme",
-  },
-
-  // Day 2: Monday, 16 Nov 2026 (Super Knockout Results)
   "godavari-knights": {
     matchNo: 4,
     dayText: "Day 2",
@@ -101,24 +72,6 @@ const BOYS_SCHEDULE_LOOKUP: Record<string, TeamMatchSchedule> = {
     stage: "Super Knockout • Match 4",
     opponentSlug: "mahanadi-masters",
     opponentName: "Mahanadi Masters",
-  },
-  "mahanadi-masters": {
-    matchNo: 4,
-    dayText: "Day 2",
-    dateText: "Monday, 16 Nov 2026",
-    time: "09:30 AM",
-    stage: "Super Knockout • Match 4",
-    opponentSlug: "godavari-knights",
-    opponentName: "Godavari Knights",
-  },
-  "kaveri-warriors": {
-    matchNo: 5,
-    dayText: "Day 2",
-    dateText: "Monday, 16 Nov 2026",
-    time: "11:30 AM",
-    stage: "Super Knockout • Match 5",
-    opponentSlug: "sindhu-spartans",
-    opponentName: "Sindhu Spartans",
   },
   "sindhu-spartans": {
     matchNo: 5,
@@ -138,14 +91,97 @@ const BOYS_SCHEDULE_LOOKUP: Record<string, TeamMatchSchedule> = {
     opponentSlug: "narmada-titans",
     opponentName: "Narmada Titans",
   },
-  "narmada-titans": {
-    matchNo: 6,
-    dayText: "Day 2",
-    dateText: "Monday, 16 Nov 2026",
+  "brahmaputra-bulls": {
+    matchNo: 7,
+    dayText: "Day 3",
+    dateText: "Tuesday, 17 Nov 2026",
+    time: "09:30 AM",
+    stage: "Super Knockout • Match 7",
+    opponentSlug: "ganga-giants",
+    opponentName: "Ganga Giants",
+  },
+  "ravi-rangers": {
+    matchNo: 8,
+    dayText: "Day 3",
+    dateText: "Tuesday, 17 Nov 2026",
+    time: "11:30 AM",
+    stage: "Super Knockout • Match 8",
+    opponentSlug: "yamuna-yodhas",
+    opponentName: "Yamuna Yodhas",
+  },
+
+  // Quarter Finals (Matches 9 to 12)
+  "kaveri-warriors": {
+    matchNo: 9,
+    dayText: "Day 3",
+    dateText: "Tuesday, 17 Nov 2026",
     time: "01:30 PM",
-    stage: "Super Knockout • Match 6",
-    opponentSlug: "chenab-challengers",
-    opponentName: "Chenab Challengers",
+    stage: "Quarter Final • Match 9",
+    opponentSlug: "beas-blasters",
+    opponentName: "Beas Blasters",
+  },
+  "tapti-tigers": {
+    matchNo: 10,
+    dayText: "Day 3",
+    dateText: "Tuesday, 17 Nov 2026",
+    time: "03:30 PM",
+    stage: "Quarter Final • Match 10",
+    opponentSlug: "narmada-titans",
+    opponentName: "Narmada Titans",
+  },
+  "ghaggar-champions": {
+    matchNo: 11,
+    dayText: "Day 4",
+    dateText: "Wednesday, 18 Nov 2026",
+    time: "09:30 AM",
+    stage: "Quarter Final • Match 11",
+    opponentSlug: "mahanadi-masters",
+    opponentName: "Mahanadi Masters",
+  },
+  "mahanadi-masters": {
+    matchNo: 14,
+    dayText: "Day 5",
+    dateText: "Thursday, 19 Nov 2026",
+    time: "09:30 AM",
+    stage: "Semi Final (Boys) • Match 14",
+    opponentSlug: "yamuna-yodhas",
+    opponentName: "Yamuna Yodhas",
+  },
+  "ganga-giants": {
+    matchNo: 12,
+    dayText: "Day 4",
+    dateText: "Wednesday, 18 Nov 2026",
+    time: "11:30 AM",
+    stage: "Quarter Final • Match 12",
+    opponentSlug: "yamuna-yodhas",
+    opponentName: "Yamuna Yodhas",
+  },
+  "beas-blasters": {
+    matchNo: 13,
+    dayText: "Day 4",
+    dateText: "Wednesday, 18 Nov 2026",
+    time: "02:00 PM",
+    stage: "Semi Final 1 • Match 13",
+    opponentSlug: "narmada-titans",
+    opponentName: "Narmada Titans",
+  },
+  "narmada-titans": {
+    matchNo: 18,
+    dayText: "Grand Final",
+    dateText: "Friday, 20 Nov 2026",
+    time: "02:00 PM",
+    stage: "Grand Final • Championship Match",
+    opponentSlug: "yamuna-yodhas",
+    opponentName: "Yamuna Yodhas",
+  },
+  "yamuna-yodhas": {
+    matchNo: 18,
+    dayText: "Grand Final",
+    dateText: "Friday, 20 Nov 2026",
+    time: "02:00 PM",
+    stage: "Grand Final • Men's Champions 🏆",
+    opponentSlug: "narmada-titans",
+    opponentName: "Narmada Titans",
   },
 };
 
